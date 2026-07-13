@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light dark">
-  <title>TYCHE · Let chance choose</title>
+  <meta name="color-scheme" content="light">
+  <title>To-Do Gambling · Your productivity casino</title>
   <script>
     // The app needs FastAPI. If the template is opened directly, move to the
     // local server instead of leaving the UI in a permanent "Failed to fetch" state.
@@ -16,28 +16,28 @@
     :root {
       color-scheme: light;
       --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-      --page: #f5f5f7;
-      --page-glow: rgba(0, 122, 255, 0.08);
-      --surface: rgba(255, 255, 255, 0.82);
-      --surface-solid: #ffffff;
+      --page: #f4eddd;
+      --page-glow: rgba(230, 0, 18, 0.09);
+      --surface: rgba(255, 253, 247, 0.88);
+      --surface-solid: #fffdf7;
       --surface-raised: #ffffff;
-      --surface-subtle: #f7f7f9;
-      --text: #1d1d1f;
-      --text-secondary: #65656d;
-      --text-tertiary: #85858d;
-      --line: rgba(29, 29, 31, 0.10);
-      --line-strong: rgba(29, 29, 31, 0.16);
-      --accent: #087af5;
-      --accent-hover: #006ee6;
-      --accent-soft: rgba(8, 122, 245, 0.11);
-      --accent-glow: rgba(8, 122, 245, 0.30);
+      --surface-subtle: #f7f1e5;
+      --text: #17140f;
+      --text-secondary: #635c50;
+      --text-tertiary: #897f6f;
+      --line: rgba(23, 20, 15, 0.10);
+      --line-strong: rgba(23, 20, 15, 0.18);
+      --accent: #17140f;
+      --accent-hover: #322e27;
+      --accent-soft: rgba(23, 20, 15, 0.09);
+      --accent-glow: rgba(23, 20, 15, 0.23);
       --danger: #c9342f;
       --danger-soft: rgba(201, 52, 47, 0.09);
-      --focus: rgba(8, 122, 245, 0.30);
-      --shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 16px 44px rgba(0, 0, 0, 0.07);
-      --shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.04), 0 20px 52px rgba(0, 0, 0, 0.10);
-      --wheel-empty: #e9e9ed;
-      --wheel-empty-line: #d9d9df;
+      --focus: rgba(23, 20, 15, 0.25);
+      --shadow: 0 1px 2px rgba(61, 45, 17, 0.04), 0 16px 44px rgba(61, 45, 17, 0.08);
+      --shadow-hover: 0 2px 4px rgba(61, 45, 17, 0.05), 0 20px 52px rgba(61, 45, 17, 0.12);
+      --wheel-empty: #eee5d5;
+      --wheel-empty-line: #d8cdbb;
       --wheel-label-light: #ffffff;
       --wheel-label-dark: #171717;
       --wheel-1: #e60012;
@@ -56,106 +56,6 @@
       --normal: 260ms;
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) {
-        color-scheme: dark;
-        --page: #09090b;
-        --page-glow: rgba(10, 132, 255, 0.12);
-        --surface: rgba(28, 28, 30, 0.82);
-        --surface-solid: #1c1c1e;
-        --surface-raised: #242426;
-        --surface-subtle: #232326;
-        --text: #f5f5f7;
-        --text-secondary: #aaaab2;
-        --text-tertiary: #85858d;
-        --line: rgba(255, 255, 255, 0.11);
-        --line-strong: rgba(255, 255, 255, 0.18);
-        --accent: #0a84ff;
-        --accent-hover: #2997ff;
-        --accent-soft: rgba(10, 132, 255, 0.17);
-        --accent-glow: rgba(10, 132, 255, 0.38);
-        --danger: #ff6961;
-        --danger-soft: rgba(255, 105, 97, 0.13);
-        --focus: rgba(10, 132, 255, 0.38);
-        --shadow: 0 1px 2px rgba(0, 0, 0, 0.22), 0 18px 48px rgba(0, 0, 0, 0.30);
-        --shadow-hover: 0 2px 5px rgba(0, 0, 0, 0.28), 0 22px 56px rgba(0, 0, 0, 0.38);
-        --wheel-empty: #2c2c2f;
-        --wheel-empty-line: #3b3b40;
-        --wheel-1: #e60012;
-        --wheel-2: #0057d9;
-        --wheel-3: #ffd400;
-        --wheel-4: #00843d;
-        --wheel-5: #f05a00;
-        --wheel-6: #7b2cbf;
-        --wheel-7: #00b8d9;
-        --wheel-8: #d5007f;
-      }
-    }
-
-    :root[data-theme="light"] {
-      color-scheme: light;
-      --page: #f5f5f7;
-      --page-glow: rgba(0, 122, 255, 0.08);
-      --surface: rgba(255, 255, 255, 0.82);
-      --surface-solid: #ffffff;
-      --surface-raised: #ffffff;
-      --surface-subtle: #f7f7f9;
-      --text: #1d1d1f;
-      --text-secondary: #65656d;
-      --text-tertiary: #85858d;
-      --line: rgba(29, 29, 31, 0.10);
-      --line-strong: rgba(29, 29, 31, 0.16);
-      --accent: #087af5;
-      --accent-hover: #006ee6;
-      --accent-soft: rgba(8, 122, 245, 0.11);
-      --accent-glow: rgba(8, 122, 245, 0.30);
-      --danger: #c9342f;
-      --danger-soft: rgba(201, 52, 47, 0.09);
-      --focus: rgba(8, 122, 245, 0.30);
-      --wheel-empty: #e9e9ed;
-      --wheel-empty-line: #d9d9df;
-      --wheel-1: #e60012;
-      --wheel-2: #0057d9;
-      --wheel-3: #ffd400;
-      --wheel-4: #00843d;
-      --wheel-5: #f05a00;
-      --wheel-6: #7b2cbf;
-      --wheel-7: #00b8d9;
-      --wheel-8: #d5007f;
-    }
-
-    :root[data-theme="dark"] {
-      color-scheme: dark;
-      --page: #09090b;
-      --page-glow: rgba(10, 132, 255, 0.12);
-      --surface: rgba(28, 28, 30, 0.82);
-      --surface-solid: #1c1c1e;
-      --surface-raised: #242426;
-      --surface-subtle: #232326;
-      --text: #f5f5f7;
-      --text-secondary: #aaaab2;
-      --text-tertiary: #85858d;
-      --line: rgba(255, 255, 255, 0.11);
-      --line-strong: rgba(255, 255, 255, 0.18);
-      --accent: #0a84ff;
-      --accent-hover: #2997ff;
-      --accent-soft: rgba(10, 132, 255, 0.17);
-      --accent-glow: rgba(10, 132, 255, 0.38);
-      --danger: #ff6961;
-      --danger-soft: rgba(255, 105, 97, 0.13);
-      --focus: rgba(10, 132, 255, 0.38);
-      --wheel-empty: #2c2c2f;
-      --wheel-empty-line: #3b3b40;
-      --wheel-1: #e60012;
-      --wheel-2: #0057d9;
-      --wheel-3: #ffd400;
-      --wheel-4: #00843d;
-      --wheel-5: #f05a00;
-      --wheel-6: #7b2cbf;
-      --wheel-7: #00b8d9;
-      --wheel-8: #d5007f;
-    }
-
     *, *::before, *::after { box-sizing: border-box; }
 
     html { min-width: 320px; background: var(--page); }
@@ -164,10 +64,12 @@
       min-height: 100vh;
       margin: 0;
       overflow-x: hidden;
+      overflow-y: auto;
       font-family: var(--font);
       color: var(--text);
       background:
-        radial-gradient(circle at 50% -10%, var(--page-glow), transparent 34rem),
+        radial-gradient(circle at 12% -12%, var(--page-glow), transparent 31rem),
+        radial-gradient(circle at 90% -8%, rgba(255, 212, 0, 0.11), transparent 28rem),
         var(--page);
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
@@ -283,10 +185,11 @@
     h1 {
       grid-area: title;
       margin: 0;
-      font-size: clamp(2.65rem, 5.2vw, 3.75rem);
+      font-size: clamp(2.05rem, 4.2vw, 3.35rem);
       line-height: 0.92;
       font-weight: 760;
-      letter-spacing: -0.065em;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
     }
 
     .subtitle {
@@ -419,18 +322,28 @@
     #add.is-confirmed input { animation: input-confirm 360ms var(--ease); }
 
     #notice {
-      margin: 10px 2px 0;
+      position: fixed;
+      z-index: 1100;
+      top: max(12px, env(safe-area-inset-top));
+      left: 50%;
+      width: min(calc(100% - 24px), 560px);
+      margin: 0;
       padding: 10px 12px;
       border: 1px solid color-mix(in srgb, var(--danger) 24%, transparent);
       border-radius: var(--radius-sm);
       color: var(--danger);
       background: var(--danger-soft);
+      box-shadow: 0 12px 32px rgba(93, 28, 23, 0.18);
       font-size: 13px;
       line-height: 1.4;
+      transform: translateX(-50%);
     }
 
     .wheel-card {
+      display: flex;
+      flex-direction: column;
       min-width: 0;
+      min-height: 0;
       text-align: center;
     }
 
@@ -704,6 +617,269 @@
 
     #result.is-winner { animation: winner-reveal 460ms var(--ease); }
 
+    .pressure-deck {
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+      flex: 1;
+      gap: 10px;
+      min-height: 126px;
+      margin-top: 14px;
+      text-align: left;
+    }
+
+    .day-pressure,
+    .focus-machine {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--surface-subtle);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68);
+    }
+
+    .day-pressure {
+      --urgency: #08783f;
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      transition: border-color 320ms ease, background-color 320ms ease, box-shadow 320ms ease;
+    }
+
+    .pressure-deck[data-urgency="warning"] .day-pressure { --urgency: #855300; }
+
+    .pressure-deck[data-urgency="urgent"] .day-pressure {
+      --urgency: #b42318;
+      border-color: rgba(217, 45, 40, 0.42);
+      background:
+        radial-gradient(circle at 85% 10%, rgba(230, 0, 18, 0.12), transparent 44%),
+        #fff1ed;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82), 0 0 0 3px rgba(217, 45, 40, 0.07);
+    }
+
+    .pressure-head,
+    .machine-head,
+    .pane-head,
+    .done-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .pressure-head h3,
+    .machine-head h3,
+    .pane-head h3 {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 790;
+      letter-spacing: -0.015em;
+    }
+
+    .urgency-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--urgency);
+      font-size: 9px;
+      line-height: 1;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .urgency-badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 13%, transparent);
+    }
+
+    .clock-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 12px;
+      margin-top: 9px;
+    }
+
+    .local-clock {
+      min-width: 0;
+      color: var(--text);
+      font-size: clamp(21px, 3vw, 30px);
+      line-height: 0.95;
+      font-variant-numeric: tabular-nums;
+      font-weight: 870;
+      letter-spacing: -0.045em;
+      white-space: nowrap;
+    }
+
+    .eod-clock {
+      display: grid;
+      justify-items: end;
+      gap: 2px;
+    }
+
+    .eod-clock span {
+      color: var(--text-tertiary);
+      font-size: 8px;
+      font-weight: 760;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #eod-countdown {
+      color: var(--urgency);
+      font-size: 14px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .pressure-copy {
+      display: grid;
+      gap: 2px;
+      margin-top: auto;
+      padding-top: 8px;
+    }
+
+    .pressure-copy span {
+      color: var(--text-tertiary);
+      font-size: 9px;
+      font-weight: 690;
+      line-height: 1.2;
+    }
+
+    .pressure-copy strong {
+      overflow: hidden;
+      color: var(--urgency);
+      font-size: 11px;
+      line-height: 1.25;
+      font-weight: 820;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .day-meter {
+      height: 5px;
+      margin-top: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--line);
+    }
+
+    #day-meter-fill {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--urgency);
+      transition: width 700ms var(--ease), background-color 300ms ease;
+    }
+
+    .pressure-deck.is-angry .day-pressure { animation: pressure-angry 980ms var(--ease); }
+    .pressure-deck.is-angry .urgency-badge { animation: urgency-growl 980ms var(--ease); }
+
+    .focus-machine {
+      display: flex;
+      flex-direction: column;
+      padding: 9px;
+      color: #fff;
+      background:
+        radial-gradient(circle at 15% 0, rgba(255, 212, 0, 0.22), transparent 42%),
+        linear-gradient(145deg, #2c251b, #17140f 62%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 10px 24px rgba(61, 45, 17, 0.13);
+    }
+
+    .machine-head h3 { color: #fff; }
+
+    #arcade-tickets {
+      color: #ffd400;
+      font-size: 9px;
+      font-weight: 830;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .focus-reels {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 5px;
+      margin-top: 4px;
+    }
+
+    .focus-reel {
+      display: grid;
+      place-items: center;
+      min-width: 0;
+      height: 30px;
+      overflow: hidden;
+      border: 2px solid #ffd400;
+      border-radius: 9px;
+      color: #17140f;
+      background: #fffdf7;
+      box-shadow: inset 0 7px 12px rgba(61, 45, 17, 0.10), inset 0 -7px 12px rgba(61, 45, 17, 0.10);
+      font-size: 19px;
+      line-height: 1;
+    }
+
+    .focus-machine.is-spinning .focus-reel { animation: reel-rattle 150ms linear infinite; }
+    .focus-machine.is-winner { animation: slot-cabinet-win 720ms var(--ease); }
+
+    .machine-controls {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .slot-pull {
+      min-height: 28px;
+      padding: 0 13px;
+      border: 2px solid #ffd400;
+      border-radius: 999px;
+      color: #17140f;
+      background: #ffd400;
+      box-shadow: 0 4px 0 #8f6100;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .slot-pull:not(:disabled):hover { background: #ffe14d; transform: translateY(-1px); }
+    .slot-pull:not(:disabled):active { transform: translateY(2px) scale(0.98); box-shadow: 0 2px 0 #8f6100; }
+
+    #ticket-progress {
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 8px;
+      font-weight: 680;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .slot-result {
+      margin: auto 0 0;
+      min-height: 20px;
+      padding-top: 3px;
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 9px;
+      line-height: 1.15;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .slot-rules { display: none; }
+
     .tasks-card {
       display: flex;
       flex-direction: column;
@@ -711,19 +887,49 @@
       min-height: 0;
     }
 
-    .task-scroll {
+    .task-board-split {
+      display: grid;
+      grid-template-rows: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      flex: 1;
+      gap: 9px;
+      min-height: 0;
+    }
+
+    .task-pane {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 253, 247, 0.55);
+    }
+
+    .pane-head,
+    .done-head {
+      flex: none;
+      min-height: 38px;
+      margin: 0;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface-subtle) 76%, transparent);
+    }
+
+    .pane-scroll {
       flex: 1;
       min-height: 0;
-      max-height: 478px;
-      padding-right: 4px;
+      padding: 0 8px;
       overflow-y: auto;
       overscroll-behavior: contain;
       scrollbar-width: thin;
       scrollbar-color: var(--line-strong) transparent;
+      scrollbar-gutter: stable;
     }
 
-    .task-scroll::-webkit-scrollbar { width: 6px; }
-    .task-scroll::-webkit-scrollbar-thumb { border-radius: 999px; background: var(--line-strong); }
+    .pane-scroll::-webkit-scrollbar { width: 6px; }
+    .pane-scroll::-webkit-scrollbar-thumb { border-radius: 999px; background: var(--line-strong); }
+    .pane-scroll:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
 
     body.winner-open { overflow: hidden; }
 
@@ -740,10 +946,10 @@
       padding: max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
       overflow: hidden;
       border: 0;
-      color: #fff;
+      color: var(--text);
       background:
-        radial-gradient(circle at 50% 48%, rgba(230, 0, 18, 0.34), transparent 34%),
-        radial-gradient(circle at 50% 50%, #101b42 0, #070b18 55%, #02040a 100%);
+        radial-gradient(circle at 50% 48%, rgba(230, 0, 18, 0.13), transparent 34%),
+        radial-gradient(circle at 50% 50%, #fffdf7 0, #f4eddd 58%, #eadfc9 100%);
       opacity: 0;
       transition: opacity 220ms ease;
     }
@@ -755,7 +961,7 @@
 
     #winner-dialog.is-visible { opacity: 1; }
 
-    #winner-dialog::backdrop { background: #02040a; }
+    #winner-dialog::backdrop { background: #f4eddd; }
 
     .winner-rays {
       position: absolute;
@@ -766,11 +972,11 @@
       border-radius: 50%;
       background: repeating-conic-gradient(
         from 0deg,
-        rgba(230, 0, 18, 0.23) 0 8deg,
-        rgba(230, 0, 18, 0.04) 8deg 16deg,
-        rgba(0, 87, 217, 0.22) 16deg 24deg,
-        rgba(0, 87, 217, 0.04) 24deg 32deg,
-        rgba(255, 212, 0, 0.18) 32deg 40deg,
+        rgba(230, 0, 18, 0.15) 0 8deg,
+        rgba(230, 0, 18, 0.025) 8deg 16deg,
+        rgba(0, 87, 217, 0.14) 16deg 24deg,
+        rgba(0, 87, 217, 0.025) 24deg 32deg,
+        rgba(255, 212, 0, 0.22) 32deg 40deg,
         transparent 40deg 48deg
       );
       transform: translate(-50%, -50%);
@@ -793,13 +999,13 @@
       border-radius: clamp(24px, 4vw, 44px);
       text-align: center;
       background:
-        radial-gradient(circle at 50% 0, rgba(255, 212, 0, 0.22), transparent 34%) padding-box,
-        linear-gradient(145deg, rgba(96, 0, 21, 0.97), rgba(8, 16, 43, 0.98) 54%, rgba(0, 42, 102, 0.98)) padding-box,
+        radial-gradient(circle at 50% 0, rgba(255, 212, 0, 0.18), transparent 34%) padding-box,
+        linear-gradient(145deg, #fffaf0, #ffffff 54%, #f6ead4) padding-box,
         conic-gradient(from 20deg, #ffd400, #e60012, #0057d9, #00b8d9, #ffd400) border-box;
       box-shadow:
-        0 0 0 8px rgba(255, 255, 255, 0.08),
+        0 0 0 8px rgba(23, 20, 15, 0.08),
         0 0 45px rgba(255, 212, 0, 0.28),
-        0 28px 90px rgba(0, 0, 0, 0.55),
+        0 28px 90px rgba(61, 45, 17, 0.24),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
       transform-origin: 50% 50%;
     }
@@ -828,17 +1034,17 @@
       height: 46px;
       min-height: 46px;
       padding: 0;
-      border-color: rgba(255, 255, 255, 0.22);
+      border-color: #17140f;
       border-radius: 50%;
       color: #fff;
-      background: rgba(0, 0, 0, 0.28);
+      background: #17140f;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       font-size: 23px;
       line-height: 1;
     }
 
-    .winner-close:hover { background: rgba(0, 0, 0, 0.46); }
+    .winner-close:hover { background: #322e27; }
 
     .jackpot-word {
       position: relative;
@@ -872,7 +1078,7 @@
       position: relative;
       z-index: 2;
       margin: clamp(28px, 5vh, 48px) 0 12px;
-      color: rgba(255, 255, 255, 0.76);
+      color: rgba(23, 20, 15, 0.68);
       font-size: clamp(11px, 1.8vw, 15px);
       line-height: 1.2;
       font-weight: 800;
@@ -889,14 +1095,14 @@
       min-height: clamp(112px, 20vh, 190px);
       padding: clamp(18px, 4vw, 34px);
       overflow: hidden;
-      border: 3px solid #ffd400;
+      border: 3px solid #17140f;
       border-radius: clamp(18px, 3vw, 28px);
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 20%, transparent 80%, rgba(255, 255, 255, 0.07)),
-        rgba(0, 0, 0, 0.46);
+        linear-gradient(180deg, rgba(255, 212, 0, 0.08), transparent 20%, transparent 80%, rgba(230, 0, 18, 0.05)),
+        rgba(255, 253, 247, 0.96);
       box-shadow:
-        inset 0 14px 28px rgba(0, 0, 0, 0.42),
-        inset 0 -14px 28px rgba(0, 0, 0, 0.42),
+        inset 0 14px 28px rgba(61, 45, 17, 0.08),
+        inset 0 -14px 28px rgba(61, 45, 17, 0.08),
         0 0 24px rgba(255, 212, 0, 0.2);
       perspective: 800px;
     }
@@ -909,7 +1115,7 @@
       left: 0;
       width: 100%;
       height: 1px;
-      background: rgba(255, 255, 255, 0.18);
+      background: rgba(23, 20, 15, 0.12);
       pointer-events: none;
     }
 
@@ -918,13 +1124,13 @@
 
     #winner-overlay-title {
       max-width: 100%;
-      color: #fff;
+      color: #17140f;
       font-size: clamp(2.1rem, 6.7vw, 5.7rem);
       line-height: 0.98;
       font-weight: 880;
       letter-spacing: -0.055em;
       text-wrap: balance;
-      text-shadow: 0 5px 18px rgba(0, 0, 0, 0.55), 0 0 22px rgba(255, 255, 255, 0.15);
+      text-shadow: 0 5px 18px rgba(61, 45, 17, 0.14), 0 0 22px rgba(255, 212, 0, 0.12);
     }
 
     .slot-word {
@@ -946,17 +1152,17 @@
       min-height: 54px;
       margin-top: clamp(24px, 4vh, 38px);
       padding: 0 28px;
-      border: 2px solid rgba(255, 255, 255, 0.72);
+      border: 2px solid #ffd400;
       border-radius: 999px;
-      color: #171717;
-      background: #ffd400;
-      box-shadow: 0 7px 0 #a86b00, 0 14px 28px rgba(0, 0, 0, 0.35), 0 0 25px rgba(255, 212, 0, 0.32);
+      color: #fff;
+      background: #17140f;
+      box-shadow: 0 7px 0 #9b6600, 0 14px 28px rgba(61, 45, 17, 0.24), 0 0 25px rgba(255, 212, 0, 0.32);
       font-size: 16px;
       font-weight: 820;
     }
 
     .winner-action:hover {
-      background: #ffe14d;
+      background: #322e27;
       transform: translateY(-2px);
     }
 
@@ -988,7 +1194,7 @@
       display: grid;
       list-style: none;
       padding: 0;
-      margin: -6px 0 0;
+      margin: 0;
     }
 
     .task-row {
@@ -1005,6 +1211,10 @@
     .task-row:last-child { border-bottom: 0; }
 
     .task-title {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px 9px;
       min-width: 0;
       padding-right: 6px;
       overflow-wrap: anywhere;
@@ -1013,7 +1223,45 @@
       font-weight: 590;
     }
 
+    .task-title-text {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .task-age {
+      --age-color: #18a957;
+      display: inline-flex;
+      align-items: center;
+      flex: none;
+      gap: 6px;
+      min-height: 24px;
+      padding: 3px 8px 3px 7px;
+      border: 1px solid color-mix(in srgb, var(--age-color) 35%, transparent);
+      border-radius: 999px;
+      color: var(--text-secondary);
+      background: color-mix(in srgb, var(--age-color) 11%, var(--surface-subtle));
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 720;
+      line-height: 1;
+      white-space: nowrap;
+      transition: border-color var(--fast) ease, background-color var(--fast) ease, color var(--fast) ease;
+    }
+
+    .task-age::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--age-color);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--age-color) 16%, transparent);
+    }
+
+    .task-age[data-age-level="yellow"] { --age-color: #e0a400; }
+    .task-age[data-age-level="red"] { --age-color: #e34840; }
+
     .task-title input {
+      flex: 1 1 100%;
       min-height: 40px;
       padding: 0 11px;
       font-size: 14px;
@@ -1043,18 +1291,118 @@
 
     .task-row.is-entering { animation: row-enter 340ms var(--ease); }
 
-    .done-section {
-      margin-top: 8px;
-      padding-top: 15px;
-      border-top: 1px solid var(--line-strong);
+    .reward-dashboard {
+      position: relative;
+      flex: none;
+      margin: -2px 0 10px;
+      padding: 8px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, transparent), transparent 48%),
+        var(--surface-subtle);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
     }
 
-    .done-head {
-      display: flex;
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4px;
+    }
+
+    .kpi-item {
+      display: grid;
+      min-width: 0;
+      justify-items: center;
+      gap: 1px;
+      padding: 3px 2px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .kpi-item strong {
+      max-width: 100%;
+      overflow: hidden;
+      color: var(--text);
+      font-size: 16px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .kpi-item span {
+      overflow: hidden;
+      color: var(--text-tertiary);
+      font-size: 9px;
+      font-weight: 720;
+      letter-spacing: 0.06em;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .level-row {
+      display: grid;
+      grid-template-columns: auto minmax(54px, 1fr) auto;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 8px;
+      gap: 7px;
+      margin-top: 6px;
+    }
+
+    #kpi-level,
+    #kpi-next {
+      color: var(--text-secondary);
+      font-size: 9px;
+      font-weight: 720;
+      white-space: nowrap;
+    }
+
+    .level-meter {
+      position: relative;
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--line);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+
+    #level-fill {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #18a957, #ffd400 68%, #ff8a00);
+      box-shadow: 0 0 10px rgba(255, 212, 0, 0.42);
+      transition: width 720ms var(--ease);
+    }
+
+    .reward-dashboard.is-rewarding { animation: reward-dashboard-pulse 920ms var(--ease); }
+
+    .reward-dashboard.is-level-up::after {
+      content: "LEVEL " attr(data-level) "!";
+      position: absolute;
+      z-index: 4;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: radial-gradient(circle, rgba(24, 169, 87, 0.97), rgba(0, 87, 217, 0.92));
+      font-size: clamp(1.3rem, 4vw, 2.25rem);
+      font-weight: 950;
+      letter-spacing: 0.08em;
+      text-shadow: 0 3px 0 rgba(0, 0, 0, 0.24);
+      animation: level-up-flash 1100ms var(--ease) forwards;
+      pointer-events: none;
+    }
+
+    .done-section {
+      margin: 0;
+      padding: 0;
+      border-top: 0;
     }
 
     .done-head h3 {
@@ -1093,7 +1441,7 @@
 
     .done-toggle {
       display: grid;
-      grid-template-columns: 31px minmax(0, 1fr);
+      grid-template-columns: 31px minmax(0, 1fr) auto;
       align-items: center;
       gap: 9px;
       min-height: 42px;
@@ -1147,6 +1495,42 @@
       text-decoration-thickness: 2px;
     }
 
+    .done-points {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 25px;
+      padding: 4px 8px;
+      border: 1px solid rgba(255, 212, 0, 0.6);
+      border-radius: 999px;
+      color: #3c2a00;
+      background: linear-gradient(135deg, #ffe66a, #ffc400);
+      box-shadow: 0 4px 12px rgba(255, 196, 0, 0.22);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 900;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .reward-fly-token {
+      position: fixed;
+      z-index: 1200;
+      display: grid;
+      place-items: center;
+      min-height: 30px;
+      padding: 6px 11px;
+      border: 2px solid #fff3a3;
+      border-radius: 999px;
+      color: #2f2100;
+      background: linear-gradient(135deg, #fff29a, #ffd400 58%, #ff9d00);
+      box-shadow: 0 0 0 5px rgba(255, 212, 0, 0.16), 0 8px 24px rgba(255, 157, 0, 0.42);
+      font-size: 12px;
+      font-weight: 950;
+      line-height: 1;
+      pointer-events: none;
+    }
+
     .done-empty {
       margin: 0;
       padding: 8px 2px 4px;
@@ -1159,6 +1543,7 @@
     .done-row.is-awaiting-reveal { opacity: 0; transform: translateY(-12px) scale(0.94); }
     .done-row.is-completed-entry { animation: completion-row-in 720ms var(--ease); }
     .done-row.is-completed-entry .done-box { animation: completion-check-pop 680ms var(--ease); }
+    .done-row.is-completed-entry .done-points { animation: reward-points-pop 1050ms var(--ease); }
 
     .done-spark {
       position: absolute;
@@ -1271,6 +1656,51 @@
       0% { opacity: 0; transform: translate(0, 0) scale(0.2); }
       22% { opacity: 1; }
       100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(1.1); }
+    }
+
+    @keyframes reward-dashboard-pulse {
+      0%, 100% { border-color: var(--line); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06); transform: scale(1); }
+      38% { border-color: rgba(255, 212, 0, 0.78); box-shadow: 0 0 0 4px rgba(255, 212, 0, 0.12), 0 0 24px rgba(24, 169, 87, 0.22); transform: scale(1.018); }
+      70% { transform: scale(0.995); }
+    }
+
+    @keyframes pressure-angry {
+      0%, 100% { transform: translateX(0) rotate(0); }
+      16% { transform: translateX(-3px) rotate(-0.35deg); }
+      32% { transform: translateX(3px) rotate(0.35deg); }
+      48% { transform: translateX(-2px) rotate(-0.2deg); }
+      64% { transform: translateX(2px) rotate(0.2deg); }
+      80% { transform: translateX(-1px); }
+    }
+
+    @keyframes urgency-growl {
+      0%, 100% { transform: scale(1); filter: brightness(1); }
+      38% { transform: scale(1.13); filter: brightness(1.12); }
+      64% { transform: scale(0.97); }
+    }
+
+    @keyframes reel-rattle {
+      0%, 100% { transform: translateY(-1px); filter: blur(0); }
+      50% { transform: translateY(2px); filter: blur(1px); }
+    }
+
+    @keyframes slot-cabinet-win {
+      0%, 100% { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 10px 24px rgba(61, 45, 17, 0.13); transform: scale(1); }
+      42% { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 4px rgba(255, 212, 0, 0.22), 0 0 34px rgba(255, 212, 0, 0.38); transform: scale(1.025); }
+    }
+
+    @keyframes reward-points-pop {
+      0% { opacity: 0; transform: translateY(15px) scale(0.25) rotate(-8deg); filter: blur(3px); }
+      42% { opacity: 1; transform: translateY(-7px) scale(1.34) rotate(3deg); filter: blur(0); box-shadow: 0 0 0 10px rgba(255, 212, 0, 0.12), 0 7px 24px rgba(255, 196, 0, 0.48); }
+      68% { transform: translateY(2px) scale(0.92) rotate(-1deg); }
+      84% { transform: translateY(-1px) scale(1.05); }
+      100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); }
+    }
+
+    @keyframes level-up-flash {
+      0% { opacity: 0; transform: scale(0.6); filter: blur(8px); }
+      30%, 68% { opacity: 1; transform: scale(1); filter: blur(0); }
+      100% { opacity: 0; transform: scale(1.16); filter: blur(4px); }
     }
 
     @keyframes completion-modal-beat {
@@ -1391,15 +1821,10 @@
 
       .wheel-stage {
         flex: none;
-        width: min(100%, 420px, calc(100dvh - 360px));
+        width: min(100%, 420px, calc(100dvh - 496px));
       }
 
       .spin-controls { flex: none; }
-
-      .task-scroll {
-        max-height: none;
-        scrollbar-gutter: stable;
-      }
 
       .tasks-card .task-row {
         grid-template-columns: minmax(0, 1fr) auto auto;
@@ -1414,6 +1839,49 @@
 
       .tasks-card .task-priority { justify-self: start; }
       .empty-state:not([hidden]) { flex: 1; align-content: center; }
+    }
+
+    @media (min-width: 821px) and (min-height: 900px) {
+      .pressure-deck {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(230px, 1fr);
+      }
+
+      .day-pressure { min-height: 120px; padding: 14px 16px; }
+      .local-clock { font-size: 34px; }
+      #eod-countdown { font-size: 17px; }
+      .pressure-copy { grid-template-columns: auto minmax(0, 1fr); align-items: baseline; gap: 12px; }
+      .pressure-copy strong { text-align: right; }
+
+      .focus-machine { padding: 16px; }
+      .machine-head h3 { font-size: 16px; }
+      #arcade-tickets { font-size: 10px; }
+      .focus-reels { width: min(100%, 430px); gap: 10px; margin: 16px auto 0; }
+      .focus-reel { height: 68px; border-radius: 13px; font-size: 35px; }
+      .machine-controls { width: min(100%, 430px); margin: 14px auto 0; }
+      .slot-pull { min-height: 42px; padding: 0 20px; font-size: 12px; }
+      #ticket-progress { font-size: 10px; }
+      .slot-result {
+        width: min(100%, 500px);
+        min-height: 30px;
+        margin: 14px auto 0;
+        padding: 0;
+        font-size: 12px;
+        line-height: 1.3;
+        text-align: center;
+      }
+      .slot-rules {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        width: min(100%, 500px);
+        margin: auto auto 0;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.48);
+        font-size: 9px;
+        line-height: 1.25;
+      }
     }
 
     @media (min-width: 821px) and (max-width: 1120px) {
@@ -1431,17 +1899,17 @@
       .task-priority { justify-self: start; }
     }
 
-    @media (min-width: 821px) and (max-height: 680px) {
+    @media (min-width: 821px) and (max-height: 820px) {
       .app-shell { padding-top: 12px; padding-bottom: 12px; }
       .hero { margin-bottom: 8px; }
       .brand-mark { margin-bottom: 1px; font-size: 10px; }
-      h1 { font-size: 2.55rem; }
+      h1 { font-size: 2rem; }
       .subtitle { font-size: 12px; line-height: 1.35; }
       .stack { gap: 10px; }
       .card { padding: 15px; }
       .add-card { padding: 9px 12px; }
       .section-head { margin-bottom: 7px; }
-      .wheel-stage { width: min(100%, 350px, calc(100dvh - 315px)); margin-top: 7px; }
+      .wheel-stage { width: min(100%, 350px, calc(100dvh - 365px)); margin-top: 7px; }
       .wheel-button-anchor { width: 94px; height: 94px; }
       #play { width: 86px; min-width: 86px; height: 86px; min-height: 86px; font-size: 10px; }
       #play .play-icon { font-size: 18px; }
@@ -1449,8 +1917,52 @@
       #result { min-height: 36px; }
       #result .result-label { font-size: 10px; }
       #result .result-title { font-size: 17px; }
+      .pressure-deck {
+        grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
+        gap: 6px;
+        flex: none;
+        min-height: 78px;
+        max-height: 78px;
+        margin-top: 7px;
+      }
+      .focus-machine { display: flex; padding: 6px; border-radius: 11px; }
+      .machine-head h3 { font-size: 10px; }
+      #arcade-tickets { font-size: 7px; }
+      .focus-reels { gap: 3px; margin-top: 2px; }
+      .focus-reel { height: 22px; border-width: 1px; border-radius: 5px; font-size: 13px; }
+      .machine-controls { gap: 5px; margin-top: 2px; }
+      .slot-pull {
+        min-height: 20px;
+        padding: 0 7px;
+        border-width: 1px;
+        box-shadow: 0 2px 0 #8f6100;
+        font-size: 7px;
+      }
+      #ticket-progress { font-size: 6px; }
+      .slot-result {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+      .day-pressure { padding: 8px 10px; }
+      .pressure-head h3 { font-size: 11px; }
+      .clock-row { margin-top: 6px; }
+      .local-clock { font-size: 19px; }
+      #eod-countdown { font-size: 12px; }
+      .pressure-copy { display: none; }
+      .day-meter { margin-top: auto; }
       .tasks-card .task-row { padding: 5px 0; }
-      .done-section { margin-top: 5px; padding-top: 10px; }
+      .reward-dashboard { margin-bottom: 7px; padding: 6px; }
+      .kpi-item strong { font-size: 14px; }
+      .level-row { margin-top: 4px; }
+      .task-board-split { gap: 7px; }
+      .pane-head, .done-head { min-height: 32px; padding: 5px 8px; }
       .done-row { padding: 3px 0; }
       .done-toggle { min-height: 36px; }
 
@@ -1479,18 +1991,19 @@
       }
 
       .brand-mark { margin-bottom: 14px; }
-      h1 { font-size: clamp(2.9rem, 11vw, 4.6rem); }
+      h1 { font-size: clamp(2.35rem, 8vw, 3.75rem); white-space: normal; }
       .subtitle { margin: 16px auto 0; font-size: 15px; line-height: 1.55; }
 
       .stack { grid-template-columns: minmax(0, 1fr); gap: 16px; }
       .add-card { grid-column: auto; }
       .wheel-stage { width: min(100%, 500px); }
-
-      .tasks-card { display: block; }
-      .task-scroll {
-        max-height: none;
-        padding-right: 0;
-        overflow: visible;
+      .pressure-deck { grid-template-columns: minmax(0, 1fr); min-height: 270px; }
+      .focus-machine { min-height: 124px; }
+      .task-board-split {
+        flex: none;
+        height: min(680px, 72dvh);
+        min-height: 500px;
+        grid-template-rows: minmax(0, 3fr) minmax(0, 2fr);
       }
     }
 
@@ -1545,6 +2058,12 @@
       .task-priority { justify-self: start; }
     }
 
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .reward-dashboard { padding: 9px; }
+      .level-row { margin-top: 7px; }
+    }
+
     @media (max-width: 380px) {
       #add { grid-template-columns: 1fr; }
       #add .title-field { grid-column: auto; }
@@ -1554,6 +2073,8 @@
       .task-title { grid-column: 1 / -1; }
       .task-priority { grid-column: 1 / -1; width: 100%; }
       .task-row .button { width: 100%; }
+      .done-toggle { grid-template-columns: 31px minmax(0, 1fr); }
+      .done-points { grid-column: 2; justify-self: start; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1564,12 +2085,18 @@
         transition-duration: 0.01ms !important;
       }
       .confetti { display: none; }
-      .screen-particle, .winner-rays { display: none; }
+      .screen-particle, .winner-rays, .done-spark, .reward-fly-token { display: none; }
       .wheel-stage::before,
       .wheel-stage::after,
       .wheel-rim::before,
       #pointer,
       #play::before {
+        animation: none !important;
+      }
+      .pressure-deck.is-angry .day-pressure,
+      .pressure-deck.is-angry .urgency-badge,
+      .focus-machine,
+      .focus-reel {
         animation: none !important;
       }
       #winner-dialog, .winner-panel, .jackpot-word span, .slot-letter, .winner-panel::after, .winner-completion-beat {
@@ -1582,9 +2109,9 @@
 <body>
   <main class="app-shell">
     <header class="hero">
-      <div class="brand-mark">Decision wheel</div>
-      <h1>TYCHE</h1>
-      <p class="subtitle">Add what needs doing, then let time tip the odds. The longer a task has waited, the more likely it is to be chosen.</p>
+      <div class="brand-mark">Productivity casino</div>
+      <h1>To-Do Gambling</h1>
+      <p class="subtitle">If it’s done in under 2 minutes, do it directly! The dopamine catch for ADHD people who have a shit ton to do.</p>
     </header>
 
     <div class="stack">
@@ -1631,27 +2158,101 @@
             <strong class="result-title">Your next move will appear here.</strong>
           </div>
         </div>
+
+        <section class="pressure-deck" id="pressure-deck" data-urgency="calm" aria-label="End-of-day pressure and XP focus slots">
+          <section class="day-pressure" id="day-pressure" aria-labelledby="day-pressure-heading">
+            <div class="pressure-head">
+              <h3 id="day-pressure-heading">Day pressure</h3>
+              <span class="urgency-badge" id="urgency-badge">On track</span>
+            </div>
+            <div class="clock-row">
+              <time class="local-clock" id="local-clock" aria-label="Local time">--:--:--</time>
+              <div class="eod-clock">
+                <span>Until EOD</span>
+                <time id="eod-countdown" aria-label="Time remaining until end of day">--:--:--</time>
+              </div>
+            </div>
+            <div class="pressure-copy">
+              <span id="workload-copy">0 open · clear runway</span>
+              <strong id="pressure-message">All clear for today.</strong>
+            </div>
+            <div class="day-meter" aria-hidden="true"><span id="day-meter-fill"></span></div>
+            <p class="visually-hidden" id="day-pressure-status" role="status" aria-live="polite" aria-atomic="true"></p>
+          </section>
+
+          <section class="focus-machine" id="focus-machine" aria-labelledby="focus-machine-heading">
+            <div class="machine-head">
+              <h3 id="focus-machine-heading">Dopamine slots</h3>
+              <span id="arcade-tickets">0 tickets</span>
+            </div>
+            <div class="focus-reels" aria-hidden="true">
+              <span class="focus-reel">⚡</span>
+              <span class="focus-reel">🎯</span>
+              <span class="focus-reel">★</span>
+            </div>
+            <div class="machine-controls">
+              <button class="slot-pull" id="slot-pull" type="button" aria-describedby="ticket-progress slot-result slot-rules" disabled>Pull</button>
+              <span id="ticket-progress">100 XP to a Lucky Ticket</span>
+            </div>
+            <p class="slot-result" id="slot-result" role="status" aria-live="polite" aria-atomic="true">Every 100 work XP unlocks a no-loss focus pull.</p>
+            <div class="slot-rules" id="slot-rules" aria-label="Focus slot rules and odds">
+              <span>No losses · work XP always stays yours</span>
+              <span>Odds: 50% · 30% · 15% · 4% · 1%</span>
+            </div>
+          </section>
+        </section>
       </section>
 
-      <section class="card tasks-card" aria-labelledby="tasks-heading">
+      <section class="card tasks-card" aria-labelledby="task-board-heading">
         <div class="section-head">
-          <h2 id="tasks-heading">Tasks</h2>
-          <span class="section-meta" id="task-count">0 tasks</span>
+          <h2 id="task-board-heading">Task board</h2>
+          <span class="section-meta" id="task-total-count">0 total</span>
         </div>
-        <div class="task-scroll" id="task-scroll">
-          <ul id="list"></ul>
-          <div class="empty-state" id="empty" hidden>
-            <div class="empty-icon" aria-hidden="true">＋</div>
-            <div class="empty-title">A clear slate</div>
-            <div class="empty-copy">Add your first task above and it will appear here and on the wheel.</div>
+        <section
+          class="reward-dashboard"
+          id="reward-dashboard"
+          aria-label="Productivity rewards"
+          title="P1: 50 XP · P2: 30 XP · P3: 20 XP · plus 2 XP per full waiting day, up to 30 bonus XP"
+        >
+          <div class="kpi-grid">
+            <div class="kpi-item"><strong id="kpi-xp">0</strong><span>Total XP</span></div>
+            <div class="kpi-item"><strong id="kpi-today">0</strong><span>Today</span></div>
+            <div class="kpi-item"><strong id="kpi-streak">0d</strong><span>Streak</span></div>
+            <div class="kpi-item"><strong id="kpi-rate">0%</strong><span>Done rate</span></div>
           </div>
-          <section class="done-section" aria-labelledby="done-heading">
+          <div class="level-row">
+            <strong id="kpi-level">Level 1</strong>
+            <div class="level-meter" id="level-meter" role="progressbar" aria-label="Level progress" aria-valuemin="0" aria-valuemax="250" aria-valuenow="0">
+              <span id="level-fill"></span>
+            </div>
+            <span id="kpi-next">250 XP to L2</span>
+          </div>
+          <p class="visually-hidden" id="reward-status" aria-live="polite" aria-atomic="true"></p>
+        </section>
+        <div class="task-board-split">
+          <section class="task-pane open-pane" aria-labelledby="tasks-heading">
+            <div class="pane-head">
+              <h3 id="tasks-heading">Open tasks</h3>
+              <span class="section-meta" id="task-count">0 tasks</span>
+            </div>
+            <div class="pane-scroll task-scroll" id="task-scroll" tabindex="0" role="region" aria-labelledby="tasks-heading">
+              <ul id="list"></ul>
+              <div class="empty-state" id="empty" hidden>
+                <div class="empty-icon" aria-hidden="true">＋</div>
+                <div class="empty-title">A clear slate</div>
+                <div class="empty-copy">Add your first task above and it will appear here and on the wheel.</div>
+              </div>
+            </div>
+          </section>
+          <section class="task-pane done-section" aria-labelledby="done-heading">
             <div class="done-head">
               <h3 id="done-heading">Done</h3>
               <span class="section-meta" id="done-count">0 wins</span>
             </div>
-            <ul id="done-list"></ul>
-            <p class="done-empty" id="done-empty">Completed wins will land here.</p>
+            <div class="pane-scroll done-scroll" id="done-scroll" tabindex="0" role="region" aria-labelledby="done-heading">
+              <ul id="done-list"></ul>
+              <p class="done-empty" id="done-empty">Completed wins will land here.</p>
+            </div>
           </section>
         </div>
       </section>
@@ -1693,17 +2294,43 @@
       const resultLabel = resultEl.querySelector(".result-label");
       const resultTitle = resultEl.querySelector(".result-title");
       const taskScroll = document.getElementById("task-scroll");
+      const doneScroll = document.getElementById("done-scroll");
       const listEl = document.getElementById("list");
       const emptyEl = document.getElementById("empty");
       const doneListEl = document.getElementById("done-list");
       const doneCount = document.getElementById("done-count");
       const doneEmpty = document.getElementById("done-empty");
+      const rewardDashboard = document.getElementById("reward-dashboard");
+      const kpiXp = document.getElementById("kpi-xp");
+      const kpiToday = document.getElementById("kpi-today");
+      const kpiStreak = document.getElementById("kpi-streak");
+      const kpiRate = document.getElementById("kpi-rate");
+      const kpiLevel = document.getElementById("kpi-level");
+      const kpiNext = document.getElementById("kpi-next");
+      const levelMeter = document.getElementById("level-meter");
+      const levelFill = document.getElementById("level-fill");
+      const rewardStatus = document.getElementById("reward-status");
       const noticeEl = document.getElementById("notice");
       const addForm = document.getElementById("add");
       const titleInput = document.getElementById("title");
       const newPrio = document.getElementById("new-prio");
       const wheelCount = document.getElementById("wheel-count");
       const taskCount = document.getElementById("task-count");
+      const taskTotalCount = document.getElementById("task-total-count");
+      const pressureDeck = document.getElementById("pressure-deck");
+      const localClock = document.getElementById("local-clock");
+      const eodCountdown = document.getElementById("eod-countdown");
+      const urgencyBadge = document.getElementById("urgency-badge");
+      const workloadCopy = document.getElementById("workload-copy");
+      const pressureMessage = document.getElementById("pressure-message");
+      const dayMeterFill = document.getElementById("day-meter-fill");
+      const dayPressureStatus = document.getElementById("day-pressure-status");
+      const focusMachine = document.getElementById("focus-machine");
+      const focusReels = Array.from(document.querySelectorAll(".focus-reel"));
+      const slotPull = document.getElementById("slot-pull");
+      const arcadeTickets = document.getElementById("arcade-tickets");
+      const ticketProgress = document.getElementById("ticket-progress");
+      const slotResult = document.getElementById("slot-result");
       const winnerDialog = document.getElementById("winner-dialog");
       const winnerOverlayTitle = document.getElementById("winner-overlay-title");
       const winnerA11yTitle = document.getElementById("winner-a11y-title");
@@ -1713,7 +2340,10 @@
       const screenConfetti = document.getElementById("screen-confetti");
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
       const darkMode = window.matchMedia("(prefers-color-scheme: dark)");
+      const compactSlots = window.matchMedia("(min-width: 821px) and (max-height: 820px)");
       const TAU = Math.PI * 2;
+      const DAY_MS = 86400000;
+      const XP_PER_LEVEL = 250;
 
       const state = {
         todos: [],
@@ -1730,6 +2360,13 @@
         canvasSize: 340,
         dpr: 1,
         loadVersion: 0,
+        kpiAnimationVersion: 0,
+        pendingProductivityReward: null,
+        arcade: null,
+        arcadeSpinning: false,
+        dayClockTimer: null,
+        eodUrgency: null,
+        lastEodAlertSlot: null,
       };
 
       let winnerReturnFocus = null;
@@ -1742,6 +2379,388 @@
 
       function taskWord(count) {
         return `${count} ${count === 1 ? "task" : "tasks"}`;
+      }
+
+      function normalizeUtcTimestamp(value) {
+        if (typeof value !== "string" || !value.trim()) return "";
+        const milliseconds = value.trim().replace(/(\.\d{3})\d+/, "$1");
+        const hasTimezone = /(?:z|[+-]\d{2}:\d{2})$/i.test(milliseconds);
+        return hasTimezone ? milliseconds : `${milliseconds}Z`;
+      }
+
+      function parseUtcTimestamp(value) {
+        return Date.parse(normalizeUtcTimestamp(value));
+      }
+
+      function taskAge(createdAt, now = Date.now()) {
+        const created = parseUtcTimestamp(createdAt);
+        if (!Number.isFinite(created)) {
+          return { label: "Zeit unbekannt", level: "green", levelLabel: "unbekannt" };
+        }
+        const totalMinutes = Math.max(0, Math.floor((now - created) / 60000));
+        const totalHours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        const level = totalHours >= 72 ? "red" : totalHours >= 24 ? "yellow" : "green";
+        const levelLabel = level === "red" ? "lange Wartezeit" : level === "yellow" ? "mittlere Wartezeit" : "frisch";
+        return {
+          label: `${totalHours} Std. ${minutes} Min.`,
+          level,
+          levelLabel,
+        };
+      }
+
+      function pointBreakdown(todo) {
+        const priorityBase = { 1: 50, 2: 30, 3: 20 }[Number(todo.priority)] ?? 20;
+        const created = parseUtcTimestamp(todo.created_at);
+        const completed = parseUtcTimestamp(todo.completed_at || todo.updated_at);
+        const waitedDays = Number.isFinite(created) && Number.isFinite(completed)
+          ? Math.max(0, Math.floor((completed - created) / DAY_MS))
+          : 0;
+        const waitingBonus = Math.min(30, waitedDays * 2);
+        return { priorityBase, waitingBonus, total: priorityBase + waitingBonus };
+      }
+
+      function localDateKey(timestamp) {
+        const date = timestamp instanceof Date ? timestamp : new Date(timestamp);
+        if (Number.isNaN(date.getTime())) return "";
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function dayPressureSnapshot(now = new Date(), openCount = state.todos.length) {
+        const end = new Date(now);
+        end.setHours(24, 0, 0, 0);
+        const start = new Date(now);
+        start.setHours(0, 0, 0, 0);
+        const remainingMs = Math.max(0, end.getTime() - now.getTime());
+        const remainingMinutes = Math.ceil(remainingMs / 60000);
+        const minutesPerTask = openCount ? remainingMinutes / openCount : Infinity;
+        let urgency = "calm";
+        if (openCount === 0) urgency = "clear";
+        else if (remainingMinutes <= 30 || minutesPerTask <= 20) urgency = "urgent";
+        else if (remainingMinutes <= 120 || minutesPerTask <= 45) urgency = "warning";
+        const dayLength = Math.max(1, end.getTime() - start.getTime());
+        const dayProgress = Math.min(100, Math.max(0, ((now.getTime() - start.getTime()) / dayLength) * 100));
+        return { now, end, remainingMs, remainingMinutes, minutesPerTask, openCount, urgency, dayProgress };
+      }
+
+      function formatCountdown(milliseconds) {
+        const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
+      }
+
+      function eodAlertSlot(date) {
+        return `${localDateKey(date)}-${String(date.getHours()).padStart(2, "0")}-${Math.floor(date.getMinutes() / 20)}`;
+      }
+
+      function pressureAnnouncement(snapshot, alert = false) {
+        if (snapshot.openCount === 0) return "All tasks are clear for today.";
+        const hours = Math.floor(snapshot.remainingMinutes / 60);
+        const minutes = snapshot.remainingMinutes % 60;
+        const remaining = hours ? `${hours} hours ${minutes} minutes` : `${minutes} minutes`;
+        const prefix = alert ? "Deadline pressure alert." : `Day pressure ${snapshot.urgency}.`;
+        return `${prefix} ${snapshot.openCount} open tasks and ${remaining} until end of day.`;
+      }
+
+      function pulseDayPressure(snapshot) {
+        if (!reduceMotion.matches) {
+          pressureDeck.classList.remove("is-angry");
+          void pressureDeck.offsetWidth;
+          pressureDeck.classList.add("is-angry");
+          window.setTimeout(() => pressureDeck.classList.remove("is-angry"), 1050);
+        }
+        dayPressureStatus.textContent = pressureAnnouncement(snapshot, true);
+      }
+
+      function renderDayPressure(now = new Date()) {
+        const snapshot = dayPressureSnapshot(now);
+        const previousUrgency = state.eodUrgency;
+        const slot = eodAlertSlot(now);
+        const labels = {
+          clear: ["All clear", "All clear for today."],
+          calm: ["On track", "Plenty of runway."],
+          warning: ["Getting tight", "EOD is closing in."],
+          urgent: ["Critical", "Pick one. Now."],
+        };
+        const [badge, message] = labels[snapshot.urgency];
+        pressureDeck.dataset.urgency = snapshot.urgency;
+        localClock.textContent = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+        localClock.dateTime = now.toISOString();
+        eodCountdown.textContent = formatCountdown(snapshot.remainingMs);
+        eodCountdown.dateTime = snapshot.end.toISOString();
+        urgencyBadge.textContent = badge;
+        pressureMessage.textContent = message;
+        workloadCopy.textContent = snapshot.openCount
+          ? `${snapshot.openCount} open · ${Math.max(1, Math.floor(snapshot.minutesPerTask))} min/task`
+          : "0 open · clear runway";
+        dayMeterFill.style.width = `${snapshot.dayProgress}%`;
+
+        const changed = previousUrgency !== snapshot.urgency;
+        const enteredUrgent = snapshot.urgency === "urgent" && previousUrgency !== "urgent";
+        if (changed && previousUrgency !== null) dayPressureStatus.textContent = pressureAnnouncement(snapshot);
+
+        if (snapshot.urgency !== "urgent") {
+          state.lastEodAlertSlot = slot;
+          pressureDeck.classList.remove("is-angry");
+        } else {
+          const nextTwentyMinutePulse = state.lastEodAlertSlot !== slot;
+          const canPulse = !document.hidden && !winnerDialog.open && !state.spinning;
+          if ((enteredUrgent || nextTwentyMinutePulse) && canPulse) {
+            pulseDayPressure(snapshot);
+            state.lastEodAlertSlot = slot;
+          }
+        }
+        state.eodUrgency = snapshot.urgency;
+      }
+
+      function scheduleDayPressure() {
+        if (state.dayClockTimer) window.clearTimeout(state.dayClockTimer);
+        state.dayClockTimer = null;
+        if (document.hidden) return;
+        renderDayPressure(new Date());
+        const delay = Math.max(120, 1000 - (Date.now() % 1000) + 18);
+        state.dayClockTimer = window.setTimeout(scheduleDayPressure, delay);
+      }
+
+      function renderArcade(arcade = state.arcade) {
+        if (!arcade) return;
+        focusMachine.classList.remove("is-unavailable");
+        const tickets = Number(arcade.tickets) || 0;
+        const last = arcade.last_spin;
+        arcadeTickets.textContent = `${tickets} ${tickets === 1 ? "ticket" : "tickets"}`;
+        ticketProgress.textContent = compactSlots.matches && last
+          ? last.label
+          : tickets
+            ? "Ready now · your work XP stays intact"
+            : `${arcade.xp_to_next_ticket} XP to a Lucky Ticket`;
+        if (last?.symbols?.length === 3 && !state.arcadeSpinning) {
+          focusReels.forEach((reel, index) => { reel.textContent = last.symbols[index]; });
+          slotResult.textContent = `${last.label}: ${last.message} ${tickets} ${tickets === 1 ? "ticket" : "tickets"} remaining.`;
+        } else if (!last) {
+          slotResult.textContent = "Every 100 work XP unlocks a no-loss focus pull.";
+        }
+        focusMachine.dataset.tier = last?.tier || "";
+      }
+
+      function renderArcadeUnavailable() {
+        state.arcade = null;
+        focusMachine.classList.add("is-unavailable");
+        focusMachine.dataset.tier = "";
+        arcadeTickets.textContent = "Unavailable";
+        ticketProgress.textContent = "Tasks and wheel are still ready";
+        slotResult.textContent = "Focus slots are temporarily unavailable.";
+      }
+
+      function animateFocusReel(reel, finalSymbol, duration, delay) {
+        if (reduceMotion.matches) {
+          reel.textContent = finalSymbol;
+          return Promise.resolve();
+        }
+        const symbols = ["⚡", "🎯", "★", "✓", "🔔", "7"];
+        return new Promise((resolve) => {
+          window.setTimeout(() => {
+            const started = Date.now();
+            const timer = window.setInterval(() => {
+              reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+              if (Date.now() - started >= duration) {
+                window.clearInterval(timer);
+                reel.textContent = finalSymbol;
+                reel.animate?.(
+                  [{ transform: "translateY(-18px) scale(0.8)", opacity: 0.35 }, { transform: "translateY(0) scale(1)", opacity: 1 }],
+                  { duration: 280, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+                );
+                resolve();
+              }
+            }, 66);
+          }, delay);
+        });
+      }
+
+      async function pullFocusSlots() {
+        if (state.arcadeSpinning || state.spinning || state.mutationBusy || !state.arcade?.tickets) return;
+        clearError();
+        state.arcadeSpinning = true;
+        focusMachine.classList.remove("is-winner");
+        focusMachine.classList.add("is-spinning");
+        slotResult.textContent = "The server is choosing your focus boost…";
+        updateControls();
+        try {
+          const result = await api.spinArcade();
+          await Promise.all(result.symbols.map((symbol, index) => animateFocusReel(focusReels[index], symbol, 660 + index * 170, index * 100)));
+          state.arcade = {
+            ...state.arcade,
+            tickets: result.remaining_tickets,
+            last_spin: result,
+          };
+          state.arcadeSpinning = false;
+          focusMachine.classList.remove("is-spinning");
+          focusMachine.classList.add("is-winner");
+          renderArcade();
+          window.setTimeout(() => focusMachine.classList.remove("is-winner"), 780);
+        } catch (error) {
+          focusMachine.classList.remove("is-spinning");
+          showError(error);
+          try {
+            state.arcade = await api.arcade();
+          } catch (_) {
+            // Keep the original failure visible when the resync also fails.
+          }
+          state.arcadeSpinning = false;
+          renderArcade();
+        } finally {
+          state.arcadeSpinning = false;
+          updateControls();
+        }
+      }
+
+      function productivityStats(now = Date.now()) {
+        const totalXp = state.doneTodos.reduce((sum, todo) => sum + pointBreakdown(todo).total, 0);
+        const completionTimes = state.doneTodos
+          .map((todo) => parseUtcTimestamp(todo.completed_at))
+          .filter(Number.isFinite);
+        const todayKey = localDateKey(now);
+        const todayWins = completionTimes.filter((timestamp) => localDateKey(timestamp) === todayKey).length;
+        const completionDays = new Set(completionTimes.map(localDateKey));
+        const cursor = new Date(now);
+        cursor.setHours(12, 0, 0, 0);
+        if (!completionDays.has(localDateKey(cursor))) cursor.setDate(cursor.getDate() - 1);
+        let streak = 0;
+        while (completionDays.has(localDateKey(cursor)) && streak < 10000) {
+          streak += 1;
+          cursor.setDate(cursor.getDate() - 1);
+        }
+
+        const taskTotal = state.todos.length + state.doneTodos.length;
+        const doneRate = taskTotal ? Math.round((state.doneTodos.length / taskTotal) * 100) : 0;
+        const level = Math.floor(totalXp / XP_PER_LEVEL) + 1;
+        const levelProgress = totalXp % XP_PER_LEVEL;
+        return {
+          totalXp,
+          todayWins,
+          streak,
+          doneRate,
+          level,
+          levelProgress,
+          xpToNext: XP_PER_LEVEL - levelProgress,
+        };
+      }
+
+      function animateKpi(element, from, to, formatter, token, duration) {
+        if (!duration || from === to) {
+          element.textContent = formatter(to);
+          return;
+        }
+        const started = performance.now();
+        const frame = (now) => {
+          if (token !== state.kpiAnimationVersion) return;
+          const progress = Math.min((now - started) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          element.textContent = formatter(Math.round(from + (to - from) * eased));
+          if (progress < 1) requestAnimationFrame(frame);
+        };
+        requestAnimationFrame(frame);
+      }
+
+      function renderProductivity(stats = productivityStats(), { fromStats = null, celebrate = false } = {}) {
+        const start = fromStats || stats;
+        const token = ++state.kpiAnimationVersion;
+        const duration = fromStats && !reduceMotion.matches ? 760 : 0;
+        animateKpi(kpiXp, start.totalXp, stats.totalXp, (value) => String(value), token, duration);
+        animateKpi(kpiToday, start.todayWins, stats.todayWins, (value) => String(value), token, duration);
+        animateKpi(kpiStreak, start.streak, stats.streak, (value) => `${value}d`, token, duration);
+        animateKpi(kpiRate, start.doneRate, stats.doneRate, (value) => `${value}%`, token, duration);
+        kpiLevel.textContent = `Level ${stats.level}`;
+        kpiNext.textContent = `${stats.xpToNext} XP to L${stats.level + 1}`;
+        levelMeter.setAttribute("aria-valuenow", String(stats.levelProgress));
+        levelMeter.setAttribute("aria-valuetext", `${stats.levelProgress} of ${XP_PER_LEVEL} XP in level ${stats.level}`);
+
+        if (fromStats && !reduceMotion.matches) {
+          levelFill.style.transition = "none";
+          levelFill.style.width = `${(start.levelProgress / XP_PER_LEVEL) * 100}%`;
+          requestAnimationFrame(() => {
+            levelFill.style.transition = "";
+            levelFill.style.width = `${(stats.levelProgress / XP_PER_LEVEL) * 100}%`;
+          });
+        } else {
+          levelFill.style.width = `${(stats.levelProgress / XP_PER_LEVEL) * 100}%`;
+        }
+
+        rewardDashboard.classList.remove("is-rewarding", "is-level-up");
+        rewardDashboard.dataset.level = String(stats.level);
+        if (celebrate && !reduceMotion.matches) {
+          void rewardDashboard.offsetWidth;
+          rewardDashboard.classList.add("is-rewarding");
+          if (fromStats && stats.level > fromStats.level) rewardDashboard.classList.add("is-level-up");
+          window.setTimeout(() => {
+            if (token === state.kpiAnimationVersion) rewardDashboard.classList.remove("is-rewarding", "is-level-up");
+          }, 1200);
+        }
+
+        if (celebrate && fromStats) {
+          const earned = Math.max(0, stats.totalXp - fromStats.totalXp);
+          const streakWord = stats.streak === 1 ? "day" : "days";
+          rewardStatus.textContent = `Task completed. ${earned} XP earned. ${stats.totalXp} total XP. Streak ${stats.streak} ${streakWord}.`;
+        }
+      }
+
+      function flyRewardToken(row, earned) {
+        if (reduceMotion.matches || !row || earned <= 0) return;
+        const source = row.querySelector(".done-points")?.getBoundingClientRect();
+        const target = kpiXp.getBoundingClientRect();
+        if (!source) return;
+        const token = document.createElement("div");
+        token.className = "reward-fly-token";
+        token.textContent = `+${earned} XP`;
+        token.style.left = `${source.left}px`;
+        token.style.top = `${source.top}px`;
+        document.body.appendChild(token);
+        const deltaX = target.left + target.width / 2 - (source.left + source.width / 2);
+        const deltaY = target.top + target.height / 2 - (source.top + source.height / 2);
+        token.animate(
+          [
+            { opacity: 0, transform: "translate(0, 8px) scale(0.45)" },
+            { opacity: 1, transform: "translate(0, -12px) scale(1.18)", offset: 0.28 },
+            { opacity: 1, transform: `translate(${deltaX * 0.72}px, ${deltaY * 0.72 - 18}px) scale(0.9)`, offset: 0.72 },
+            { opacity: 0, transform: `translate(${deltaX}px, ${deltaY}px) scale(0.35)` },
+          ],
+          { duration: 820, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "forwards" }
+        ).finished.finally(() => token.remove());
+      }
+
+      function playPendingProductivityReward(row) {
+        const pending = state.pendingProductivityReward;
+        state.pendingProductivityReward = null;
+        if (!pending) return;
+        const earned = Math.max(0, pending.to.totalXp - pending.from.totalXp);
+        flyRewardToken(row, earned);
+        renderProductivity(pending.to, { fromStats: pending.from, celebrate: true });
+      }
+
+      function updateAgeBadge(badge, now = Date.now()) {
+        const age = taskAge(badge.dataset.createdAt, now);
+        badge.textContent = age.label;
+        badge.dataset.ageLevel = age.level;
+        badge.title = `${age.label} auf der Liste · Grün unter 24 Std., Gelb ab 24 Std., Rot ab 72 Std.`;
+        badge.setAttribute("aria-label", `${age.label} auf der Liste, ${age.levelLabel}`);
+      }
+
+      function createAgeBadge(todo) {
+        const badge = document.createElement("time");
+        badge.className = "task-age";
+        badge.dataset.createdAt = todo.created_at;
+        badge.dateTime = normalizeUtcTimestamp(todo.created_at);
+        updateAgeBadge(badge);
+        return badge;
+      }
+
+      function refreshTaskAges() {
+        const now = Date.now();
+        listEl.querySelectorAll(".task-age").forEach((badge) => updateAgeBadge(badge, now));
       }
 
       async function request(path, options = {}) {
@@ -1778,6 +2797,8 @@
         }),
         remove: (id) => request(`/todos/${id}`, { method: "DELETE" }),
         spin: () => request("/wheel/spin"),
+        arcade: () => request("/arcade"),
+        spinArcade: () => request("/arcade/spin", { method: "POST" }),
       };
 
       function showError(error) {
@@ -1791,7 +2812,7 @@
       }
 
       function updateControls() {
-        const busy = state.loading || state.spinning || state.mutationBusy;
+        const busy = state.loading || state.spinning || state.mutationBusy || state.arcadeSpinning;
         addForm.querySelectorAll("input, select, button").forEach((control) => {
           control.disabled = busy;
         });
@@ -1803,6 +2824,8 @@
         });
         playBtn.disabled = busy || state.todos.length === 0;
         playBtn.classList.toggle("is-loading", state.spinning);
+        slotPull.disabled = busy || !state.arcade?.tickets;
+        slotPull.textContent = state.arcadeSpinning ? "Rolling…" : "Pull";
         wheelStage.classList.toggle("is-spinning", state.spinning);
         playLabel.textContent = state.spinning ? "Spinning" : "Spin";
         playBtn.setAttribute("aria-label", state.spinning ? "Wheel is spinning" : "Spin the wheel");
@@ -2223,7 +3246,10 @@
 
         const title = document.createElement("div");
         title.className = "task-title";
-        title.textContent = todo.title;
+        const titleText = document.createElement("span");
+        titleText.className = "task-title-text";
+        titleText.textContent = todo.title;
+        title.append(titleText, createAgeBadge(todo));
 
         const select = prioritySelect(todo);
         const editButton = document.createElement("button");
@@ -2353,7 +3379,12 @@
         const title = document.createElement("span");
         title.className = "done-title";
         title.textContent = todo.title;
-        label.append(checkbox, box, title);
+        const points = document.createElement("span");
+        const breakdown = pointBreakdown(todo);
+        points.className = "done-points";
+        points.textContent = `+${breakdown.total} XP`;
+        points.title = `${breakdown.priorityBase} priority XP + ${breakdown.waitingBonus} backlog bonus XP`;
+        label.append(checkbox, box, title, points);
 
         const sparkColors = ["#18a957", "#ffd400", "#e60012", "#00b8d9", "#7b2cbf"];
         for (let i = 0; i < 10; i += 1) {
@@ -2370,6 +3401,7 @@
 
         checkbox.addEventListener("change", async () => {
           if (checkbox.checked || state.mutationBusy || state.spinning) return;
+          const productivityBefore = productivityStats();
           clearError();
           state.mutationBusy = true;
           updateControls();
@@ -2377,10 +3409,15 @@
             await api.update(todo.id, { status: "open" });
             await animateRowOut(row);
             resetWinner();
-            await load({ enterId: todo.id, animateReorder: true, wheelChange: true });
+            await load({
+              enterId: todo.id,
+              animateReorder: true,
+              wheelChange: true,
+              productivityFrom: productivityBefore,
+            });
             requestAnimationFrame(() => {
               const restored = listEl.querySelector(`[data-id="${todo.id}"]`);
-              restored?.scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth", block: "nearest" });
+              scrollIntoPane(taskScroll, restored, reduceMotion.matches ? "auto" : "smooth");
               restored?.querySelector(".edit-button")?.focus({ preventScroll: true });
             });
           } catch (error) {
@@ -2408,20 +3445,34 @@
         doneCount.textContent = `${state.doneTodos.length} ${state.doneTodos.length === 1 ? "win" : "wins"}`;
       }
 
+      function scrollIntoPane(scroller, element, behavior = "auto") {
+        if (!scroller || !element) return;
+        const scrollerRect = scroller.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        if (elementRect.top < scrollerRect.top) {
+          scroller.scrollBy({ top: elementRect.top - scrollerRect.top - 6, behavior });
+        } else if (elementRect.bottom > scrollerRect.bottom) {
+          scroller.scrollBy({ top: elementRect.bottom - scrollerRect.bottom + 6, behavior });
+        }
+      }
+
       function revealDoneRow(todoId) {
         const row = doneListEl.querySelector(`[data-id="${todoId}"]`);
-        if (!row) return;
-        row.classList.remove("is-awaiting-reveal");
-        if (!reduceMotion.matches) {
-          row.classList.add("is-completed-entry");
-          window.setTimeout(() => row.classList.remove("is-completed-entry"), 900);
+        if (!row) {
+          playPendingProductivityReward(null);
+          return;
         }
-        requestAnimationFrame(() => {
-          taskScroll.scrollTo({
-            top: taskScroll.scrollHeight,
-            behavior: reduceMotion.matches ? "auto" : "smooth",
-          });
-        });
+        doneScroll.scrollTo({ top: 0, behavior: "auto" });
+        const reveal = () => {
+          row.classList.remove("is-awaiting-reveal");
+          if (!reduceMotion.matches) {
+            row.classList.add("is-completed-entry");
+            window.setTimeout(() => row.classList.remove("is-completed-entry"), 1100);
+          }
+          playPendingProductivityReward(row);
+        };
+        if (reduceMotion.matches) reveal();
+        else requestAnimationFrame(() => requestAnimationFrame(reveal));
       }
 
       function renderList({ enterId = null, animateReorder = false } = {}) {
@@ -2456,11 +3507,13 @@
 
         const countText = taskWord(state.todos.length);
         taskCount.textContent = countText;
+        taskTotalCount.textContent = `${state.todos.length + state.doneTodos.length} total`;
         wheelCount.textContent = countText;
+        renderDayPressure(new Date());
         canvas.setAttribute(
           "aria-label",
           state.todos.length
-            ? `Task wheel with ${countText}. The task list below contains the segment labels.`
+            ? `Task wheel with ${countText}. The adjacent task list contains the segment labels.`
             : "The task wheel is empty"
         );
       }
@@ -2481,6 +3534,7 @@
         const winner = state.pendingWinner;
         if (!winner || state.mutationBusy || state.spinning) return;
         const activeRow = listEl.querySelector(`[data-id="${winner.id}"]`);
+        const productivityBefore = productivityStats();
         clearError();
         state.mutationBusy = true;
         winnerAction.disabled = true;
@@ -2496,7 +3550,12 @@
             new Promise((resolve) => window.setTimeout(resolve, reduceMotion.matches ? 0 : 650)),
           ]);
           state.completionRevealId = winner.id;
-          await load({ doneEnterId: winner.id, wheelChange: true });
+          await load({
+            doneEnterId: winner.id,
+            wheelChange: true,
+            productivityFrom: productivityBefore,
+            celebrateReward: true,
+          });
           state.winnerId = null;
           resultLabel.textContent = "Completed";
           resultTitle.textContent = winner.title;
@@ -2536,14 +3595,36 @@
         }
       }
 
-      async function load({ enterId = null, doneEnterId = null, animateReorder = false, wheelChange = false } = {}) {
+      async function load({
+        enterId = null,
+        doneEnterId = null,
+        animateReorder = false,
+        wheelChange = false,
+        productivityFrom = null,
+        celebrateReward = false,
+      } = {}) {
         const version = ++state.loadVersion;
-        const [todos, doneTodos] = await Promise.all([api.list(), api.listDone()]);
+        const arcadeRequest = api.arcade().then(
+          (value) => ({ value }),
+          (error) => ({ error })
+        );
+        const [todos, doneTodos, arcadeResult] = await Promise.all([api.list(), api.listDone(), arcadeRequest]);
         if (version !== state.loadVersion) return;
         state.todos = todos;
         state.doneTodos = doneTodos;
+        state.arcade = arcadeResult.value ?? null;
         renderList({ enterId, animateReorder });
         renderDoneList({ enterId: doneEnterId });
+        if (arcadeResult.value) renderArcade();
+        else renderArcadeUnavailable();
+        const nextProductivity = productivityStats();
+        if (celebrateReward && productivityFrom) {
+          renderProductivity(productivityFrom);
+          state.pendingProductivityReward = { from: productivityFrom, to: nextProductivity };
+        } else {
+          state.pendingProductivityReward = null;
+          renderProductivity(nextProductivity, { fromStats: productivityFrom });
+        }
         draw();
         if (enterId != null) startSegmentIntro(enterId);
         else if (wheelChange) animateWheelRefresh();
@@ -2584,6 +3665,7 @@
       });
 
       titleInput.addEventListener("input", () => titleInput.setCustomValidity(""));
+      slotPull.addEventListener("click", pullFocusSlots);
 
       winnerClose.addEventListener("click", () => closeWinnerDialog(true));
       winnerAction.addEventListener("click", completeWinner);
@@ -2607,6 +3689,7 @@
         state.pendingWinner = null;
         state.completionRevealId = null;
         restoreWinnerFocus = true;
+        renderDayPressure(new Date());
         if (completedId != null) revealDoneRow(completedId);
         if (shouldRestore) {
           requestAnimationFrame(() => {
@@ -2663,6 +3746,7 @@
 
       const redrawForTheme = () => requestAnimationFrame(draw);
       darkMode.addEventListener?.("change", redrawForTheme);
+      compactSlots.addEventListener?.("change", () => renderArcade());
       reduceMotion.addEventListener?.("change", (event) => {
         redrawForTheme();
         if (event.matches && winnerDialog.open) screenConfetti.replaceChildren();
@@ -2672,6 +3756,17 @@
         attributeFilter: ["data-theme"],
       });
       new ResizeObserver(syncCanvasSize).observe(canvas);
+      window.setInterval(refreshTaskAges, 30000);
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          if (state.dayClockTimer) window.clearTimeout(state.dayClockTimer);
+          state.dayClockTimer = null;
+          return;
+        }
+        refreshTaskAges();
+        scheduleDayPressure();
+      });
+      window.addEventListener("focus", scheduleDayPressure);
 
       (async () => {
         try {
@@ -2682,6 +3777,7 @@
           state.loading = false;
           updateControls();
           syncCanvasSize();
+          scheduleDayPressure();
         }
       })();
     })();

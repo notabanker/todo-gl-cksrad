@@ -1,8 +1,9 @@
-"""Data model for TYCHE todos.
+"""Persistent models for To-Do Gambling.
 
-A single ``Todo`` table backs the whole Phase 0 app. All timestamps are stored
-as *naive UTC* (see ``utcnow``) so that arithmetic like ``now - created_at``
-never mixes timezone-aware and naive datetimes (SQLite hands them back naive).
+``Todo`` stores task history and the singleton ``ArcadeState`` keeps earned
+Lucky Tickets across launches. All timestamps are stored as *naive UTC* (see
+``utcnow``) so arithmetic never mixes timezone-aware and naive datetimes
+(SQLite hands them back naive).
 """
 
 from datetime import datetime, timezone
@@ -36,3 +37,27 @@ class Todo(SQLModel, table=True):
     created_at: datetime = Field(default_factory=utcnow)
     updated_at: datetime = Field(default_factory=utcnow)
     completed_at: Optional[datetime] = None
+
+
+class ArcadeState(SQLModel, table=True):
+    """Persistent singleton for the XP-powered, no-loss focus arcade.
+
+    ``highest_xp_threshold`` records the greatest 100-XP boundary that has
+    already minted tickets.  It deliberately never decreases when tasks are
+    reopened or deleted, which prevents the same productivity XP from earning
+    a second ticket later.
+    """
+
+    __tablename__ = "arcade_state"
+
+    id: int = Field(default=1, primary_key=True)
+    highest_xp_threshold: int = Field(default=0)
+    tickets: int = Field(default=0)
+    spin_count: int = Field(default=0)
+    last_outcome: Optional[str] = None
+    last_symbols: Optional[str] = None
+    last_label: Optional[str] = None
+    last_message: Optional[str] = None
+    last_tier: Optional[str] = None
+    last_spun_at: Optional[datetime] = None
+    updated_at: datetime = Field(default_factory=utcnow)

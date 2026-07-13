@@ -41,7 +41,7 @@ canvas.fill()
 
 let backgroundRect = NSRect(x: 42, y: 42, width: 940, height: 940)
 let background = NSBezierPath(roundedRect: backgroundRect, xRadius: 214, yRadius: 214)
-let backgroundGradient = NSGradient(colors: [color(0x12254d), color(0x050811)])!
+let backgroundGradient = NSGradient(colors: [color(0xfffdf7), color(0xeadfc9)])!
 backgroundGradient.draw(in: background, angle: -55)
 background.addClip()
 
@@ -61,7 +61,7 @@ NSGraphicsContext.current = context
 background.addClip()
 
 let rimOuter = NSBezierPath(ovalIn: NSRect(x: center.x - outerRadius, y: center.y - outerRadius, width: outerRadius * 2, height: outerRadius * 2))
-color(0xffd400).setFill()
+color(0x17140f).setFill()
 rimOuter.fill()
 
 let rimChromeRadius: CGFloat = 354

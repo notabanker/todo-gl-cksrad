@@ -1,4 +1,4 @@
-"""SQLite engine + session wiring for TYCHE."""
+"""SQLite engine + session wiring for To-Do Gambling."""
 
 from collections.abc import Iterator
 import os

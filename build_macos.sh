@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build an Apple Silicon TYCHE.app with a native WKWebView shell and bundled backend.
+# Build the Apple Silicon To-Do Gambling app with a native WKWebView shell and bundled backend.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -7,10 +7,13 @@ BUILD_ROOT="$ROOT/build/macos"
 BACKEND_DIST="$BUILD_ROOT/backend-dist"
 BACKEND_WORK="$BUILD_ROOT/backend-work"
 BUILD_VENV="$ROOT/.build-venv"
-APP="$ROOT/dist/TYCHE.app"
-ZIP="$ROOT/dist/TYCHE-macOS-arm64.zip"
+APP_NAME="To-Do Gambling"
+APP="$ROOT/dist/$APP_NAME.app"
+ZIP="$ROOT/dist/To-Do-Gambling-macOS-arm64.zip"
+LEGACY_APP="$ROOT/dist/TYCHE.app"
+LEGACY_ZIP="$ROOT/dist/TYCHE-macOS-arm64.zip"
 
-command -v uv >/dev/null || { echo "uv is required to build TYCHE.app" >&2; exit 1; }
+command -v uv >/dev/null || { echo "uv is required to build $APP_NAME.app" >&2; exit 1; }
 command -v xcrun >/dev/null || { echo "Apple Command Line Tools are required" >&2; exit 1; }
 
 mkdir -p "$BUILD_ROOT" "$ROOT/dist"
@@ -25,7 +28,7 @@ uv pip install --python "$BUILD_VENV/bin/python" \
   -r "$ROOT/requirements-desktop.txt" \
   -r "$ROOT/requirements-build.txt"
 
-rm -rf "$BACKEND_DIST" "$BACKEND_WORK" "$BUILD_ROOT/spec" "$APP" "$ZIP"
+rm -rf "$BACKEND_DIST" "$BACKEND_WORK" "$BUILD_ROOT/spec" "$APP" "$ZIP" "$LEGACY_APP" "$LEGACY_ZIP"
 mkdir -p "$BACKEND_DIST" "$BACKEND_WORK" "$BUILD_ROOT/spec"
 
 echo "Bundling the FastAPI backend..."
@@ -72,15 +75,15 @@ sips -z 512 512 "$BUILD_ROOT/AppIcon-1024.png" --out "$ICONSET/icon_512x512.png"
 cp "$BUILD_ROOT/AppIcon-1024.png" "$ICONSET/icon_512x512@2x.png"
 iconutil -c icns "$ICONSET" -o "$BUILD_ROOT/AppIcon.icns"
 
-echo "Assembling TYCHE.app..."
+echo "Assembling $APP_NAME.app..."
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BUILD_ROOT/TYCHE" "$APP/Contents/MacOS/TYCHE"
 ditto "$BACKEND_DIST/tyche-backend" "$APP/Contents/Resources/Backend"
 cp "$BUILD_ROOT/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"
 cp "$ROOT/macos/Info.plist" "$APP/Contents/Info.plist"
-if [ -f "$ROOT/tyche.db" ]; then
-  cp "$ROOT/tyche.db" "$APP/Contents/Resources/starter.sqlite3"
-fi
+# Never copy the repo-local database into a distributable app. It can contain
+# private task titles; the backend creates a clean writable database on first
+# launch when no existing Application Support database is present.
 chmod 755 "$APP/Contents/MacOS/TYCHE" "$APP/Contents/Resources/Backend/tyche-backend"
 
 plutil -lint "$APP/Contents/Info.plist" >/dev/null

@@ -1,4 +1,4 @@
-# Design Brief — TYCHE frontend redesign (prompt for a coding agent)
+# Design Brief — To-Do Gambling frontend redesign (prompt for a coding agent)
 
 > Paste everything below the line into the coding LLM. It is self-contained.
 
@@ -7,7 +7,7 @@
 ## Your role
 
 You are a senior product designer + frontend engineer. Redesign the UI of an
-existing, working web app called **TYCHE** to a clean, modern, **Apple-like**
+existing, working web app called **To-Do Gambling** to a clean, modern, **Apple-like**
 standard (think Apple Human Interface Guidelines: restraint, hierarchy, generous
 whitespace, precise typography, tasteful depth, and fluid, physical motion).
 
@@ -53,52 +53,66 @@ Otherwise do not touch any `.py` file.
 
 The JS must keep talking to these endpoints. Shapes are fixed:
 
-| Method | Path            | Body / returns |
-|--------|-----------------|----------------|
-| GET    | `/todos`        | → JSON array of tasks, pre-ordered by priority then age |
-| POST   | `/todos`        | body `{ "title": string, "priority": 1\|2\|3 }` → created task (201) |
-| PATCH  | `/todos/{id}`   | body `{ "title"?: string, "priority"?: 1\|2\|3 }` → updated task |
-| DELETE | `/todos/{id}`   | → 204 |
-| GET    | `/wheel/spin`   | → the chosen task object, or `null` if there are no tasks |
+| Method | Path                  | Body / returns |
+|--------|-----------------------|----------------|
+| GET    | `/todos`              | → JSON array of open tasks, pre-ordered by priority then age |
+| GET    | `/todos?status=done`  | → JSON array of completed tasks, newest first |
+| POST   | `/todos`              | body `{ "title": string, "priority": 1\|2\|3 }` → created task (201) |
+| PATCH  | `/todos/{id}`         | body `{ "title"?: string, "priority"?: 1\|2\|3, "status"?: "open"\|"done" }` → updated task |
+| DELETE | `/todos/{id}`         | → 204 |
+| GET    | `/wheel/spin`         | → the chosen open task object, or `null` if there are no tasks |
+| GET    | `/arcade`             | → `{ "tickets": int, "task_xp": int, "xp_to_next_ticket": int, "last_spin": object\|null }` |
+| POST   | `/arcade/spin`        | → `{ "symbols": string[3], "outcome": string, "label": string, "message": string, "tier": string, "spin_count": int, "spun_at": datetime, "remaining_tickets": int }`; 409 without a ticket |
 
-Task object fields you can use: `id` (int), `title` (string), `priority`
-(1=high, 2=medium, 3=low), `created_at` (ISO datetime string). Other fields
-(`description`, `tags`, `status`, `updated_at`, `completed_at`) exist but aren't
-needed in the UI.
+Task object fields used by the UI: `id` (int), `title` (string), `priority`
+(1=high, 2=medium, 3=low), `created_at` (ISO datetime string), `status`
+(`open` or `done`), and `completed_at` (ISO datetime string or null). Other
+fields include `description`, `tags`, and `updated_at`.
 
 **Wheel semantics you must preserve:** the *server* picks the winner (age-weighted);
 the animation must **land the pointer on the task the server returned** (match by
 `id`), never pick its own winner. Segments are currently equal-sized — keep them
 equal-sized unless you have a clean reason otherwise.
 
+**Arcade semantics you must preserve:** the *server* also picks the final slot
+outcome. The client may show transient symbols during the reel animation, but the
+three final symbols, label, message, and tier must match `/arcade/spin`. A pull
+spends one Lucky Ticket but never subtracts task XP. Previously crossed lifetime
+100-XP boundaries must never mint again after reopening or deleting work.
+
 ## Current UI inventory (what exists, all must remain functional)
 
-1. Header: title "TYCHE" + one-line subtitle.
+1. Header: title "To-Do Gambling" + the product description.
 2. **Add** form: text input (`Task name`) + priority `<select>` (P1/P2/P3) + Add button.
    Adding is AJAX (no reload); on success the input clears & refocuses and the
    list + wheel update.
-3. **Wheel**: a `<canvas>` (~340px) with one colored segment per task and a
-   pointer at the top; a **Play** button below it; a result line that shows the
-   winning task after a spin.
-4. **Tasks** list: each row shows the title, a priority dropdown (live-updates via
-   PATCH), an **Edit** button (inline rename), and a **Delete** button.
-   Empty state: "No tasks yet."
+3. **Wheel**: a `<canvas>` with one colored segment per task, a pointer at the
+   top, and the **Spin** button in the center. The server-selected task opens a
+   full-window jackpot reveal with an animated title and **Mark it done** action.
+4. **Task board**: KPI strip for XP, today, streak, completion rate, level, and
+   level progress. Open and Done are fixed, independently scrollable, labeled
+   keyboard regions. Open rows include task age, priority, inline rename, and
+   Delete. Done rows have reversible checked checkboxes and earned-XP badges.
+5. **Day pressure**: live local clock, countdown to the next local midnight,
+   open-task workload, green/yellow/red state, progress meter, and a restrained
+   Critical pulse once per new 20-minute block while urgent.
+6. **Dopamine slots**: persistent Lucky Ticket balance, three animated reels,
+   server-selected positive focus result, ticket progress, and no-loss/odds copy.
 
 ## Design direction (make it feel Apple-grade)
 
 - **Typography:** system font. Establish a real type scale (e.g. large rounded
   display title, medium section labels, comfortable body). Use weight and size
   for hierarchy, not decoration. Tighten letter-spacing on large headings.
-- **Color & theming:** a calm, neutral base (near-white / true-dark surfaces) with
-  **one** confident accent color. Support **light and dark mode** via
-  `prefers-color-scheme`, plus a `:root[data-theme=...]` override hook. Replace the
-  raw rainbow HSL wheel with a **refined, harmonious palette** — e.g. a curated set
-  of 6–10 tasteful hues, or tints of the accent — so a full wheel looks designed,
-  not random. Priorities should read clearly (P1 high → P3 low) with subtle,
-  non-garish color/label treatment.
-- **Layout & spacing:** a centered, comfortably narrow column. Consistent spacing
-  scale (4/8px rhythm). Group the add form, wheel, and list into clean "cards" or
-  well-separated sections with generous padding.
+- **Color & theming:** use a warm white/eggshell canvas with black typography and
+  controls as the main accent. Keep the wheel and reward moments saturated with
+  strong fairground red, blue, yellow, green, orange, and purple. Do not switch
+  the main interface to a black/dark theme. Priorities should read clearly (P1
+  high → P3 low) with explicit labels as well as color.
+- **Layout & spacing:** a compact two-column desktop dashboard: wheel, day
+  pressure, and arcade on the left; fixed task board on the right. Stack
+  responsively on narrow screens. Open and Done retain independent scroll
+  regions. Use a consistent 4/8px rhythm and clean cards with generous padding.
 - **Materials & depth:** soft, layered surfaces — gentle shadows, ~12–20px corner
   radii, hairline borders, optional subtle translucency/blur for bars. Avoid heavy
   drop shadows and pure-black borders.
@@ -127,27 +141,37 @@ Prefer transform/opacity (GPU-friendly). Suggested character:
   **settles onto the server's winning segment**, ideally with a tiny overshoot/
   settle at the end. Optional: a faint tick as segments pass the pointer.
 - **Winner reveal:** celebrate tastefully — e.g. the winning segment highlights/
-  glows, the result text scales/fades in, maybe a restrained confetti burst.
-  Keep it classy, not noisy.
+  glows and a full-window jackpot moment animates both the panel and task title.
+- **Complete task:** animate the selected task into the Done pane with a check
+  pop, glow/spark burst, XP reward token, and KPI count-up.
+- **Day pressure:** Critical mode may use one restrained shake/pulse on entry and
+  in each new 20-minute wall-clock block. Never flash or take over the screen.
+- **Slot reels:** animate transient symbols, then land on the exact final symbols
+  returned by the server. Never choose an outcome locally.
 - **Theme + state changes** should cross-fade rather than snap.
 - **Respect `prefers-reduced-motion: reduce`:** drop non-essential animation, keep
-  the wheel result instantaneous or minimal, no confetti.
+  the wheel and slot result instantaneous or minimal, no confetti, and show a
+  static red Critical warning instead of an angry pulse.
 
 ## Accessibility (required)
 
-- Sufficient color contrast in both themes (WCAG AA).
+- Sufficient color contrast throughout the eggshell interface (WCAG AA).
 - Full keyboard operability; visible focus states; logical tab order.
 - Buttons/inputs have accessible names; the wheel result is announced (e.g.
   `aria-live="polite"` on the result region).
 - Don't rely on color alone to convey priority (include the P1/P2/P3 label).
+- Do not make the clock's per-second digits an `aria-live` region. Announce only
+  meaningful urgency transitions and 20-minute Critical alerts.
+- Both task scroll panes must be keyboard-focusable, labeled regions.
 
 ## Deliverables
 
 1. A redesigned `templates/index.html` (and optionally `static/` assets + the one
    allowed `main.py` mount line) implementing all of the above.
 2. All existing functionality intact: add, list, inline edit, delete, priority
-   change (live PATCH), spin landing on the server's winner, empty state.
-3. Light and dark mode.
+   change, completion/reopen, independent Open/Done scrolling, EOD pressure,
+   Lucky Ticket mint/spend, spin landing on the server's winner, and empty states.
+3. A polished eggshell-and-black interface.
 4. The animation set described above, with reduced-motion fallback.
 
 ## Definition of done / acceptance
@@ -157,9 +181,15 @@ Prefer transform/opacity (GPU-friendly). Suggested character:
   network requests**.
 - I can: add a task (animated in, input clears) → change its priority (list
   reorders) → edit its title inline → delete it (animated out) → add a few and
-  press **Play** → the wheel spins smoothly and lands on the highlighted winner,
-  matching the task shown in the result line.
-- Toggling OS light/dark restyles the app cleanly.
+  press **Spin** → the wheel lands on the returned winner → mark it done → see it
+  animate into Done → reopen it from its checkbox. Open and Done scroll without
+  moving each other.
+- EOD thresholds match the documented workload logic, Critical alerts never run
+  more than once per local 20-minute block, and reduced motion stays static.
+- Reaching a new lifetime 100-XP boundary mints one ticket. A pull spends exactly
+  one ticket without reducing task XP, cannot re-mint an old boundary, and ends
+  on the exact server-returned symbols and result.
+- The eggshell interface remains readable regardless of the OS appearance.
 - With reduced-motion enabled, everything still works without heavy animation.
 - It looks like a polished Apple product, not a prototype.
 
@@ -168,3 +198,7 @@ Prefer transform/opacity (GPU-friendly). Suggested character:
 - Do not change the API, the Python logic, the DB, or the wheel's weighting.
 - Do not add frameworks, bundlers, CDNs, web fonts, or any external requests.
 - Do not let the client pick the spin winner — always land on the server's result.
+- Do not let the client pick the arcade outcome or substitute final reel symbols.
+- Do not spend or subtract task XP on a slot pull.
+- Do not re-mint a Lucky Ticket for a previously crossed XP boundary.
+- Do not merge Open and Done back into one scroll container.

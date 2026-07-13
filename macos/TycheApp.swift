@@ -27,11 +27,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
     private var stopCompletion: (() -> Void)?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.appearance = NSAppearance(named: .aqua)
         do {
             supportURL = try makeSupportDirectory()
             logURL = supportURL.appendingPathComponent("backend.log")
         } catch {
-            showFatalAlert("TYCHE cannot create its data folder", detail: error.localizedDescription)
+            showFatalAlert("To-Do Gambling cannot create its data folder", detail: error.localizedDescription)
             NSApp.terminate(nil)
             return
         }
@@ -61,7 +62,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
             backing: .buffered,
             defer: false
         )
-        window.title = "TYCHE"
+        window.title = "To-Do Gambling"
         window.minSize = NSSize(width: 840, height: 560)
         window.center()
         window.setFrameAutosaveName("TYCHE.MainWindow.Compact.v2")
@@ -83,7 +84,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
         statusView.translatesAutoresizingMaskIntoConstraints = false
         root.addSubview(statusView)
 
-        titleLabel = NSTextField(labelWithString: "Starting TYCHE…")
+        titleLabel = NSTextField(labelWithString: "Starting To-Do Gambling…")
         titleLabel.font = .systemFont(ofSize: 24, weight: .semibold)
         titleLabel.alignment = .center
 
@@ -136,7 +137,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
         let main = NSMenu()
         let appItem = NSMenuItem()
         let appMenu = NSMenu()
-        let appName = (Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String) ?? "TYCHE"
+        let appName = (Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String) ?? "To-Do Gambling"
         appMenu.addItem(withTitle: "About \(appName)", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
         appMenu.addItem(.separator())
         appMenu.addItem(withTitle: "Quit \(appName)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
@@ -214,7 +215,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
             beginMonitoring()
             waitUntilHealthy(url, timeout: 12)
         } catch {
-            showFailure("TYCHE couldn’t start", detail: error.localizedDescription)
+            showFailure("To-Do Gambling couldn’t start", detail: error.localizedDescription)
         }
     }
 
@@ -226,7 +227,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
             let healthURL = url.appendingPathComponent("healthz")
             while !Task.isCancelled, Date() < deadline {
                 guard self.backend?.isRunning == true else {
-                    self.showFailure("TYCHE stopped while starting", detail: self.logHint())
+                    self.showFailure("To-Do Gambling stopped while starting", detail: self.logHint())
                     return
                 }
                 var request = URLRequest(
@@ -249,7 +250,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
                 try? await Task.sleep(nanoseconds: 180_000_000)
             }
             guard !Task.isCancelled else { return }
-            self.showFailure("TYCHE took too long to start", detail: "The local service did not become ready. \(self.logHint())")
+            self.showFailure("To-Do Gambling took too long to start", detail: "The local service did not become ready. \(self.logHint())")
         }
     }
 
@@ -273,7 +274,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
         try? logHandle?.close()
         logHandle = nil
         backend = nil
-        showFailure("TYCHE stopped unexpectedly", detail: "Exit status: \(process.terminationStatus). \(logHint())")
+        showFailure("To-Do Gambling stopped unexpectedly", detail: "Exit status: \(process.terminationStatus). \(logHint())")
     }
 
     @objc private func retry() {
@@ -366,7 +367,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
 
     private func showStarting() {
         statusView?.isHidden = false
-        titleLabel?.stringValue = "Starting TYCHE…"
+        titleLabel?.stringValue = "Starting To-Do Gambling…"
         detailLabel?.stringValue = "Preparing your wheel"
         retryButton?.isHidden = true
         logButton?.isHidden = true
@@ -392,8 +393,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
             appropriateFor: nil,
             create: true
         )
-        let name = (Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String) ?? "TYCHE"
-        let folder = base.appendingPathComponent(name, isDirectory: true)
+        // Preserve the original support directory so a renamed app keeps all
+        // existing tasks, completed wins, and reward history.
+        let folder = base.appendingPathComponent("TYCHE", isDirectory: true)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         return folder
     }
@@ -434,7 +436,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         if (error as NSError).code == NSURLErrorCancelled { return }
-        showFailure("TYCHE couldn’t load", detail: "\(error.localizedDescription) \(logHint())")
+        showFailure("To-Do Gambling couldn’t load", detail: "\(error.localizedDescription) \(logHint())")
     }
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
@@ -475,7 +477,7 @@ private enum LauncherError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .missingBackend:
-            return "The bundled backend was not found. Reinstall TYCHE."
+            return "The bundled backend was not found. Reinstall To-Do Gambling."
         case .backendNotExecutable(let path):
             return "The bundled backend is not executable: \(path)"
         case .socket(let code):
