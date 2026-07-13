@@ -7,9 +7,9 @@ To-Do Gambling is a local-first todo app built around a carnival-style decision 
 Add tasks, assign priorities, and let the server choose the next task with an
 age-weighted random spin: the longer a task has waited, the better its odds.
 
-The compact dashboard keeps the carnival wheel, live day-pressure clock, and XP
-focus slots beside a task board whose Open and Done panes are fixed and
-independently scrollable. It also includes a full-screen jackpot reveal, strong
+The compact, tabbed dashboard separates **Heute**, **Glücksrad**, and
+**Rewards** while keeping the active task board visible at a glance. It also
+includes a live day-pressure clock, a full-screen jackpot reveal, strong
 fairground colors, an eggshell-and-black interface, and reduced-motion support.
 
 ## Features
@@ -18,16 +18,20 @@ fairground colors, an eggshell-and-black interface, and reduced-motion support.
 - Server-authoritative, age-weighted winner selection.
 - Animated wheel with the Spin button in its center.
 - Full-window jackpot celebration for the selected task.
-- Persistent Done list with reversible checkboxes.
+- Persistent Done list with reversible one-off tasks and final Daily completions.
 - Completion check-pop, glow, spark burst, and automatic Done-list scrolling.
-- Productivity rewards with XP, levels, daily wins, streaks, and completion rate.
+- Compact task rows with a one-click **Morgen** action and a separate signed
+  Daily Score.
+- Daily recurring tasks with streak bonuses and one immutable occurrence per day.
+- Monotonic lifetime XP, levels, daily wins, streaks, and completion rate.
 - Live local clock and end-of-day countdown with workload-scaled green, yellow,
   and red pressure states.
 - A focused pressure pulse when the day becomes critical and once per new
   20-minute block while it remains urgent.
 - Fixed, independently scrollable Open and Done task panes.
-- No-loss Dopamine slots: lifetime 100-XP milestones earn Lucky Tickets for
-  server-selected focus prompts.
+- No-loss Dopamine Slots 2.0: lifetime 100-XP milestones earn Lucky Tickets;
+  every accepted server-selected result pays Reward Chips.
+- User-defined real-world reward goals with atomic redemption and history.
 - Live green/yellow/red task-age badges in total hours and minutes.
 - Compact 1060×720 macOS window with an 840×560 minimum layout.
 - No frontend framework, CDN, web font, or external network dependency.
@@ -55,19 +59,33 @@ intentionally ignored by Git.
 
 ## Productivity rewards
 
-Completing a task awards XP based on its priority: P1 earns 50 XP, P2 earns
-30 XP, and P3 earns 20 XP. A capped backlog bonus adds 2 XP for every full day
-the task waited, up to 30 extra XP. Every 250 XP advances one level.
+Completing a task for the first time awards XP based on its priority: P1 earns
+50 XP, P2 earns 30 XP, and P3 earns 20 XP. A capped backlog bonus adds 2 XP for
+every full available day the task waited, up to 30 extra XP. Time while a task
+is postponed is excluded. Every 250 lifetime XP advances one display level.
 
-The compact KPI strip tracks total XP, today's completed tasks, the current
-daily completion streak, completion rate, level, and progress toward the next
-level. XP is derived from the current Done list, so reopening a task removes its
-points and completing it again cannot inflate the total beyond the completed
-work currently recorded.
+The compact KPI strip tracks lifetime XP, today's completed tasks, signed Daily
+Score, the completion streak, completion rate, level, and progress toward the
+next level. Lifetime XP is recorded in an append-only ledger: reopening or
+deleting a completed one-off never confiscates XP, while completing it again
+cannot award XP twice.
 
-Current XP can therefore decrease when a completed task is reopened or deleted.
-Lucky Tickets already minted at lifetime-high XP milestones remain earned, and
-returning to a previously rewarded 100-XP boundary never mints it again.
+Daily Score is intentionally separate. Completing work raises it; postponing a
+task to tomorrow applies `-10` once for that task and local day, removes it from
+today's board, wheel, completion rate, and EOD pressure, and never subtracts
+lifetime XP. Lucky Tickets already minted at 100-XP boundaries remain earned,
+and an accounted boundary never mints twice.
+
+## Daily routines
+
+A routine materializes at most one task occurrence for each scheduled local
+day. Daily XP is the priority base plus one XP per current streak day, capped at
+10 bonus XP. Dailies never earn a waiting-age bonus. Missing or postponing an
+occurrence breaks the next streak; previous lifetime XP remains untouched.
+
+Daily completions are final so reopening cannot farm a streak or a second XP
+award. Pause, reactivate, rename, or reprioritize a routine from **Heute →
+Tägliche Routinen → Verwalten**.
 
 ## Day pressure
 
@@ -83,20 +101,24 @@ or winner dialog, and becomes a static red warning when reduced motion is enable
 
 ## Dopamine slots
 
-Each newly reached lifetime-high 100-XP boundary mints one persistent Lucky
-Ticket. Pulling spends one ticket, never subtracts task XP, and returns a positive
-focus prompt selected by the server. Reopening or deleting completed work can
-lower current XP but cannot erase minted tickets or re-mint an old boundary. The
-last result persists across launches, and the final symbols always come from the
-server.
+Each newly reached lifetime 100-XP boundary mints one persistent Lucky Ticket.
+Pulling spends one ticket, never subtracts XP, and returns a positive focus
+prompt plus Reward Chips selected by the server. At most three reward-paying
+pulls are accepted per local day; a rejected fourth pull retains its ticket.
+The last result persists across launches, and final symbols, payout, and jackpot
+copy always come from the server.
 
-| Result | Odds |
-|---|---:|
-| Quick Win | 50% |
-| 15-Minute Focus | 30% |
-| 25-Minute Power Block | 15% |
-| 5-Minute Reset | 4% |
-| Focus Jackpot | 1% |
+| Result | Odds | Chips |
+|---|---:|---:|
+| Quick Win | 50% | 5 |
+| 15-Minute Focus | 30% | 10 |
+| 25-Minute Power Block | 15% | 20 |
+| 5-Minute Reset | 4% | 50 |
+| Focus Jackpot | 1% | 100 |
+
+Reward Chips collect in one wallet. Create any real-world goal, set its Chip
+cost, and redeem it only when the full balance is available. Awards and
+redemptions are recorded atomically in an append-only history.
 
 The compact desktop window mode (820 px tall or less) compresses the cabinet to
 a mini three-reel strip so the wheel, day clock, slots, and task board all remain
@@ -138,7 +160,10 @@ result, or reward history:
 
 The repo-local `tyche.db` is never copied into the application bundle. A first
 launch creates a clean database, while an existing standalone installation keeps
-using its private Application Support database.
+using its private Application Support database. Every file-backed database is
+hardened to mode `0600` before SQLite connects or writes. Schema upgrades are
+versioned, transactional, and create a verified mode-`0600` sibling backup
+before changing an existing legacy database.
 
 ## API
 
@@ -148,11 +173,24 @@ using its private Application Support database.
 | `GET` | `/healthz` | Native launcher readiness check |
 | `GET` | `/todos` | List open tasks |
 | `GET` | `/todos?status=done` | List completed tasks, newest first |
+| `GET` | `/today` | List currently actionable tasks and materialize today's Dailies |
+| `GET` | `/tomorrow` | Preview postponed tasks and tomorrow's Daily occurrences |
+| `GET` | `/dailies?date=YYYY-MM-DD` | List Daily occurrences for today or tomorrow |
 | `POST` | `/todos` | Create a task from `{title, priority}` |
 | `PATCH` | `/todos/{id}` | Update title, priority, or `open`/`done` status |
 | `DELETE` | `/todos/{id}` | Delete a task |
-| `GET` | `/arcade` | Return Lucky Tickets, current task XP, XP to the next new milestone, and the last slot result |
-| `POST` | `/arcade/spin` | Spend one Lucky Ticket and return the server-selected focus result; `409` when no ticket is available |
+| `POST` | `/todos/{id}/postpone` | Move an open task to tomorrow and apply today's `-10` score once |
+| `GET/POST` | `/routines` | List or create Daily routine templates |
+| `PATCH/DELETE` | `/routines/{id}` | Edit, pause, or reactivate a routine |
+| `GET` | `/metrics` | Return ledger XP, Daily Score, streak, task, ticket, Chip, and spin KPIs |
+| `GET/PATCH` | `/settings` | Read or update the IANA scoring timezone |
+| `GET` | `/arcade` | Return XP, tickets, Chips, daily pull limit, and persisted last result |
+| `POST` | `/arcade/spin` | Spend one ticket and return the server-selected symbols and Chip payout |
+| `GET` | `/rewards` | Return wallet, goals, progress, and recent transactions |
+| `POST` | `/rewards/goals` | Create a reward goal |
+| `PATCH/DELETE` | `/rewards/goals/{id}` | Edit or archive a reward goal |
+| `POST` | `/rewards/goals/{id}/redeem` | Atomically redeem an affordable goal |
+| `GET` | `/rewards/history` | Return immutable Chip awards and redemptions |
 | `GET` | `/wheel/spin` | Return the server-selected open task or `null` |
 
 The client never chooses its own winner. It requests `/wheel/spin`, finds the
@@ -180,10 +218,10 @@ eligible while older tasks become proportionally more likely to win.
 PYTHONPATH=. .venv/bin/pytest -q
 ```
 
-The suite covers API persistence and validation, completion/reopening, arcade
-ticket minting and spending, lifetime-high/no-remint behavior, persisted
-server-authoritative slot outcomes, exclusion of completed tasks from the wheel,
-and the weighted-selection distribution.
+The suite covers legacy migration and idempotent restart, API validation,
+postponement, recurring streaks and DST boundaries, monotonic XP, concurrent
+completion, server-authoritative slot payouts and daily caps, atomic reward
+redemption, and weighted wheel selection.
 
 ## Project layout
 
@@ -191,6 +229,7 @@ and the weighted-selection distribution.
 main.py                 FastAPI routes and request validation
 models.py               SQLModel todo and persistent arcade-state schemas
 database.py             SQLite engine and session wiring
+migrations.py           Versioned SQLite migration and verified backup runner
 wheel.py                Pure weighted-selection logic
 templates/index.html    Complete vanilla HTML/CSS/JavaScript interface
 desktop_backend.py      Entrypoint for the bundled backend

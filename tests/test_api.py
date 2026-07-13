@@ -8,11 +8,11 @@ from datetime import timedelta
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import Session, create_engine
 from sqlmodel.pool import StaticPool
 
 import main
-from database import get_session
+from database import get_session, init_db
 from models import ArcadeState, Todo, utcnow
 
 
@@ -23,7 +23,7 @@ def client_fixture():
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
-    SQLModel.metadata.create_all(engine)
+    init_db(engine, create_backup=False)
 
     def session_override():
         with Session(engine) as session:
@@ -181,7 +181,10 @@ def test_arcade_mints_one_ticket_for_each_new_100_xp_threshold(client):
 
     response = client.get("/arcade")
     assert response.status_code == 200
-    assert response.json() == {
+    assert {
+        key: response.json()[key]
+        for key in ("tickets", "task_xp", "xp_to_next_ticket", "last_spin")
+    } == {
         "tickets": 2,
         "task_xp": 200,
         "xp_to_next_ticket": 100,
@@ -220,7 +223,11 @@ def test_arcade_task_xp_matches_priority_and_waiting_bonus_formula(client):
         )
         session.commit()
 
-    assert client.get("/arcade").json() == {
+    status = client.get("/arcade").json()
+    assert {
+        key: status[key]
+        for key in ("tickets", "task_xp", "xp_to_next_ticket", "last_spin")
+    } == {
         "tickets": 0,
         "task_xp": 84,
         "xp_to_next_ticket": 16,
@@ -285,7 +292,18 @@ def test_arcade_spin_is_server_result_and_consumes_one_ticket(client, monkeypatc
     status = client.get("/arcade").json()
     assert status["tickets"] == 0
     assert status["task_xp"] == 100
-    assert status["last_spin"] == {
+    assert {
+        key: status["last_spin"][key]
+        for key in (
+            "symbols",
+            "outcome",
+            "label",
+            "message",
+            "tier",
+            "spin_count",
+            "spun_at",
+        )
+    } == {
         key: body[key]
         for key in (
             "symbols",

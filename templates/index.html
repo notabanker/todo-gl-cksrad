@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -57,6 +57,8 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; }
+
+    [hidden] { display: none !important; }
 
     html { min-width: 320px; background: var(--page); }
 
@@ -1199,11 +1201,11 @@
 
     .task-row {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto auto auto;
-      gap: 9px;
+      grid-template-columns: minmax(0, 1fr) auto auto auto auto;
+      gap: 6px;
       align-items: center;
       min-width: 0;
-      padding: 13px 0;
+      padding: 8px 0;
       border-bottom: 1px solid var(--line);
       transform-origin: center top;
     }
@@ -1214,12 +1216,12 @@
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 6px 9px;
+      gap: 5px 7px;
       min-width: 0;
-      padding-right: 6px;
+      padding-right: 4px;
       overflow-wrap: anywhere;
-      font-size: 15px;
-      line-height: 1.4;
+      font-size: 14px;
+      line-height: 1.25;
       font-weight: 590;
     }
 
@@ -1233,14 +1235,14 @@
       display: inline-flex;
       align-items: center;
       flex: none;
-      gap: 6px;
-      min-height: 24px;
-      padding: 3px 8px 3px 7px;
+      gap: 5px;
+      min-height: 20px;
+      padding: 2px 6px 2px 5px;
       border: 1px solid color-mix(in srgb, var(--age-color) 35%, transparent);
       border-radius: 999px;
       color: var(--text-secondary);
       background: color-mix(in srgb, var(--age-color) 11%, var(--surface-subtle));
-      font-size: 11px;
+      font-size: 10px;
       font-variant-numeric: tabular-nums;
       font-weight: 720;
       line-height: 1;
@@ -1250,11 +1252,11 @@
 
     .task-age::before {
       content: "";
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       background: var(--age-color);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--age-color) 16%, transparent);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--age-color) 16%, transparent);
     }
 
     .task-age[data-age-level="yellow"] { --age-color: #e0a400; }
@@ -1262,16 +1264,16 @@
 
     .task-title input {
       flex: 1 1 100%;
-      min-height: 40px;
-      padding: 0 11px;
-      font-size: 14px;
+      min-height: 34px;
+      padding: 0 9px;
+      font-size: 13px;
     }
 
     .task-priority {
-      min-width: 116px;
-      min-height: 40px;
-      padding-right: 31px;
-      font-size: 12px;
+      min-width: 100px;
+      min-height: 32px;
+      padding-right: 27px;
+      font-size: 11px;
       font-weight: 680;
       color: var(--text-secondary);
       background-color: var(--surface-subtle);
@@ -1284,9 +1286,9 @@
     }
 
     .task-row .button {
-      min-height: 40px;
-      padding: 0 11px;
-      font-size: 12px;
+      min-height: 32px;
+      padding: 0 9px;
+      font-size: 11px;
     }
 
     .task-row.is-entering { animation: row-enter 340ms var(--ease); }
@@ -1483,6 +1485,12 @@
     .done-toggle:hover .done-box { transform: scale(1.07); box-shadow: 0 7px 19px rgba(24, 169, 87, 0.34); }
     .done-checkbox:focus-visible + .done-box { outline: 0; box-shadow: 0 0 0 4px var(--focus), 0 7px 19px rgba(24, 169, 87, 0.34); }
 
+    .done-toggle.is-final { cursor: default; }
+    .done-toggle.is-final:hover .done-box {
+      transform: none;
+      box-shadow: 0 5px 15px rgba(24, 169, 87, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+
     .done-title {
       min-width: 0;
       overflow-wrap: anywhere;
@@ -1626,6 +1634,438 @@
       color: var(--text-secondary);
       font-size: 13px;
       line-height: 1.45;
+    }
+
+    .global-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: stretch;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .global-dashboard {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(210px, 0.65fr);
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      margin: 0;
+      padding: 7px 10px;
+    }
+
+    .global-dashboard .level-row { margin-top: 0; }
+    .global-dashboard .kpi-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+    .app-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      align-items: center;
+      gap: 4px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgba(255, 253, 247, 0.82);
+      box-shadow: var(--shadow);
+    }
+
+    .app-tab {
+      min-height: 42px;
+      padding: 0 13px;
+      border: 0;
+      border-radius: 11px;
+      color: var(--text-secondary);
+      background: transparent;
+      box-shadow: none;
+      font-size: 12px;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .app-tab span { margin-right: 4px; color: var(--text-tertiary); }
+    .app-tab:hover { color: var(--text); background: var(--surface-subtle); }
+
+    .app-tab[aria-selected="true"] {
+      color: #fff;
+      background: var(--accent);
+      box-shadow: 0 5px 14px var(--accent-glow);
+    }
+
+    .app-tab[aria-selected="true"] span { color: #ffd400; }
+
+    .tab-stage,
+    .tab-panel,
+    .today-layout,
+    .wheel-page-layout,
+    .rewards-layout { min-width: 0; min-height: 0; }
+
+    .tab-stage { position: relative; }
+    .tab-panel[hidden] { display: none !important; }
+    .tab-panel:not([hidden]) { display: flex; width: 100%; }
+
+    .today-layout {
+      display: grid;
+      grid-template-columns: minmax(255px, 0.7fr) minmax(0, 1.3fr);
+      grid-template-rows: auto minmax(0, 1fr);
+      flex: 1;
+      gap: 10px;
+    }
+
+    .today-layout .add-card { grid-column: 1 / -1; padding: 10px 12px; }
+
+    .today-pressure-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      padding: 12px;
+    }
+
+    .today-pressure-card .pressure-deck {
+      display: block;
+      flex: 1;
+      min-height: 0;
+      margin: 0;
+    }
+
+    .today-pressure-card .day-pressure { width: 100%; height: 100%; min-height: 0; }
+
+    .pressure-head h2 {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 790;
+      letter-spacing: -0.015em;
+    }
+
+    .routine-entry {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--surface-subtle);
+    }
+
+    .routine-entry div { display: grid; gap: 2px; min-width: 0; }
+    .routine-entry strong { font-size: 12px; line-height: 1.2; }
+    .routine-entry span { color: var(--text-tertiary); font-size: 9px; line-height: 1.25; }
+    .routine-entry .button { min-height: 32px; padding: 0 10px; font-size: 10px; }
+
+    .today-layout .tasks-card { padding: 12px; }
+    .task-board-head { align-items: center; margin-bottom: 7px; }
+    .task-board-head > div,
+    .section-head > div { min-width: 0; }
+
+    .section-caption {
+      display: block;
+      margin-top: 2px;
+      overflow: hidden;
+      color: var(--text-tertiary);
+      font-size: 9px;
+      line-height: 1.3;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .wheel-page-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.36fr) minmax(255px, 0.64fr);
+      flex: 1;
+      gap: 10px;
+    }
+
+    .wheel-hero-card,
+    .wheel-queue-card { display: flex; flex-direction: column; min-height: 0; }
+
+    .wheel-hero-card .wheel-stage {
+      width: min(100%, 500px, calc(100dvh - 255px));
+      margin-top: 2px;
+    }
+
+    .wheel-hero-card .spin-controls { margin-top: auto; padding-top: 8px; }
+
+    .wheel-queue {
+      display: grid;
+      align-content: start;
+      gap: 6px;
+      min-height: 0;
+      margin: 0;
+      padding: 0 3px 0 0;
+      overflow-y: auto;
+      list-style: none;
+      scrollbar-width: thin;
+      scrollbar-color: var(--line-strong) transparent;
+    }
+
+    .wheel-queue-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--surface-subtle);
+    }
+
+    .queue-number {
+      display: grid;
+      place-items: center;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--accent);
+      font-size: 9px;
+      font-weight: 850;
+    }
+
+    .queue-title { overflow: hidden; font-size: 12px; font-weight: 670; text-overflow: ellipsis; white-space: nowrap; }
+    .queue-priority { color: var(--text-tertiary); font-size: 9px; font-weight: 800; text-transform: uppercase; }
+    .wheel-queue-item[data-priority="1"] { border-color: rgba(201, 52, 47, 0.25); background: var(--danger-soft); }
+    .wheel-queue-item[data-priority="1"] .queue-priority { color: var(--danger); }
+
+    .queue-empty,
+    .rewards-empty {
+      margin: auto 0;
+      padding: 18px 8px;
+      color: var(--text-tertiary);
+      font-size: 11px;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .rewards-layout {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+      grid-template-rows: minmax(0, 1.1fr) minmax(145px, 0.9fr);
+      flex: 1;
+      gap: 10px;
+    }
+
+    .slot-2-card {
+      display: flex;
+      flex-direction: column;
+      grid-row: 1 / -1;
+      min-height: 0;
+      padding: 12px;
+    }
+
+    .reward-wallet {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      margin-bottom: 8px;
+    }
+
+    .reward-wallet div {
+      display: grid;
+      gap: 2px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface-subtle);
+    }
+
+    .reward-wallet span { color: var(--text-tertiary); font-size: 8px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; }
+    .reward-wallet strong { font-size: 22px; font-variant-numeric: tabular-nums; font-weight: 900; letter-spacing: -0.04em; }
+
+    .rewards-machine {
+      flex: 1;
+      min-height: 0;
+      padding: 16px;
+      border-color: rgba(255, 212, 0, 0.42);
+      border-radius: 17px;
+    }
+
+    .rewards-machine .machine-head h2 { margin: 0; color: #fff; font-size: 18px; }
+    .rewards-machine .focus-reels { gap: 9px; margin-top: 18px; }
+    .rewards-machine .focus-reel { height: clamp(54px, 10vh, 78px); border-radius: 13px; font-size: 34px; }
+    .rewards-machine .machine-controls { margin-top: 14px; }
+    .rewards-machine .slot-pull { min-height: 42px; padding: 0 21px; font-size: 12px; }
+    .rewards-machine #ticket-progress { font-size: 10px; }
+    .rewards-machine .slot-result { min-height: 42px; margin: 14px 0 0; font-size: 12px; line-height: 1.4; }
+
+    .rewards-machine .slot-rules {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.48);
+      font-size: 9px;
+    }
+
+    .slot-payout { min-height: 28px; color: #ffd400; font-size: 14px; font-weight: 900; text-align: center; }
+    .slot-payout:empty { display: none; }
+
+    .reward-goals-card,
+    .reward-history-card { display: flex; flex-direction: column; min-height: 0; padding: 12px; }
+
+    .reward-goal-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 88px auto;
+      align-items: end;
+      gap: 7px;
+      margin-bottom: 8px;
+    }
+
+    .reward-goal-form label,
+    .routine-form label { display: grid; gap: 3px; min-width: 0; color: var(--text-tertiary); font-size: 9px; font-weight: 760; }
+    .reward-goal-form input,
+    .routine-form input,
+    .routine-form select { min-height: 38px; font-size: 12px; }
+    .reward-goal-form .button,
+    .routine-form .button { min-height: 38px; font-size: 11px; }
+
+    .reward-goal-scroll,
+    .reward-history-scroll { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+
+    .reward-goal-list,
+    .reward-history,
+    .routine-list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+
+    .reward-goal-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 6px 10px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--surface-subtle);
+    }
+
+    .reward-goal-copy { display: grid; gap: 2px; min-width: 0; }
+    .reward-goal-copy strong { overflow-wrap: anywhere; font-size: 12px; }
+    .reward-goal-copy span { color: var(--text-tertiary); font-size: 9px; }
+    .reward-goal-actions { display: flex; align-items: center; gap: 4px; }
+    .reward-goal-actions .button { min-height: 30px; padding: 0 8px; font-size: 9px; }
+
+    .goal-progress { grid-column: 1 / -1; height: 5px; overflow: hidden; border-radius: 999px; background: var(--line); }
+    .goal-progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #18a957, #ffd400); }
+
+    .reward-history-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 2px;
+      border-bottom: 1px solid var(--line);
+      font-size: 10px;
+    }
+
+    .reward-history-item:last-child { border-bottom: 0; }
+    .history-icon { font-size: 14px; }
+    .history-copy { display: grid; gap: 1px; min-width: 0; }
+    .history-copy strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .history-copy time { color: var(--text-tertiary); font-size: 8px; }
+    .history-amount { font-variant-numeric: tabular-nums; font-weight: 850; }
+
+    .rewards-notice { min-height: 15px; margin: 4px 0 0; color: var(--text-tertiary); font-size: 9px; line-height: 1.3; }
+
+    .routine-dialog {
+      width: min(calc(100% - 28px), 620px);
+      max-height: min(760px, calc(100dvh - 28px));
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      border-radius: 22px;
+      color: var(--text);
+      background: var(--surface-solid);
+      box-shadow: 0 30px 90px rgba(61, 45, 17, 0.24);
+    }
+
+    .routine-dialog::backdrop { background: rgba(23, 20, 15, 0.35); backdrop-filter: blur(8px); }
+    .routine-dialog-body { display: grid; gap: 12px; max-height: inherit; padding: 22px; overflow-y: auto; }
+    .dialog-close-row { position: absolute; z-index: 2; top: 10px; right: 10px; }
+    .dialog-close-row .winner-close { position: static; }
+    .routine-form { display: grid; grid-template-columns: minmax(0, 1fr) 130px auto; align-items: end; gap: 8px; }
+
+    .routine-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--surface-subtle);
+    }
+
+    .routine-item-copy { display: grid; gap: 2px; min-width: 0; }
+    .routine-item-copy strong { font-size: 12px; overflow-wrap: anywhere; }
+    .routine-item-copy span { color: var(--text-tertiary); font-size: 9px; }
+
+    .task-row[data-priority="1"] {
+      position: relative;
+      padding-left: 6px;
+      border-left: 3px solid var(--danger);
+      border-radius: 7px 0 0 7px;
+    }
+
+    .p1-marker {
+      display: inline-flex;
+      align-items: center;
+      flex: none;
+      gap: 3px;
+      min-height: 19px;
+      padding: 2px 5px;
+      border: 1px solid rgba(201, 52, 47, 0.28);
+      border-radius: 999px;
+      color: #a32621;
+      background: rgba(201, 52, 47, 0.10);
+      font-size: 9px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .p1-fire { display: inline-block; transform-origin: center bottom; }
+
+    .daily-marker {
+      display: inline-flex;
+      align-items: center;
+      min-height: 19px;
+      padding: 2px 5px;
+      border: 1px solid rgba(0, 87, 217, 0.20);
+      border-radius: 999px;
+      color: #004ebf;
+      background: rgba(0, 87, 217, 0.08);
+      font-size: 9px;
+      font-weight: 850;
+      line-height: 1;
+    }
+
+    .task-row[data-priority="1"]:hover,
+    .task-row[data-priority="1"]:focus-within,
+    .task-row[data-priority="1"].is-priority-boost {
+      background: radial-gradient(circle at 12% 50%, rgba(230, 0, 18, 0.11), transparent 46%);
+      box-shadow: -8px 0 20px rgba(230, 0, 18, 0.09);
+    }
+
+    .task-row[data-priority="1"]:hover .p1-fire,
+    .task-row[data-priority="1"]:focus-within .p1-fire,
+    .task-row[data-priority="1"].is-priority-boost .p1-fire { animation: p1-heat 620ms ease-in-out infinite alternate; }
+
+    .winner-quote {
+      position: relative;
+      z-index: 5;
+      max-width: 42rem;
+      margin: 18px auto 0;
+      color: rgba(23, 20, 15, 0.68);
+      font-size: clamp(13px, 2vw, 17px);
+      line-height: 1.45;
+      font-style: italic;
+      font-weight: 650;
+      text-align: center;
+    }
+
+    @keyframes p1-heat {
+      0% { transform: translateY(0) rotate(-2deg) scale(1); filter: saturate(1); }
+      100% { transform: translateY(-2px) rotate(3deg) scale(1.16); filter: saturate(1.35) drop-shadow(0 3px 4px rgba(230, 0, 18, 0.34)); }
     }
 
     @keyframes input-confirm {
@@ -1827,9 +2267,9 @@
       .spin-controls { flex: none; }
 
       .tasks-card .task-row {
-        grid-template-columns: minmax(0, 1fr) auto auto;
-        gap: 7px;
-        padding: 7px 0;
+        grid-template-columns: minmax(0, 1fr) auto auto auto;
+        gap: 4px 6px;
+        padding: 4px 0;
       }
 
       .tasks-card .task-title {
@@ -1837,7 +2277,7 @@
         padding: 0 0 2px;
       }
 
-      .tasks-card .task-priority { justify-self: start; }
+      .tasks-card .task-priority { justify-self: start; width: 104px; }
       .empty-state:not([hidden]) { flex: 1; align-content: center; }
     }
 
@@ -1886,9 +2326,9 @@
 
     @media (min-width: 821px) and (max-width: 1120px) {
       .task-row {
-        grid-template-columns: minmax(0, 1fr) auto auto;
-        gap: 7px;
-        padding: 10px 0;
+        grid-template-columns: minmax(0, 1fr) auto auto auto;
+        gap: 4px 6px;
+        padding: 4px 0;
       }
 
       .task-title {
@@ -1957,7 +2397,7 @@
       #eod-countdown { font-size: 12px; }
       .pressure-copy { display: none; }
       .day-meter { margin-top: auto; }
-      .tasks-card .task-row { padding: 5px 0; }
+      .tasks-card .task-row { padding: 3px 0; }
       .reward-dashboard { margin-bottom: 7px; padding: 6px; }
       .kpi-item strong { font-size: 14px; }
       .level-row { margin-top: 4px; }
@@ -1999,6 +2439,14 @@
       .wheel-stage { width: min(100%, 500px); }
       .pressure-deck { grid-template-columns: minmax(0, 1fr); min-height: 270px; }
       .focus-machine { min-height: 124px; }
+      .task-priority {
+        min-width: 116px;
+        min-height: 40px;
+        padding-right: 31px;
+        font-size: 12px;
+      }
+      .task-row .button { min-height: 40px; padding: 0 11px; font-size: 12px; }
+      .task-title input { min-height: 40px; padding: 0 11px; font-size: 14px; }
       .task-board-split {
         flex: none;
         height: min(680px, 72dvh);
@@ -2050,7 +2498,7 @@
       .winner-action { width: min(100%, 260px); }
 
       .task-row {
-        grid-template-columns: minmax(0, 1fr) auto auto;
+        grid-template-columns: minmax(0, 1fr) auto auto auto;
         gap: 8px;
       }
 
@@ -2077,6 +2525,103 @@
       .done-points { grid-column: 2; justify-self: start; }
     }
 
+    @media (min-width: 821px) {
+      .app-shell { gap: 0; }
+      .tab-stage { display: flex; flex: 1; min-height: 0; }
+      .tab-panel:not([hidden]) { flex: 1; height: 100%; }
+      .today-layout,
+      .wheel-page-layout,
+      .rewards-layout { height: 100%; }
+      .today-layout .tasks-card { min-height: 0; }
+      .today-layout .task-board-split { flex: 1; min-height: 0; }
+      .wheel-queue { flex: 1; }
+    }
+
+    @media (min-width: 821px) and (max-height: 820px) {
+      .global-controls { gap: 7px; margin-bottom: 7px; }
+      .global-dashboard { grid-template-columns: minmax(0, 1fr) minmax(180px, 0.56fr); gap: 8px; padding: 5px 8px; }
+      .global-dashboard .kpi-item strong { font-size: 13px; }
+      .app-tabs { padding: 3px; }
+      .app-tab { min-height: 36px; padding: 0 9px; font-size: 10px; }
+      .today-layout { gap: 7px; }
+      .today-layout .add-card { padding: 7px 9px; }
+      .today-pressure-card,
+      .today-layout .tasks-card { padding: 9px; }
+      .today-layout .empty-copy { display: none; }
+      .today-pressure-card .pressure-deck { max-height: none; min-height: 0; margin: 0; }
+      .today-pressure-card .day-pressure { padding: 9px 10px; }
+      .routine-entry { margin-top: 6px; padding: 6px 8px; }
+      .routine-entry span { display: none; }
+      .wheel-page-layout,
+      .rewards-layout { gap: 7px; }
+      .wheel-hero-card .wheel-stage { width: min(100%, 390px, calc(100dvh - 250px)); }
+      .wheel-queue-card,
+      .wheel-hero-card { padding: 12px; }
+      .slot-2-card,
+      .reward-goals-card,
+      .reward-history-card { padding: 9px; }
+      .reward-wallet { margin-bottom: 6px; }
+      .reward-wallet div { padding: 5px 8px; }
+      .reward-wallet strong { font-size: 17px; }
+      .rewards-machine { display: flex; padding: 10px; border-radius: 13px; }
+      .rewards-machine .machine-head h2 { font-size: 14px; }
+      .rewards-machine .focus-reels { gap: 5px; margin-top: 7px; }
+      .rewards-machine .focus-reel { height: 36px; border-width: 2px; border-radius: 8px; font-size: 22px; }
+      .rewards-machine .machine-controls { margin-top: 7px; }
+      .rewards-machine .slot-pull { min-height: 32px; padding: 0 13px; font-size: 9px; }
+      .rewards-machine #ticket-progress { font-size: 8px; }
+      .rewards-machine .slot-result {
+        position: static;
+        width: auto;
+        height: auto;
+        min-height: 29px;
+        margin: 7px 0 0;
+        overflow: visible;
+        clip: auto;
+        clip-path: none;
+        white-space: normal;
+        font-size: 9px;
+      }
+      .rewards-machine .slot-rules { padding-top: 6px; font-size: 7px; }
+      .reward-goal-form input,
+      .reward-goal-form .button { min-height: 32px; }
+      .reward-goal-item { padding: 6px; }
+    }
+
+    @media (max-width: 820px) {
+      .global-controls { grid-template-columns: minmax(0, 1fr); }
+      .global-dashboard { grid-template-columns: minmax(0, 1fr); }
+      .global-dashboard .level-row { margin-top: 5px; }
+      .app-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); position: sticky; top: 8px; z-index: 20; }
+      .app-tab { padding: 0 8px; }
+      .tab-panel:not([hidden]) { display: block; }
+      .today-layout,
+      .wheel-page-layout,
+      .rewards-layout { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; }
+      .today-layout .add-card { grid-column: auto; }
+      .today-pressure-card .pressure-deck { min-height: 150px; max-height: none; }
+      .today-pressure-card .day-pressure { min-height: 150px; }
+      .today-layout .tasks-card { min-height: 620px; }
+      .wheel-hero-card .wheel-stage { width: min(100%, 500px); }
+      .wheel-queue-card { min-height: 300px; }
+      .wheel-queue { max-height: 420px; }
+      .slot-2-card { grid-row: auto; min-height: 430px; }
+      .reward-goals-card { min-height: 420px; }
+      .reward-history-card { min-height: 300px; }
+      .routine-form { grid-template-columns: minmax(0, 1fr) 120px; }
+      .routine-form .button { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 520px) {
+      .app-tab span { display: none; }
+      .section-caption { white-space: normal; }
+      .reward-goal-form { grid-template-columns: minmax(0, 1fr) 82px; }
+      .reward-goal-form .button { grid-column: 1 / -1; }
+      .rewards-machine .slot-rules { display: grid; }
+      .routine-form { grid-template-columns: minmax(0, 1fr); }
+      .routine-form .button { grid-column: auto; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         scroll-behavior: auto !important;
@@ -2096,7 +2641,8 @@
       .pressure-deck.is-angry .day-pressure,
       .pressure-deck.is-angry .urgency-badge,
       .focus-machine,
-      .focus-reel {
+      .focus-reel,
+      .p1-fire {
         animation: none !important;
       }
       #winner-dialog, .winner-panel, .jackpot-word span, .slot-letter, .winner-panel::after, .winner-completion-beat {
@@ -2114,157 +2660,276 @@
       <p class="subtitle">If it’s done in under 2 minutes, do it directly! The dopamine catch for ADHD people who have a shit ton to do.</p>
     </header>
 
-    <div class="stack">
-      <section class="card add-card" aria-label="Add a task">
-        <form id="add" novalidate>
-          <div class="title-field">
-            <label class="visually-hidden" for="title">Task name</label>
-            <input id="title" name="title" type="text" placeholder="What needs doing?" autocomplete="off" required autofocus>
+    <div class="global-controls">
+      <section
+        class="reward-dashboard global-dashboard"
+        id="reward-dashboard"
+        aria-label="Productivity rewards"
+        title="P1: 50 XP · P2: 30 XP · P3: 20 XP · plus 2 XP per full waiting day, up to 30 bonus XP"
+      >
+        <div class="kpi-grid">
+          <div class="kpi-item"><strong id="kpi-xp">0</strong><span>Total XP</span></div>
+          <div class="kpi-item"><strong id="kpi-today">0</strong><span>Today</span></div>
+          <div class="kpi-item"><strong id="kpi-score">100</strong><span>Tagesscore</span></div>
+          <div class="kpi-item"><strong id="kpi-streak">0d</strong><span>Streak</span></div>
+          <div class="kpi-item"><strong id="kpi-rate">0%</strong><span>Done rate</span></div>
+        </div>
+        <div class="level-row">
+          <strong id="kpi-level">Level 1</strong>
+          <div class="level-meter" id="level-meter" role="progressbar" aria-label="Level progress" aria-valuemin="0" aria-valuemax="250" aria-valuenow="0">
+            <span id="level-fill"></span>
           </div>
-          <label class="visually-hidden" for="new-prio">Priority</label>
-          <select id="new-prio" name="priority" aria-label="Priority for new task">
-            <option value="1">P1 · high</option>
-            <option value="2" selected>P2 · medium</option>
-            <option value="3">P3 · low</option>
-          </select>
-          <button class="button button-primary" type="submit"><span aria-hidden="true">＋</span> Add task</button>
-        </form>
-        <div id="notice" role="alert" hidden></div>
+          <span id="kpi-next">250 XP to L2</span>
+        </div>
+        <p class="visually-hidden" id="reward-status" aria-live="polite" aria-atomic="true"></p>
       </section>
 
-      <section class="card wheel-card" aria-labelledby="wheel-heading">
-        <div class="section-head">
-          <h2 id="wheel-heading">Wheel</h2>
-          <span class="section-meta" id="wheel-count">0 tasks</span>
-        </div>
+      <nav class="app-tabs" role="tablist" aria-label="App-Bereiche">
+        <button class="app-tab" id="tab-heute" type="button" role="tab" aria-selected="true" aria-controls="panel-heute" data-tab="heute">
+          <span aria-hidden="true">●</span> Heute
+        </button>
+        <button class="app-tab" id="tab-gluecksrad" type="button" role="tab" aria-selected="false" aria-controls="panel-gluecksrad" data-tab="gluecksrad" tabindex="-1">
+          <span aria-hidden="true">◎</span> Glücksrad
+        </button>
+        <button class="app-tab" id="tab-rewards" type="button" role="tab" aria-selected="false" aria-controls="panel-rewards" data-tab="rewards" tabindex="-1">
+          <span aria-hidden="true">◆</span> Rewards
+        </button>
+      </nav>
+    </div>
 
-        <div class="wheel-stage" id="wheel-stage">
-          <div class="wheel-rim">
-            <canvas id="wheel" role="img" aria-label="The task wheel is empty"></canvas>
-          </div>
-          <div id="pointer" aria-hidden="true"><span></span></div>
-          <div class="wheel-button-anchor">
-            <button class="button button-primary" id="play" type="button" aria-label="Spin the wheel" disabled>
-              <span class="play-icon" aria-hidden="true">▶</span>
-              <span class="play-label">Spin</span>
-            </button>
-          </div>
-          <div id="celebration" aria-hidden="true"></div>
-        </div>
+    <div id="notice" role="alert" hidden></div>
 
-        <div class="spin-controls">
-          <div id="result" role="status" aria-live="polite" aria-atomic="true">
-            <span class="result-label">Ready when you are</span>
-            <strong class="result-title">Your next move will appear here.</strong>
-          </div>
-        </div>
-
-        <section class="pressure-deck" id="pressure-deck" data-urgency="calm" aria-label="End-of-day pressure and XP focus slots">
-          <section class="day-pressure" id="day-pressure" aria-labelledby="day-pressure-heading">
-            <div class="pressure-head">
-              <h3 id="day-pressure-heading">Day pressure</h3>
-              <span class="urgency-badge" id="urgency-badge">On track</span>
-            </div>
-            <div class="clock-row">
-              <time class="local-clock" id="local-clock" aria-label="Local time">--:--:--</time>
-              <div class="eod-clock">
-                <span>Until EOD</span>
-                <time id="eod-countdown" aria-label="Time remaining until end of day">--:--:--</time>
+    <div class="tab-stage">
+      <section class="tab-panel" id="panel-heute" role="tabpanel" aria-labelledby="tab-heute" data-panel="heute">
+        <div class="today-layout">
+          <section class="card add-card" aria-label="Aufgabe hinzufügen">
+            <form id="add" novalidate>
+              <div class="title-field">
+                <label class="visually-hidden" for="title">Aufgabenname</label>
+                <input id="title" name="title" type="text" placeholder="Was muss erledigt werden?" autocomplete="off" required autofocus>
               </div>
-            </div>
-            <div class="pressure-copy">
-              <span id="workload-copy">0 open · clear runway</span>
-              <strong id="pressure-message">All clear for today.</strong>
-            </div>
-            <div class="day-meter" aria-hidden="true"><span id="day-meter-fill"></span></div>
-            <p class="visually-hidden" id="day-pressure-status" role="status" aria-live="polite" aria-atomic="true"></p>
+              <label class="visually-hidden" for="new-prio">Priorität</label>
+              <select id="new-prio" name="priority" aria-label="Priorität der neuen Aufgabe">
+                <option value="1">P1 · hoch</option>
+                <option value="2" selected>P2 · mittel</option>
+                <option value="3">P3 · niedrig</option>
+              </select>
+              <button class="button button-primary" type="submit"><span aria-hidden="true">＋</span> Aufgabe</button>
+            </form>
           </section>
 
-          <section class="focus-machine" id="focus-machine" aria-labelledby="focus-machine-heading">
-            <div class="machine-head">
-              <h3 id="focus-machine-heading">Dopamine slots</h3>
-              <span id="arcade-tickets">0 tickets</span>
-            </div>
-            <div class="focus-reels" aria-hidden="true">
-              <span class="focus-reel">⚡</span>
-              <span class="focus-reel">🎯</span>
-              <span class="focus-reel">★</span>
-            </div>
-            <div class="machine-controls">
-              <button class="slot-pull" id="slot-pull" type="button" aria-describedby="ticket-progress slot-result slot-rules" disabled>Pull</button>
-              <span id="ticket-progress">100 XP to a Lucky Ticket</span>
-            </div>
-            <p class="slot-result" id="slot-result" role="status" aria-live="polite" aria-atomic="true">Every 100 work XP unlocks a no-loss focus pull.</p>
-            <div class="slot-rules" id="slot-rules" aria-label="Focus slot rules and odds">
-              <span>No losses · work XP always stays yours</span>
-              <span>Odds: 50% · 30% · 15% · 4% · 1%</span>
+          <section class="card today-pressure-card" aria-labelledby="day-pressure-heading">
+            <section class="pressure-deck" id="pressure-deck" data-urgency="calm" aria-label="Tageszeit und Druck bis zum Tagesende">
+              <section class="day-pressure" id="day-pressure">
+                <div class="pressure-head">
+                  <h2 id="day-pressure-heading">Tagesdruck</h2>
+                  <span class="urgency-badge" id="urgency-badge">Im Plan</span>
+                </div>
+                <div class="clock-row">
+                  <time class="local-clock" id="local-clock" aria-label="Lokale Uhrzeit">--:--:--</time>
+                  <div class="eod-clock">
+                    <span>Bis EOD</span>
+                    <time id="eod-countdown" aria-label="Restzeit bis Tagesende">--:--:--</time>
+                  </div>
+                </div>
+                <div class="pressure-copy">
+                  <span id="workload-copy">0 offen · freie Bahn</span>
+                  <strong id="pressure-message">Für heute ist alles frei.</strong>
+                </div>
+                <div class="day-meter" aria-hidden="true"><span id="day-meter-fill"></span></div>
+                <p class="visually-hidden" id="day-pressure-status" role="status" aria-live="polite" aria-atomic="true"></p>
+              </section>
+            </section>
+            <div class="routine-entry">
+              <div>
+                <strong>Tägliche Routinen</strong>
+                <span>Einmal anlegen, jeden Tag abhaken.</span>
+              </div>
+              <button class="button button-quiet" id="manage-routines" type="button" aria-haspopup="dialog" aria-controls="routine-dialog">Verwalten</button>
             </div>
           </section>
-        </section>
+
+          <section class="card tasks-card" aria-labelledby="task-board-heading">
+            <div class="section-head task-board-head">
+              <div>
+                <h2 id="task-board-heading">Heute</h2>
+                <span class="section-caption">Verschieben zählt heute nicht als erledigt.</span>
+              </div>
+              <span class="section-meta" id="task-total-count">0 gesamt</span>
+            </div>
+            <div class="task-board-split">
+              <section class="task-pane open-pane" aria-labelledby="tasks-heading">
+                <div class="pane-head">
+                  <h3 id="tasks-heading">Offen</h3>
+                  <span class="section-meta" id="task-count">0 Aufgaben</span>
+                </div>
+                <div class="pane-scroll task-scroll" id="task-scroll" tabindex="0" role="region" aria-labelledby="tasks-heading">
+                  <ul id="list"></ul>
+                  <div class="empty-state" id="empty" hidden>
+                    <div class="empty-icon" aria-hidden="true">＋</div>
+                    <div class="empty-title">Freie Bahn</div>
+                    <div class="empty-copy">Neue Aufgaben erscheinen hier und auf dem Glücksrad.</div>
+                  </div>
+                </div>
+              </section>
+              <section class="task-pane done-section" aria-labelledby="done-heading">
+                <div class="done-head">
+                  <h3 id="done-heading">Erledigt</h3>
+                  <span class="section-meta" id="done-count">0 Siege</span>
+                </div>
+                <div class="pane-scroll done-scroll" id="done-scroll" tabindex="0" role="region" aria-labelledby="done-heading">
+                  <ul id="done-list"></ul>
+                  <p class="done-empty" id="done-empty">Erledigte Siege landen hier.</p>
+                </div>
+              </section>
+            </div>
+          </section>
+        </div>
       </section>
 
-      <section class="card tasks-card" aria-labelledby="task-board-heading">
-        <div class="section-head">
-          <h2 id="task-board-heading">Task board</h2>
-          <span class="section-meta" id="task-total-count">0 total</span>
-        </div>
-        <section
-          class="reward-dashboard"
-          id="reward-dashboard"
-          aria-label="Productivity rewards"
-          title="P1: 50 XP · P2: 30 XP · P3: 20 XP · plus 2 XP per full waiting day, up to 30 bonus XP"
-        >
-          <div class="kpi-grid">
-            <div class="kpi-item"><strong id="kpi-xp">0</strong><span>Total XP</span></div>
-            <div class="kpi-item"><strong id="kpi-today">0</strong><span>Today</span></div>
-            <div class="kpi-item"><strong id="kpi-streak">0d</strong><span>Streak</span></div>
-            <div class="kpi-item"><strong id="kpi-rate">0%</strong><span>Done rate</span></div>
-          </div>
-          <div class="level-row">
-            <strong id="kpi-level">Level 1</strong>
-            <div class="level-meter" id="level-meter" role="progressbar" aria-label="Level progress" aria-valuemin="0" aria-valuemax="250" aria-valuenow="0">
-              <span id="level-fill"></span>
+      <section class="tab-panel" id="panel-gluecksrad" role="tabpanel" aria-labelledby="tab-gluecksrad" data-panel="gluecksrad" hidden>
+        <div class="wheel-page-layout">
+          <section class="card wheel-card wheel-hero-card" aria-labelledby="wheel-heading">
+            <div class="section-head">
+              <h2 id="wheel-heading">Glücksrad</h2>
+              <span class="section-meta" id="wheel-count">0 Aufgaben</span>
             </div>
-            <span id="kpi-next">250 XP to L2</span>
-          </div>
-          <p class="visually-hidden" id="reward-status" aria-live="polite" aria-atomic="true"></p>
-        </section>
-        <div class="task-board-split">
-          <section class="task-pane open-pane" aria-labelledby="tasks-heading">
-            <div class="pane-head">
-              <h3 id="tasks-heading">Open tasks</h3>
-              <span class="section-meta" id="task-count">0 tasks</span>
+            <div class="wheel-stage" id="wheel-stage">
+              <div class="wheel-rim">
+                <canvas id="wheel" role="img" aria-label="Das Aufgabenrad ist leer"></canvas>
+              </div>
+              <div id="pointer" aria-hidden="true"><span></span></div>
+              <div class="wheel-button-anchor">
+                <button class="button button-primary" id="play" type="button" aria-label="Glücksrad drehen" disabled>
+                  <span class="play-icon" aria-hidden="true">▶</span>
+                  <span class="play-label">Spin</span>
+                </button>
+              </div>
+              <div id="celebration" aria-hidden="true"></div>
             </div>
-            <div class="pane-scroll task-scroll" id="task-scroll" tabindex="0" role="region" aria-labelledby="tasks-heading">
-              <ul id="list"></ul>
-              <div class="empty-state" id="empty" hidden>
-                <div class="empty-icon" aria-hidden="true">＋</div>
-                <div class="empty-title">A clear slate</div>
-                <div class="empty-copy">Add your first task above and it will appear here and on the wheel.</div>
+            <div class="spin-controls">
+              <div id="result" role="status" aria-live="polite" aria-atomic="true">
+                <span class="result-label">Bereit, wenn du es bist</span>
+                <strong class="result-title">Dein nächster Schritt erscheint hier.</strong>
               </div>
             </div>
           </section>
-          <section class="task-pane done-section" aria-labelledby="done-heading">
-            <div class="done-head">
-              <h3 id="done-heading">Done</h3>
-              <span class="section-meta" id="done-count">0 wins</span>
+
+          <aside class="card wheel-queue-card" aria-labelledby="wheel-queue-heading">
+            <div class="section-head">
+              <div>
+                <h2 id="wheel-queue-heading">Im Rennen</h2>
+                <span class="section-caption">Der Server entscheidet. Alter erhöht die Chance.</span>
+              </div>
+              <span class="section-meta" id="wheel-queue-count">0</span>
             </div>
-            <div class="pane-scroll done-scroll" id="done-scroll" tabindex="0" role="region" aria-labelledby="done-heading">
-              <ul id="done-list"></ul>
-              <p class="done-empty" id="done-empty">Completed wins will land here.</p>
+            <ol class="wheel-queue" id="wheel-queue"></ol>
+            <p class="queue-empty" id="wheel-queue-empty">Lege unter „Heute“ zuerst eine Aufgabe an.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="panel-rewards" role="tabpanel" aria-labelledby="tab-rewards" data-panel="rewards" hidden>
+        <div class="rewards-layout">
+          <section class="card slot-2-card" aria-labelledby="focus-machine-heading">
+            <div class="reward-wallet" aria-label="Reward-Wallet">
+              <div><span>Lucky Tickets</span><strong id="reward-ticket-total">0</strong></div>
+              <div><span>Reward Chips</span><strong id="chip-balance">0</strong></div>
             </div>
+            <section class="focus-machine rewards-machine" id="focus-machine">
+              <div class="machine-head">
+                <h2 id="focus-machine-heading">Dopamin Slots 2.0</h2>
+                <span id="arcade-tickets">0 Tickets</span>
+              </div>
+              <div class="focus-reels" aria-hidden="true">
+                <span class="focus-reel">⚡</span>
+                <span class="focus-reel">◆</span>
+                <span class="focus-reel">★</span>
+              </div>
+              <div class="machine-controls">
+                <button class="slot-pull" id="slot-pull" type="button" aria-describedby="ticket-progress slot-result slot-rules" disabled>Pull</button>
+                <span id="ticket-progress">100 XP bis zum nächsten Lucky Ticket</span>
+              </div>
+              <p class="slot-result" id="slot-result" role="status" aria-live="polite" aria-atomic="true">Jeder Pull gewinnt Chips. Deine Arbeits-XP bleiben unangetastet.</p>
+              <div class="slot-payout" id="slot-payout" aria-live="polite"></div>
+              <div class="slot-rules" id="slot-rules" aria-label="Slot-Regeln und Gewinnchancen">
+                <span>Kein Verlust · XP bleiben immer erhalten</span>
+                <span>Auszahlung und Symbole kommen vom Server</span>
+              </div>
+            </section>
+          </section>
+
+          <section class="card reward-goals-card" aria-labelledby="reward-goals-heading">
+            <div class="section-head">
+              <div>
+                <h2 id="reward-goals-heading">Belohnungsziele</h2>
+                <span class="section-caption">Du bestimmst, wofür sich die Arbeit lohnt.</span>
+              </div>
+              <span class="section-meta" id="reward-goal-count">0 Ziele</span>
+            </div>
+            <form class="reward-goal-form" id="reward-goal-form" novalidate>
+              <label>
+                <span>Name</span>
+                <input id="reward-goal-title" name="title" type="text" placeholder="z. B. Kaffee" maxlength="80" required>
+              </label>
+              <label>
+                <span>Chips</span>
+                <input id="reward-goal-cost" name="cost" type="number" inputmode="numeric" min="1" max="100000" value="50" required>
+              </label>
+              <button class="button button-primary" id="reward-goal-submit" type="submit">Ziel anlegen</button>
+              <button class="button button-quiet" id="reward-goal-cancel" type="button" hidden>Abbrechen</button>
+            </form>
+            <div class="reward-goal-scroll" tabindex="0" role="region" aria-label="Belohnungsziele">
+              <ul class="reward-goal-list" id="reward-goal-list"></ul>
+              <p class="rewards-empty" id="reward-goal-empty">Noch kein Ziel. Lege eine echte Belohnung fest.</p>
+            </div>
+          </section>
+
+          <section class="card reward-history-card" aria-labelledby="reward-history-heading">
+            <div class="section-head">
+              <div>
+                <h2 id="reward-history-heading">Verlauf</h2>
+                <span class="section-caption">Gewinne und eingelöste Rewards.</span>
+              </div>
+            </div>
+            <div class="reward-history-scroll" tabindex="0" role="region" aria-labelledby="reward-history-heading">
+              <ol class="reward-history" id="reward-history"></ol>
+              <p class="rewards-empty" id="reward-history-empty">Dein Reward-Verlauf startet mit dem ersten Gewinn.</p>
+            </div>
+            <p class="rewards-notice" id="rewards-notice" role="status" aria-live="polite"></p>
           </section>
         </div>
       </section>
     </div>
   </main>
 
-  <dialog id="winner-dialog" aria-label="Winner celebration">
+  <dialog class="routine-dialog" id="routine-dialog" aria-labelledby="routine-dialog-title">
+    <form method="dialog" class="dialog-close-row"><button class="winner-close" type="submit" aria-label="Routinen schließen">×</button></form>
+    <div class="routine-dialog-body">
+      <div class="section-head">
+        <div>
+          <h2 id="routine-dialog-title">Tägliche Routinen</h2>
+          <span class="section-caption">Eine neue Aufgabe pro Tag, ohne doppelte Auszahlungen.</span>
+        </div>
+      </div>
+      <form class="routine-form" id="routine-form" novalidate>
+        <label><span>Name</span><input id="routine-title" name="title" type="text" maxlength="200" required placeholder="z. B. Morgenroutine"></label>
+        <label><span>Priorität</span><select id="routine-priority" name="priority"><option value="1">P1 · hoch</option><option value="2" selected>P2 · mittel</option><option value="3">P3 · niedrig</option></select></label>
+        <button class="button button-primary" id="routine-submit" type="submit">Daily anlegen</button>
+        <button class="button button-quiet" id="routine-cancel" type="button" hidden>Abbrechen</button>
+      </form>
+      <ul class="routine-list" id="routine-list"></ul>
+      <p class="rewards-empty" id="routine-empty">Noch keine täglichen Routinen.</p>
+      <p class="rewards-notice" id="routine-notice" role="status" aria-live="polite"></p>
+    </div>
+  </dialog>
+
+  <dialog id="winner-dialog" aria-label="Gewinner-Feier">
     <div class="winner-rays" aria-hidden="true"></div>
     <div id="screen-confetti" aria-hidden="true"></div>
     <section class="winner-panel">
       <div class="winner-completion-beat" id="winner-completion-beat" aria-hidden="true"><span>✓</span></div>
-      <button class="winner-close" id="winner-close" type="button" aria-label="Close winner celebration">×</button>
+      <button class="winner-close" id="winner-close" type="button" aria-label="Gewinner-Feier schließen">×</button>
       <div aria-hidden="true">
         <p class="jackpot-word">
           <span style="--i:0">J</span><span style="--i:1">A</span><span style="--i:2">C</span><span style="--i:3">K</span><span style="--i:4">P</span><span style="--i:5">O</span><span style="--i:6">T</span><span style="--i:7">!</span>
@@ -2275,6 +2940,7 @@
         </div>
       </div>
       <p class="visually-hidden" id="winner-a11y-title"></p>
+      <p class="winner-quote" id="winner-quote"></p>
       <button class="winner-action" id="winner-action" type="button">Mark it done ✓</button>
     </section>
   </dialog>
@@ -2303,6 +2969,7 @@
       const rewardDashboard = document.getElementById("reward-dashboard");
       const kpiXp = document.getElementById("kpi-xp");
       const kpiToday = document.getElementById("kpi-today");
+      const kpiScore = document.getElementById("kpi-score");
       const kpiStreak = document.getElementById("kpi-streak");
       const kpiRate = document.getElementById("kpi-rate");
       const kpiLevel = document.getElementById("kpi-level");
@@ -2331,11 +2998,41 @@
       const arcadeTickets = document.getElementById("arcade-tickets");
       const ticketProgress = document.getElementById("ticket-progress");
       const slotResult = document.getElementById("slot-result");
+      const slotPayout = document.getElementById("slot-payout");
+      const rewardTicketTotal = document.getElementById("reward-ticket-total");
+      const chipBalance = document.getElementById("chip-balance");
+      const rewardGoalCount = document.getElementById("reward-goal-count");
+      const rewardGoalForm = document.getElementById("reward-goal-form");
+      const rewardGoalTitle = document.getElementById("reward-goal-title");
+      const rewardGoalCost = document.getElementById("reward-goal-cost");
+      const rewardGoalSubmit = document.getElementById("reward-goal-submit");
+      const rewardGoalCancel = document.getElementById("reward-goal-cancel");
+      const rewardGoalList = document.getElementById("reward-goal-list");
+      const rewardGoalEmpty = document.getElementById("reward-goal-empty");
+      const rewardHistory = document.getElementById("reward-history");
+      const rewardHistoryEmpty = document.getElementById("reward-history-empty");
+      const rewardsNotice = document.getElementById("rewards-notice");
+      const wheelQueue = document.getElementById("wheel-queue");
+      const wheelQueueCount = document.getElementById("wheel-queue-count");
+      const wheelQueueEmpty = document.getElementById("wheel-queue-empty");
+      const tabButtons = Array.from(document.querySelectorAll('[role="tab"][data-tab]'));
+      const tabPanels = Array.from(document.querySelectorAll('[role="tabpanel"][data-panel]'));
+      const manageRoutines = document.getElementById("manage-routines");
+      const routineDialog = document.getElementById("routine-dialog");
+      const routineForm = document.getElementById("routine-form");
+      const routineTitle = document.getElementById("routine-title");
+      const routinePriority = document.getElementById("routine-priority");
+      const routineSubmit = document.getElementById("routine-submit");
+      const routineCancel = document.getElementById("routine-cancel");
+      const routineList = document.getElementById("routine-list");
+      const routineEmpty = document.getElementById("routine-empty");
+      const routineNotice = document.getElementById("routine-notice");
       const winnerDialog = document.getElementById("winner-dialog");
       const winnerOverlayTitle = document.getElementById("winner-overlay-title");
       const winnerA11yTitle = document.getElementById("winner-a11y-title");
       const winnerClose = document.getElementById("winner-close");
       const winnerAction = document.getElementById("winner-action");
+      const winnerQuote = document.getElementById("winner-quote");
       const winnerPanel = winnerDialog.querySelector(".winner-panel");
       const screenConfetti = document.getElementById("screen-confetti");
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -2363,7 +3060,16 @@
         kpiAnimationVersion: 0,
         pendingProductivityReward: null,
         arcade: null,
+        metrics: null,
+        rewards: null,
+        routines: [],
         arcadeSpinning: false,
+        rewardsBusy: false,
+        routinesBusy: false,
+        editingRewardGoalId: null,
+        editingRoutineId: null,
+        priorityHeatId: null,
+        activeTab: "heute",
         dayClockTimer: null,
         eodUrgency: null,
         lastEodAlertSlot: null,
@@ -2376,9 +3082,78 @@
       const mod = (value, base) => ((value % base) + base) % base;
       const cssValue = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
       const palette = () => Array.from({ length: 8 }, (_, i) => cssValue(`--wheel-${i + 1}`));
+      const TAB_NAMES = ["heute", "gluecksrad", "rewards"];
+      const JACKPOT_LINES = [
+        "Motivation ist optional. Der nächste Schritt nicht.",
+        "Nicht zerdenken. Anfangen. Der Rest darf unterwegs passieren.",
+        "Mach es unperfekt, aber mach es fertig.",
+        "Die Aufgabe wird nicht kleiner. Du wirst nur schneller, wenn du beginnst.",
+        "Keine Verhandlung mehr. Ein Schritt, dann der nächste.",
+        "Der Plan muss nicht glänzen. Das Ergebnis schon.",
+        "Du brauchst keinen perfekten Moment. Du brauchst Bewegung.",
+        "Heute gewinnt nicht die Ausrede. Heute gewinnst du.",
+      ];
+
+      function operationId() {
+        if (typeof globalThis.crypto?.randomUUID === "function") return globalThis.crypto.randomUUID();
+        return `${Date.now()}-${Math.random().toString(16).slice(2)}-${Math.random().toString(16).slice(2)}`;
+      }
+
+      function tabFromLocation() {
+        const fromHash = window.location.hash.replace(/^#/, "");
+        if (TAB_NAMES.includes(fromHash)) return fromHash;
+        try {
+          const saved = window.localStorage.getItem("todo-gambling-active-tab");
+          if (TAB_NAMES.includes(saved)) return saved;
+        } catch (_) {
+          // Storage can be unavailable in hardened web views; Heute is the fallback.
+        }
+        return "heute";
+      }
+
+      function activateTab(name, { focus = false, persist = true } = {}) {
+        const next = TAB_NAMES.includes(name) ? name : "heute";
+        state.activeTab = next;
+        tabButtons.forEach((button) => {
+          const selected = button.dataset.tab === next;
+          button.setAttribute("aria-selected", selected ? "true" : "false");
+          button.tabIndex = selected ? 0 : -1;
+          if (selected && focus) button.focus();
+        });
+        tabPanels.forEach((panel) => { panel.hidden = panel.dataset.panel !== next; });
+        if (persist) {
+          try { window.localStorage.setItem("todo-gambling-active-tab", next); } catch (_) {}
+          if (window.location.hash !== `#${next}`) history.replaceState(null, "", `#${next}`);
+        }
+        if (next === "gluecksrad") {
+          requestAnimationFrame(() => {
+            syncCanvasSize();
+            draw();
+          });
+        }
+      }
+
+      tabButtons.forEach((button, index) => {
+        button.addEventListener("click", () => activateTab(button.dataset.tab));
+        button.addEventListener("keydown", (event) => {
+          let nextIndex = null;
+          if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (index + 1) % tabButtons.length;
+          else if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (index - 1 + tabButtons.length) % tabButtons.length;
+          else if (event.key === "Home") nextIndex = 0;
+          else if (event.key === "End") nextIndex = tabButtons.length - 1;
+          if (nextIndex == null) return;
+          event.preventDefault();
+          activateTab(tabButtons[nextIndex].dataset.tab, { focus: true });
+        });
+      });
+
+      window.addEventListener("hashchange", () => {
+        const hashTab = window.location.hash.replace(/^#/, "");
+        if (TAB_NAMES.includes(hashTab)) activateTab(hashTab, { persist: false });
+      });
 
       function taskWord(count) {
-        return `${count} ${count === 1 ? "task" : "tasks"}`;
+        return `${count} ${count === 1 ? "Aufgabe" : "Aufgaben"}`;
       }
 
       function normalizeUtcTimestamp(value) {
@@ -2413,8 +3188,9 @@
         const priorityBase = { 1: 50, 2: 30, 3: 20 }[Number(todo.priority)] ?? 20;
         const created = parseUtcTimestamp(todo.created_at);
         const completed = parseUtcTimestamp(todo.completed_at || todo.updated_at);
+        const unavailableMilliseconds = Math.max(0, Number(todo.unavailable_seconds) || 0) * 1000;
         const waitedDays = Number.isFinite(created) && Number.isFinite(completed)
-          ? Math.max(0, Math.floor((completed - created) / DAY_MS))
+          ? Math.max(0, Math.floor((completed - created - unavailableMilliseconds) / DAY_MS))
           : 0;
         const waitingBonus = Math.min(30, waitedDays * 2);
         return { priorityBase, waitingBonus, total: priorityBase + waitingBonus };
@@ -2459,12 +3235,12 @@
       }
 
       function pressureAnnouncement(snapshot, alert = false) {
-        if (snapshot.openCount === 0) return "All tasks are clear for today.";
+        if (snapshot.openCount === 0) return "Für heute sind alle Aufgaben erledigt.";
         const hours = Math.floor(snapshot.remainingMinutes / 60);
         const minutes = snapshot.remainingMinutes % 60;
-        const remaining = hours ? `${hours} hours ${minutes} minutes` : `${minutes} minutes`;
-        const prefix = alert ? "Deadline pressure alert." : `Day pressure ${snapshot.urgency}.`;
-        return `${prefix} ${snapshot.openCount} open tasks and ${remaining} until end of day.`;
+        const remaining = hours ? `${hours} Stunden und ${minutes} Minuten` : `${minutes} Minuten`;
+        const prefix = alert ? "Deadline-Alarm." : "Der Tagesdruck hat sich geändert.";
+        return `${prefix} ${snapshot.openCount} Aufgaben offen, noch ${remaining} bis Tagesende.`;
       }
 
       function pulseDayPressure(snapshot) {
@@ -2482,10 +3258,10 @@
         const previousUrgency = state.eodUrgency;
         const slot = eodAlertSlot(now);
         const labels = {
-          clear: ["All clear", "All clear for today."],
-          calm: ["On track", "Plenty of runway."],
-          warning: ["Getting tight", "EOD is closing in."],
-          urgent: ["Critical", "Pick one. Now."],
+          clear: ["Alles frei", "Für heute ist alles frei."],
+          calm: ["Im Plan", "Noch genug Luft."],
+          warning: ["Wird eng", "EOD kommt näher."],
+          urgent: ["Kritisch", "Nimm eine. Jetzt."],
         };
         const [badge, message] = labels[snapshot.urgency];
         pressureDeck.dataset.urgency = snapshot.urgency;
@@ -2496,8 +3272,8 @@
         urgencyBadge.textContent = badge;
         pressureMessage.textContent = message;
         workloadCopy.textContent = snapshot.openCount
-          ? `${snapshot.openCount} open · ${Math.max(1, Math.floor(snapshot.minutesPerTask))} min/task`
-          : "0 open · clear runway";
+          ? `${snapshot.openCount} offen · ${Math.max(1, Math.floor(snapshot.minutesPerTask))} Min./Aufgabe`
+          : "0 offen · freie Bahn";
         dayMeterFill.style.width = `${snapshot.dayProgress}%`;
 
         const changed = previousUrgency !== snapshot.urgency;
@@ -2531,18 +3307,29 @@
         if (!arcade) return;
         focusMachine.classList.remove("is-unavailable");
         const tickets = Number(arcade.tickets) || 0;
+        const chips = Number(arcade.chips ?? state.rewards?.chips) || 0;
+        const remainingSpins = Number(arcade.reward_spins_remaining);
+        const hasDailyLimit = Number.isFinite(remainingSpins);
+        const dailyLimitReached = hasDailyLimit && remainingSpins <= 0;
         const last = arcade.last_spin;
-        arcadeTickets.textContent = `${tickets} ${tickets === 1 ? "ticket" : "tickets"}`;
-        ticketProgress.textContent = compactSlots.matches && last
+        arcadeTickets.textContent = `${tickets} ${tickets === 1 ? "Ticket" : "Tickets"}`;
+        rewardTicketTotal.textContent = String(tickets);
+        chipBalance.textContent = String(chips);
+        ticketProgress.textContent = dailyLimitReached
+          ? "Tageslimit erreicht · morgen wieder"
+          : compactSlots.matches && last
           ? last.label
           : tickets
-            ? "Ready now · your work XP stays intact"
-            : `${arcade.xp_to_next_ticket} XP to a Lucky Ticket`;
+            ? `${hasDailyLimit ? `${remainingSpins} Pulls heute · ` : ""}Arbeits-XP bleiben erhalten`
+            : `${arcade.xp_to_next_ticket} XP bis zum Lucky Ticket`;
         if (last?.symbols?.length === 3 && !state.arcadeSpinning) {
           focusReels.forEach((reel, index) => { reel.textContent = last.symbols[index]; });
-          slotResult.textContent = `${last.label}: ${last.message} ${tickets} ${tickets === 1 ? "ticket" : "tickets"} remaining.`;
+          const quote = last.tier === "jackpot" && last.quote?.text ? ` ${last.quote.text}` : "";
+          slotResult.textContent = `${last.label}: ${last.message}${quote}`;
+          slotPayout.textContent = Number(last.chips_awarded) > 0 ? `+${last.chips_awarded} Reward Chips` : "";
         } else if (!last) {
-          slotResult.textContent = "Every 100 work XP unlocks a no-loss focus pull.";
+          slotResult.textContent = "Jeder Pull gewinnt Chips. Deine Arbeits-XP bleiben unangetastet.";
+          slotPayout.textContent = "";
         }
         focusMachine.dataset.tier = last?.tier || "";
       }
@@ -2551,9 +3338,12 @@
         state.arcade = null;
         focusMachine.classList.add("is-unavailable");
         focusMachine.dataset.tier = "";
-        arcadeTickets.textContent = "Unavailable";
-        ticketProgress.textContent = "Tasks and wheel are still ready";
-        slotResult.textContent = "Focus slots are temporarily unavailable.";
+        arcadeTickets.textContent = "Nicht verfügbar";
+        rewardTicketTotal.textContent = "—";
+        if (!state.rewards) chipBalance.textContent = "—";
+        ticketProgress.textContent = "Aufgaben und Glücksrad funktionieren weiter";
+        slotResult.textContent = "Rewards sind gerade nicht erreichbar.";
+        slotPayout.textContent = "";
       }
 
       function animateFocusReel(reel, finalSymbol, duration, delay) {
@@ -2582,58 +3372,380 @@
       }
 
       async function pullFocusSlots() {
-        if (state.arcadeSpinning || state.spinning || state.mutationBusy || !state.arcade?.tickets) return;
-        clearError();
+        if (
+          state.arcadeSpinning
+          || state.spinning
+          || state.mutationBusy
+          || !state.arcade?.tickets
+          || Number(state.arcade?.reward_spins_remaining) <= 0
+        ) return;
+        rewardsNotice.textContent = "";
         state.arcadeSpinning = true;
         focusMachine.classList.remove("is-winner");
         focusMachine.classList.add("is-spinning");
-        slotResult.textContent = "The server is choosing your focus boost…";
+        slotResult.textContent = "Der Server bestimmt Symbole und Auszahlung…";
+        slotPayout.textContent = "";
         updateControls();
         try {
-          const result = await api.spinArcade();
+          const result = await api.spinArcade(operationId());
           await Promise.all(result.symbols.map((symbol, index) => animateFocusReel(focusReels[index], symbol, 660 + index * 170, index * 100)));
           state.arcade = {
             ...state.arcade,
             tickets: result.remaining_tickets,
+            chips: result.chips_balance,
+            reward_spins_remaining: result.reward_spins_remaining,
             last_spin: result,
           };
           state.arcadeSpinning = false;
           focusMachine.classList.remove("is-spinning");
           focusMachine.classList.add("is-winner");
           renderArcade();
+          slotPayout.textContent = `+${result.chips_awarded} Reward Chips`;
+          rewardsNotice.textContent = `${result.chips_awarded} Chips gewonnen. Kein XP verloren.`;
+          await refreshRewardsData({ quiet: true });
           window.setTimeout(() => focusMachine.classList.remove("is-winner"), 780);
         } catch (error) {
           focusMachine.classList.remove("is-spinning");
-          showError(error);
+          rewardsNotice.textContent = error instanceof Error ? error.message : String(error);
           try {
             state.arcade = await api.arcade();
           } catch (_) {
-            // Keep the original failure visible when the resync also fails.
+            // Rewards are optional; the task and wheel state must remain intact.
           }
           state.arcadeSpinning = false;
-          renderArcade();
+          if (state.arcade) renderArcade();
         } finally {
           state.arcadeSpinning = false;
           updateControls();
         }
       }
 
+      function renderMetrics(metrics = state.metrics) {
+        if (!metrics) {
+          kpiScore.textContent = "—";
+          kpiScore.title = "Tagesscore nicht verfügbar";
+          return;
+        }
+        const score = Number(metrics.daily_score);
+        kpiScore.textContent = Number.isFinite(score) ? String(score) : "—";
+        kpiScore.title = `${Number(metrics.completed_today) || 0} heute erledigt · ${Number(metrics.postponed_today) || 0} verschoben · ${Number(metrics.open_today) || 0} offen`;
+      }
+
+      function renderWheelQueue() {
+        const fragment = document.createDocumentFragment();
+        state.todos.forEach((todo, index) => {
+          const item = document.createElement("li");
+          item.className = "wheel-queue-item";
+          item.dataset.priority = String(todo.priority);
+          const number = document.createElement("span");
+          number.className = "queue-number";
+          number.textContent = String(index + 1);
+          number.setAttribute("aria-hidden", "true");
+          const title = document.createElement("span");
+          title.className = "queue-title";
+          title.textContent = todo.title;
+          const priority = document.createElement("span");
+          priority.className = "queue-priority";
+          priority.textContent = Number(todo.priority) === 1 ? "🔥 P1" : `P${todo.priority}`;
+          item.append(number, title, priority);
+          fragment.appendChild(item);
+        });
+        wheelQueue.replaceChildren(fragment);
+        wheelQueueCount.textContent = String(state.todos.length);
+        wheelQueueEmpty.hidden = state.todos.length > 0;
+      }
+
+      function resetRewardGoalForm() {
+        state.editingRewardGoalId = null;
+        rewardGoalForm.reset();
+        rewardGoalCost.value = "50";
+        rewardGoalSubmit.textContent = "Ziel anlegen";
+        rewardGoalCancel.hidden = true;
+      }
+
+      function beginRewardGoalEdit(goal) {
+        state.editingRewardGoalId = goal.id;
+        rewardGoalTitle.value = goal.title;
+        rewardGoalCost.value = String(goal.cost_chips);
+        rewardGoalSubmit.textContent = "Änderungen speichern";
+        rewardGoalCancel.hidden = false;
+        rewardGoalTitle.focus();
+        rewardGoalTitle.select();
+      }
+
+      function renderRewardHistory(transactions = []) {
+        const fragment = document.createDocumentFragment();
+        transactions.forEach((transaction) => {
+          const item = document.createElement("li");
+          item.className = "reward-history-item";
+          const isAward = transaction.transaction_type === "slot_award";
+          const icon = document.createElement("span");
+          icon.className = "history-icon";
+          icon.textContent = isAward ? "◆" : "✓";
+          icon.setAttribute("aria-hidden", "true");
+          const copy = document.createElement("span");
+          copy.className = "history-copy";
+          const title = document.createElement("strong");
+          title.textContent = isAward ? "Slot-Gewinn" : `Eingelöst: ${transaction.goal_title || "Belohnung"}`;
+          const time = document.createElement("time");
+          const parsed = parseUtcTimestamp(transaction.created_at);
+          time.textContent = Number.isFinite(parsed)
+            ? new Date(parsed).toLocaleString([], { dateStyle: "short", timeStyle: "short" })
+            : "Gerade eben";
+          time.dateTime = normalizeUtcTimestamp(transaction.created_at);
+          copy.append(title, time);
+          const amount = document.createElement("span");
+          amount.className = "history-amount";
+          const value = Number(transaction.amount) || 0;
+          amount.textContent = `${value > 0 ? "+" : ""}${value} Chips`;
+          amount.style.color = value >= 0 ? "#08783f" : "var(--danger)";
+          item.append(icon, copy, amount);
+          fragment.appendChild(item);
+        });
+        rewardHistory.replaceChildren(fragment);
+        rewardHistoryEmpty.hidden = transactions.length > 0;
+      }
+
+      async function redeemRewardGoal(goal) {
+        if (state.rewardsBusy || !goal.affordable) return;
+        state.rewardsBusy = true;
+        rewardsNotice.textContent = `„${goal.title}“ wird eingelöst…`;
+        updateControls();
+        try {
+          const result = await api.redeemRewardGoal(goal.id, operationId());
+          rewardsNotice.textContent = `Belohnung freigeschaltet: ${result.goal.title}. Gönn sie dir bewusst.`;
+          await refreshRewardsData({ quiet: true });
+        } catch (error) {
+          rewardsNotice.textContent = error instanceof Error ? error.message : String(error);
+        } finally {
+          state.rewardsBusy = false;
+          updateControls();
+        }
+      }
+
+      async function archiveRewardGoal(goal) {
+        if (state.rewardsBusy) return;
+        if (!window.confirm(`Belohnungsziel „${goal.title}“ archivieren?`)) return;
+        state.rewardsBusy = true;
+        updateControls();
+        try {
+          await api.deleteRewardGoal(goal.id);
+          rewardsNotice.textContent = `„${goal.title}“ wurde archiviert.`;
+          if (String(state.editingRewardGoalId) === String(goal.id)) resetRewardGoalForm();
+          await refreshRewardsData({ quiet: true });
+        } catch (error) {
+          rewardsNotice.textContent = error instanceof Error ? error.message : String(error);
+        } finally {
+          state.rewardsBusy = false;
+          updateControls();
+        }
+      }
+
+      function renderRewards(rewards = state.rewards) {
+        if (!rewards) {
+          rewardGoalList.replaceChildren();
+          rewardGoalEmpty.hidden = false;
+          renderRewardHistory([]);
+          return;
+        }
+        state.rewards = rewards;
+        chipBalance.textContent = String(Number(rewards.chips) || 0);
+        const goals = Array.isArray(rewards.goals) ? rewards.goals.filter((goal) => goal.active !== false) : [];
+        rewardGoalCount.textContent = `${goals.length} ${goals.length === 1 ? "Ziel" : "Ziele"}`;
+        const fragment = document.createDocumentFragment();
+        goals.forEach((goal) => {
+          const item = document.createElement("li");
+          item.className = "reward-goal-item";
+          item.dataset.id = String(goal.id);
+          const copy = document.createElement("span");
+          copy.className = "reward-goal-copy";
+          const title = document.createElement("strong");
+          title.textContent = goal.title;
+          const meta = document.createElement("span");
+          meta.textContent = `${Number(goal.progress_chips) || 0} / ${goal.cost_chips} Chips · ${Number(goal.times_redeemed) || 0}× eingelöst`;
+          copy.append(title, meta);
+          const actions = document.createElement("span");
+          actions.className = "reward-goal-actions";
+          const redeem = document.createElement("button");
+          redeem.type = "button";
+          redeem.className = "button button-primary";
+          redeem.textContent = "Einlösen";
+          redeem.dataset.rewardAction = "redeem";
+          redeem.dataset.affordable = goal.affordable ? "true" : "false";
+          redeem.disabled = !goal.affordable || state.rewardsBusy;
+          redeem.setAttribute("aria-label", `${goal.title} für ${goal.cost_chips} Chips einlösen`);
+          redeem.addEventListener("click", () => redeemRewardGoal(goal));
+          const edit = document.createElement("button");
+          edit.type = "button";
+          edit.className = "button button-quiet";
+          edit.textContent = "Edit";
+          edit.addEventListener("click", () => beginRewardGoalEdit(goal));
+          const archive = document.createElement("button");
+          archive.type = "button";
+          archive.className = "button button-danger";
+          archive.textContent = "×";
+          archive.setAttribute("aria-label", `${goal.title} archivieren`);
+          archive.addEventListener("click", () => archiveRewardGoal(goal));
+          actions.append(redeem, edit, archive);
+          const progress = document.createElement("div");
+          progress.className = "goal-progress";
+          progress.setAttribute("role", "progressbar");
+          progress.setAttribute("aria-label", `Fortschritt für ${goal.title}`);
+          progress.setAttribute("aria-valuemin", "0");
+          progress.setAttribute("aria-valuemax", String(goal.cost_chips));
+          progress.setAttribute("aria-valuenow", String(Math.min(Number(goal.progress_chips) || 0, Number(goal.cost_chips) || 0)));
+          const fill = document.createElement("span");
+          fill.style.width = `${Math.max(0, Math.min(100, Number(goal.progress_percent) || 0))}%`;
+          progress.appendChild(fill);
+          item.append(copy, actions, progress);
+          fragment.appendChild(item);
+        });
+        rewardGoalList.replaceChildren(fragment);
+        rewardGoalEmpty.hidden = goals.length > 0;
+        renderRewardHistory(Array.isArray(rewards.recent_transactions) ? rewards.recent_transactions : []);
+      }
+
+      async function refreshRewardsData({ quiet = false } = {}) {
+        const [arcadeResult, rewardsResult, metricsResult] = await Promise.all([
+          api.arcade().then((value) => ({ value }), (error) => ({ error })),
+          api.rewards().then((value) => ({ value }), (error) => ({ error })),
+          api.metrics().then((value) => ({ value }), (error) => ({ error })),
+        ]);
+        if (arcadeResult.value) {
+          state.arcade = arcadeResult.value;
+          renderArcade();
+        }
+        if (rewardsResult.value) {
+          state.rewards = rewardsResult.value;
+          renderRewards();
+        }
+        if (metricsResult.value) {
+          state.metrics = metricsResult.value;
+          renderMetrics();
+        }
+        const firstError = arcadeResult.error || rewardsResult.error || metricsResult.error;
+        if (firstError && !quiet) rewardsNotice.textContent = firstError.message || String(firstError);
+        updateControls();
+      }
+
+      function resetRoutineForm() {
+        state.editingRoutineId = null;
+        routineForm.reset();
+        routinePriority.value = "2";
+        routineSubmit.textContent = "Daily anlegen";
+        routineCancel.hidden = true;
+      }
+
+      function beginRoutineEdit(routine) {
+        state.editingRoutineId = routine.id;
+        routineTitle.value = routine.title;
+        routinePriority.value = String(routine.priority);
+        routineSubmit.textContent = "Daily speichern";
+        routineCancel.hidden = false;
+        routineTitle.focus();
+        routineTitle.select();
+      }
+
+      async function setRoutineActive(routine, active) {
+        if (state.routinesBusy) return;
+        state.routinesBusy = true;
+        routineNotice.textContent = "Routine wird aktualisiert…";
+        updateControls();
+        try {
+          await api.updateRoutine(routine.id, { active });
+          await loadRoutines();
+          await load({ wheelChange: true });
+          routineNotice.textContent = active ? "Routine ist wieder aktiv." : "Routine pausiert. Heute gibt es keine doppelte Aufgabe.";
+        } catch (error) {
+          routineNotice.textContent = error instanceof Error ? error.message : String(error);
+        } finally {
+          state.routinesBusy = false;
+          updateControls();
+        }
+      }
+
+      function renderRoutines() {
+        const fragment = document.createDocumentFragment();
+        state.routines.forEach((routine) => {
+          const item = document.createElement("li");
+          item.className = "routine-item";
+          item.dataset.active = routine.active ? "true" : "false";
+          if (!routine.active) item.style.opacity = "0.58";
+          const copy = document.createElement("span");
+          copy.className = "routine-item-copy";
+          const title = document.createElement("strong");
+          title.textContent = routine.title;
+          const days = Array.isArray(routine.weekdays) && routine.weekdays.length < 7
+            ? `${routine.weekdays.length} Tage/Woche`
+            : "Täglich";
+          const meta = document.createElement("span");
+          meta.textContent = `P${routine.priority} · ${days} · ${Number(routine.current_streak) || 0} Tage Streak${routine.active ? "" : " · pausiert"}`;
+          copy.append(title, meta);
+          const actions = document.createElement("span");
+          actions.className = "reward-goal-actions";
+          const edit = document.createElement("button");
+          edit.type = "button";
+          edit.className = "button button-quiet";
+          edit.textContent = "Edit";
+          edit.addEventListener("click", () => beginRoutineEdit(routine));
+          const toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.className = routine.active ? "button button-danger" : "button button-primary";
+          toggle.textContent = routine.active ? "Pause" : "Aktivieren";
+          toggle.addEventListener("click", () => setRoutineActive(routine, !routine.active));
+          actions.append(edit, toggle);
+          item.append(copy, actions);
+          fragment.appendChild(item);
+        });
+        routineList.replaceChildren(fragment);
+        routineEmpty.hidden = state.routines.length > 0;
+      }
+
+      async function loadRoutines() {
+        try {
+          state.routines = await api.routines();
+          renderRoutines();
+        } catch (error) {
+          routineNotice.textContent = `Routinen sind gerade nicht verfügbar. ${error.message || error}`;
+        }
+      }
+
+      async function openRoutineManager(routineId = null) {
+        routineNotice.textContent = "";
+        if (!routineDialog.open) routineDialog.showModal();
+        await loadRoutines();
+        if (routineId == null) return;
+        const routine = state.routines.find((item) => String(item.id) === String(routineId));
+        if (!routine) {
+          routineNotice.textContent = "Diese Routine ist gerade nicht verfügbar.";
+          return;
+        }
+        beginRoutineEdit(routine);
+        routineNotice.textContent = "Titel und Priorität gelten für alle Vorkommen dieser Daily-Routine.";
+      }
+
       function productivityStats(now = Date.now()) {
-        const totalXp = state.doneTodos.reduce((sum, todo) => sum + pointBreakdown(todo).total, 0);
+        const derivedTaskXp = state.doneTodos.reduce((sum, todo) => sum + pointBreakdown(todo).total, 0);
+        const ledgerXp = Number(state.metrics?.lifetime_xp);
+        const totalXp = Number.isFinite(ledgerXp) ? ledgerXp : derivedTaskXp;
         const completionTimes = state.doneTodos
           .map((todo) => parseUtcTimestamp(todo.completed_at))
           .filter(Number.isFinite);
         const todayKey = localDateKey(now);
-        const todayWins = completionTimes.filter((timestamp) => localDateKey(timestamp) === todayKey).length;
+        const derivedTodayWins = completionTimes.filter((timestamp) => localDateKey(timestamp) === todayKey).length;
+        const metricTodayWins = Number(state.metrics?.completed_today);
+        const todayWins = Number.isFinite(metricTodayWins) ? metricTodayWins : derivedTodayWins;
         const completionDays = new Set(completionTimes.map(localDateKey));
         const cursor = new Date(now);
         cursor.setHours(12, 0, 0, 0);
         if (!completionDays.has(localDateKey(cursor))) cursor.setDate(cursor.getDate() - 1);
-        let streak = 0;
-        while (completionDays.has(localDateKey(cursor)) && streak < 10000) {
-          streak += 1;
+        let derivedStreak = 0;
+        while (completionDays.has(localDateKey(cursor)) && derivedStreak < 10000) {
+          derivedStreak += 1;
           cursor.setDate(cursor.getDate() - 1);
         }
+        const ledgerStreak = Number(state.metrics?.completion_streak);
+        const streak = Number.isFinite(ledgerStreak) ? ledgerStreak : derivedStreak;
 
         const taskTotal = state.todos.length + state.doneTodos.length;
         const doneRate = taskTotal ? Math.round((state.doneTodos.length / taskTotal) * 100) : 0;
@@ -2779,13 +3891,17 @@
           } catch (_) {
             // Keep the status-based fallback when the response is not JSON.
           }
-          throw new Error(message);
+          const error = new Error(message);
+          error.status = response.status;
+          throw error;
         }
         return response.status === 204 ? null : response.json();
       }
 
       const api = {
         list: () => request("/todos"),
+        today: () => request("/today"),
+        tomorrow: () => request("/tomorrow"),
         listDone: () => request("/todos?status=done"),
         create: (title, priority) => request("/todos", {
           method: "POST",
@@ -2796,9 +3912,30 @@
           body: JSON.stringify(patch),
         }),
         remove: (id) => request(`/todos/${id}`, { method: "DELETE" }),
+        postpone: (id, idempotencyKey) => request(`/todos/${id}/postpone`, {
+          method: "POST",
+          body: JSON.stringify({ operation_id: idempotencyKey }),
+        }),
         spin: () => request("/wheel/spin"),
         arcade: () => request("/arcade"),
-        spinArcade: () => request("/arcade/spin", { method: "POST" }),
+        spinArcade: (idempotencyKey) => request("/arcade/spin", {
+          method: "POST",
+          body: JSON.stringify({ operation_id: idempotencyKey }),
+        }),
+        metrics: () => request("/metrics"),
+        rewards: () => request("/rewards"),
+        createRewardGoal: (payload) => request("/rewards/goals", { method: "POST", body: JSON.stringify(payload) }),
+        updateRewardGoal: (id, payload) => request(`/rewards/goals/${id}`, { method: "PATCH", body: JSON.stringify(payload) }),
+        deleteRewardGoal: (id) => request(`/rewards/goals/${id}`, { method: "DELETE" }),
+        redeemRewardGoal: (id, idempotencyKey) => request(`/rewards/goals/${id}/redeem`, {
+          method: "POST",
+          body: JSON.stringify({ operation_id: idempotencyKey }),
+        }),
+        rewardHistory: () => request("/rewards/history?limit=50"),
+        routines: () => request("/routines"),
+        createRoutine: (payload) => request("/routines", { method: "POST", body: JSON.stringify(payload) }),
+        updateRoutine: (id, payload) => request(`/routines/${id}`, { method: "PATCH", body: JSON.stringify(payload) }),
+        deleteRoutine: (id) => request(`/routines/${id}`, { method: "DELETE" }),
       };
 
       function showError(error) {
@@ -2820,11 +3957,27 @@
           control.disabled = busy;
         });
         doneListEl.querySelectorAll("input, select, button").forEach((control) => {
-          control.disabled = busy;
+          control.disabled = busy || control.dataset.final === "true";
+        });
+        rewardGoalForm.querySelectorAll("input, button").forEach((control) => {
+          control.disabled = busy || state.rewardsBusy || !state.rewards;
+        });
+        rewardGoalList.querySelectorAll("button").forEach((control) => {
+          const cannotRedeem = control.dataset.rewardAction === "redeem"
+            && control.dataset.affordable !== "true";
+          control.disabled = busy || state.rewardsBusy || cannotRedeem;
+        });
+        routineForm.querySelectorAll("input, select, button").forEach((control) => {
+          control.disabled = busy || state.routinesBusy;
+        });
+        routineList.querySelectorAll("button").forEach((control) => {
+          control.disabled = busy || state.routinesBusy;
         });
         playBtn.disabled = busy || state.todos.length === 0;
         playBtn.classList.toggle("is-loading", state.spinning);
-        slotPull.disabled = busy || !state.arcade?.tickets;
+        slotPull.disabled = busy
+          || !state.arcade?.tickets
+          || (Number.isFinite(Number(state.arcade?.reward_spins_remaining)) && Number(state.arcade.reward_spins_remaining) <= 0);
         slotPull.textContent = state.arcadeSpinning ? "Rolling…" : "Pull";
         wheelStage.classList.toggle("is-spinning", state.spinning);
         playLabel.textContent = state.spinning ? "Spinning" : "Spin";
@@ -2890,10 +4043,12 @@
       function openWinnerDialog(winner) {
         winnerReturnFocus = document.activeElement;
         restoreWinnerFocus = true;
-        winnerA11yTitle.textContent = `The wheel selected ${winner.title}.`;
-        winnerAction.textContent = "Mark it done ✓";
+        const quoteIndex = (Math.abs(Number(winner.id)) + state.doneTodos.length) % JACKPOT_LINES.length;
+        winnerQuote.textContent = JACKPOT_LINES[quoteIndex];
+        winnerA11yTitle.textContent = `Das Glücksrad hat ${winner.title} ausgewählt.`;
+        winnerAction.textContent = "Als erledigt markieren ✓";
         winnerAction.disabled = false;
-        winnerAction.setAttribute("aria-label", `Mark ${winner.title} as done`);
+        winnerAction.setAttribute("aria-label", `${winner.title} als erledigt markieren`);
         winnerPanel.classList.remove("is-completing");
         buildWinnerTitle(winner.title);
         celebrateScreen();
@@ -2917,22 +4072,22 @@
         state.winnerId = null;
         state.pendingWinner = null;
         resultEl.classList.remove("is-winner");
-        resultLabel.textContent = "Ready when you are";
-        resultTitle.textContent = "Your next move will appear here.";
+        resultLabel.textContent = "Bereit, wenn du es bist";
+        resultTitle.textContent = "Dein nächster Schritt erscheint hier.";
         celebration.replaceChildren();
       }
 
       function setChoosingResult() {
         state.winnerId = null;
         resultEl.classList.remove("is-winner");
-        resultLabel.textContent = "The wheel is turning";
-        resultTitle.textContent = "Choosing your next move…";
+        resultLabel.textContent = "Das Rad dreht sich";
+        resultTitle.textContent = "Der Server bestimmt deinen nächsten Schritt…";
       }
 
       function showWinner(winner) {
         state.winnerId = winner.id;
         state.pendingWinner = winner;
-        resultLabel.textContent = "Up next";
+        resultLabel.textContent = "Als Nächstes";
         resultTitle.textContent = winner.title;
         resultEl.classList.remove("is-winner");
         void resultEl.offsetWidth;
@@ -3220,11 +4375,13 @@
           select.appendChild(option);
         });
         select.addEventListener("change", async () => {
+          const nextPriority = Number(select.value);
           clearError();
           state.mutationBusy = true;
           updateControls();
           try {
-            await api.update(todo.id, { priority: Number(select.value) });
+            await api.update(todo.id, { priority: nextPriority });
+            if (nextPriority === 1 && Number(todo.priority) !== 1) state.priorityHeatId = todo.id;
             resetWinner();
             await load({ animateReorder: true, wheelChange: true });
           } catch (error) {
@@ -3243,13 +4400,55 @@
         const row = document.createElement("li");
         row.className = "task-row";
         row.dataset.id = String(todo.id);
+        row.dataset.priority = String(todo.priority);
+        const isDaily = todo.task_kind === "daily";
 
         const title = document.createElement("div");
         title.className = "task-title";
         const titleText = document.createElement("span");
         titleText.className = "task-title-text";
         titleText.textContent = todo.title;
+        if (Number(todo.priority) === 1) {
+          const marker = document.createElement("span");
+          marker.className = "p1-marker";
+          marker.innerHTML = '<span class="p1-fire" aria-hidden="true">🔥</span><span>P1</span>';
+          marker.setAttribute("aria-label", "P1, höchste Priorität");
+          title.appendChild(marker);
+        }
         title.append(titleText, createAgeBadge(todo));
+        if (isDaily) {
+          const daily = document.createElement("span");
+          daily.className = "daily-marker";
+          daily.textContent = `↻ Daily · P${todo.priority}`;
+          daily.title = "Titel und Priorität werden über die Daily-Routine verwaltet";
+          title.appendChild(daily);
+        }
+
+        const postponeButton = document.createElement("button");
+        postponeButton.type = "button";
+        postponeButton.className = "button button-quiet postpone-button";
+        postponeButton.innerHTML = isDaily
+          ? '<span aria-hidden="true">⊘</span> Auslassen'
+          : '<span aria-hidden="true">→</span> Morgen';
+        postponeButton.setAttribute(
+          "aria-label",
+          isDaily
+            ? `${todo.title} heute auslassen; kostet 10 Punkte und beendet die Daily-Streak`
+            : `${todo.title} auf morgen verschieben; zählt heute nicht als erledigt`
+        );
+
+        if (isDaily) {
+          const manageButton = document.createElement("button");
+          manageButton.type = "button";
+          manageButton.className = "button button-quiet manage-routine-button";
+          manageButton.textContent = "Routine";
+          manageButton.title = "Titel und Priorität der Daily-Routine verwalten";
+          manageButton.setAttribute("aria-label", `Daily-Routine ${todo.title} verwalten`);
+          postponeButton.addEventListener("click", () => postponeTodo(todo, row));
+          manageButton.addEventListener("click", () => openRoutineManager(todo.routine_id));
+          row.append(title, postponeButton, manageButton);
+          return row;
+        }
 
         const select = prioritySelect(todo);
         const editButton = document.createElement("button");
@@ -3332,6 +4531,7 @@
           deleteButton.className = "button button-quiet delete-button";
           deleteButton.setAttribute("aria-label", `Cancel editing ${todo.title}`);
           select.disabled = true;
+          postponeButton.disabled = true;
 
           editInput.addEventListener("input", () => editInput.setCustomValidity(""));
           editInput.addEventListener("keydown", (event) => {
@@ -3351,9 +4551,13 @@
           editInput.select();
         }
 
+        postponeButton.addEventListener("click", () => postponeTodo(todo, row));
         editButton.addEventListener("click", () => editing ? saveEdit() : beginEdit());
-        deleteButton.addEventListener("click", () => editing ? cancelEdit() : deleteTodo(todo, row));
-        row.append(title, select, editButton, deleteButton);
+        deleteButton.addEventListener("click", () => {
+          if (editing) cancelEdit();
+          else deleteTodo(todo, row);
+        });
+        row.append(title, select, postponeButton, editButton, deleteButton);
         return row;
       }
 
@@ -3361,16 +4565,25 @@
         const row = document.createElement("li");
         row.className = "done-row";
         row.dataset.id = String(todo.id);
+        const isDaily = todo.task_kind === "daily";
         if (awaitingReveal) row.classList.add("is-awaiting-reveal");
 
         const label = document.createElement("label");
         label.className = "done-toggle";
+        if (isDaily) label.classList.add("is-final");
 
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "done-checkbox";
         checkbox.checked = true;
-        checkbox.setAttribute("aria-label", `Mark ${todo.title} as not done`);
+        checkbox.dataset.final = isDaily ? "true" : "false";
+        checkbox.disabled = isDaily;
+        checkbox.setAttribute(
+          "aria-label",
+          isDaily
+            ? `${todo.title} erledigt. Daily-Abschlüsse sind endgültig und können nicht wieder geöffnet werden.`
+            : `${todo.title} wieder als offen markieren`
+        );
 
         const box = document.createElement("span");
         box.className = "done-box";
@@ -3380,11 +4593,22 @@
         title.className = "done-title";
         title.textContent = todo.title;
         const points = document.createElement("span");
-        const breakdown = pointBreakdown(todo);
         points.className = "done-points";
-        points.textContent = `+${breakdown.total} XP`;
-        points.title = `${breakdown.priorityBase} priority XP + ${breakdown.waitingBonus} backlog bonus XP`;
+        if (isDaily) {
+          points.textContent = "XP + Streak";
+          points.title = "Prioritäts-XP plus serverseitig berechneter Daily-Streak-Bonus";
+        } else {
+          const breakdown = pointBreakdown(todo);
+          points.textContent = `+${breakdown.total} XP`;
+          points.title = `${breakdown.priorityBase} Prioritäts-XP + ${breakdown.waitingBonus} Wartebonus-XP`;
+        }
         label.append(checkbox, box, title, points);
+        if (isDaily) {
+          const finalNote = document.createElement("span");
+          finalNote.className = "visually-hidden";
+          finalNote.textContent = "Daily-Abschluss ist endgültig.";
+          label.appendChild(finalNote);
+        }
 
         const sparkColors = ["#18a957", "#ffd400", "#e60012", "#00b8d9", "#7b2cbf"];
         for (let i = 0; i < 10; i += 1) {
@@ -3399,7 +4623,7 @@
           row.appendChild(spark);
         }
 
-        checkbox.addEventListener("change", async () => {
+        if (!isDaily) checkbox.addEventListener("change", async () => {
           if (checkbox.checked || state.mutationBusy || state.spinning) return;
           const productivityBefore = productivityStats();
           clearError();
@@ -3442,7 +4666,7 @@
         });
         doneListEl.replaceChildren(fragment);
         doneEmpty.hidden = state.doneTodos.length > 0;
-        doneCount.textContent = `${state.doneTodos.length} ${state.doneTodos.length === 1 ? "win" : "wins"}`;
+        doneCount.textContent = `${state.doneTodos.length} ${state.doneTodos.length === 1 ? "Sieg" : "Siege"}`;
       }
 
       function scrollIntoPane(scroller, element, behavior = "auto") {
@@ -3487,10 +4711,16 @@
         state.todos.forEach((todo) => {
           const row = renderRow(todo);
           if (String(todo.id) === String(enterId) && !reduceMotion.matches) row.classList.add("is-entering");
+          if (String(todo.id) === String(state.priorityHeatId) && Number(todo.priority) === 1) row.classList.add("is-priority-boost");
           fragment.appendChild(row);
         });
         listEl.replaceChildren(fragment);
         emptyEl.hidden = state.todos.length > 0;
+        if (state.priorityHeatId != null) {
+          const heatId = state.priorityHeatId;
+          state.priorityHeatId = null;
+          window.setTimeout(() => listEl.querySelector(`[data-id="${heatId}"]`)?.classList.remove("is-priority-boost"), 1250);
+        }
 
         if (oldPositions.size) {
           listEl.querySelectorAll(".task-row").forEach((row) => {
@@ -3507,8 +4737,9 @@
 
         const countText = taskWord(state.todos.length);
         taskCount.textContent = countText;
-        taskTotalCount.textContent = `${state.todos.length + state.doneTodos.length} total`;
+        taskTotalCount.textContent = `${state.todos.length + state.doneTodos.length} gesamt`;
         wheelCount.textContent = countText;
+        renderWheelQueue();
         renderDayPressure(new Date());
         canvas.setAttribute(
           "aria-label",
@@ -3538,12 +4769,12 @@
         clearError();
         state.mutationBusy = true;
         winnerAction.disabled = true;
-        winnerAction.textContent = "Completing…";
+        winnerAction.textContent = "Wird erledigt…";
         updateControls();
 
         try {
           await api.update(winner.id, { status: "done" });
-          winnerAction.textContent = "DONE! ✓";
+          winnerAction.textContent = "ERLEDIGT! ✓";
           winnerPanel.classList.add("is-completing");
           await Promise.all([
             animateRowOut(activeRow),
@@ -3557,13 +4788,46 @@
             celebrateReward: true,
           });
           state.winnerId = null;
-          resultLabel.textContent = "Completed";
+          resultLabel.textContent = "Erledigt";
           resultTitle.textContent = winner.title;
           closeWinnerDialog(true);
         } catch (error) {
           winnerPanel.classList.remove("is-completing");
-          winnerAction.textContent = "Try again";
+          winnerAction.textContent = "Noch einmal versuchen";
           winnerAction.disabled = false;
+          showError(error);
+        } finally {
+          state.mutationBusy = false;
+          updateControls();
+        }
+      }
+
+      async function postponeTodo(todo, row) {
+        if (state.mutationBusy || state.spinning) return;
+        const oldIndex = state.todos.findIndex((item) => String(item.id) === String(todo.id));
+        const focusId = state.todos[oldIndex + 1]?.id ?? state.todos[oldIndex - 1]?.id;
+        clearError();
+        state.mutationBusy = true;
+        row.setAttribute("aria-busy", "true");
+        updateControls();
+        try {
+          const result = await api.postpone(todo.id, operationId());
+          await animateRowOut(row);
+          resetWinner();
+          if (state.metrics && Number.isFinite(Number(result.daily_score))) {
+            state.metrics = { ...state.metrics, daily_score: Number(result.daily_score) };
+            renderMetrics();
+          }
+          rewardStatus.textContent = todo.task_kind === "daily"
+            ? `${todo.title} wurde heute ausgelassen. Die Daily-Streak beginnt beim nächsten Abschluss neu. Tagesscore ${result.daily_score}.`
+            : `${todo.title} wurde auf morgen verschoben. Tagesscore ${result.daily_score}.`;
+          await load({ wheelChange: true });
+          requestAnimationFrame(() => {
+            if (focusId != null) listEl.querySelector(`[data-id="${focusId}"] .postpone-button`)?.focus();
+            else titleInput.focus();
+          });
+        } catch (error) {
+          row.removeAttribute("aria-busy");
           showError(error);
         } finally {
           state.mutationBusy = false;
@@ -3604,19 +4868,42 @@
         celebrateReward = false,
       } = {}) {
         const version = ++state.loadVersion;
+        const todayRequest = api.today().catch((error) => {
+          if (error?.status === 404) return api.list();
+          throw error;
+        });
         const arcadeRequest = api.arcade().then(
           (value) => ({ value }),
           (error) => ({ error })
         );
-        const [todos, doneTodos, arcadeResult] = await Promise.all([api.list(), api.listDone(), arcadeRequest]);
+        const metricsRequest = api.metrics().then(
+          (value) => ({ value }),
+          (error) => ({ error })
+        );
+        const rewardsRequest = api.rewards().then(
+          (value) => ({ value }),
+          (error) => ({ error })
+        );
+        const [todos, doneTodos, arcadeResult, metricsResult, rewardsResult] = await Promise.all([
+          todayRequest,
+          api.listDone(),
+          arcadeRequest,
+          metricsRequest,
+          rewardsRequest,
+        ]);
         if (version !== state.loadVersion) return;
         state.todos = todos;
         state.doneTodos = doneTodos;
-        state.arcade = arcadeResult.value ?? null;
+        if (arcadeResult.value) state.arcade = arcadeResult.value;
+        if (metricsResult.value) state.metrics = metricsResult.value;
+        if (rewardsResult.value) state.rewards = rewardsResult.value;
         renderList({ enterId, animateReorder });
         renderDoneList({ enterId: doneEnterId });
-        if (arcadeResult.value) renderArcade();
+        renderMetrics();
+        if (state.arcade) renderArcade();
         else renderArcadeUnavailable();
+        if (state.rewards) renderRewards();
+        else if (rewardsResult.error) rewardsNotice.textContent = "Reward-Ziele sind gerade nicht erreichbar. Aufgaben und Glücksrad funktionieren weiter.";
         const nextProductivity = productivityStats();
         if (celebrateReward && productivityFrom) {
           renderProductivity(productivityFrom);
@@ -3642,7 +4929,6 @@
         titleInput.setCustomValidity("");
         clearError();
         state.mutationBusy = true;
-        let refocusTitle = false;
         updateControls();
         try {
           const created = await api.create(title, Number(newPrio.value));
@@ -3653,19 +4939,84 @@
           addForm.classList.remove("is-confirmed");
           void addForm.offsetWidth;
           addForm.classList.add("is-confirmed");
-          refocusTitle = true;
         } catch (error) {
           showError(error);
-          refocusTitle = true;
         } finally {
           state.mutationBusy = false;
           updateControls();
-          if (refocusTitle) titleInput.focus();
+          titleInput.focus();
         }
       });
 
       titleInput.addEventListener("input", () => titleInput.setCustomValidity(""));
       slotPull.addEventListener("click", pullFocusSlots);
+
+      rewardGoalCancel.addEventListener("click", resetRewardGoalForm);
+      rewardGoalForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (state.rewardsBusy) return;
+        const title = rewardGoalTitle.value.trim();
+        const cost = Number(rewardGoalCost.value);
+        if (!title || !Number.isInteger(cost) || cost < 1) {
+          rewardsNotice.textContent = "Bitte Name und einen positiven Chip-Preis eingeben.";
+          return;
+        }
+        state.rewardsBusy = true;
+        rewardsNotice.textContent = state.editingRewardGoalId == null ? "Ziel wird angelegt…" : "Ziel wird gespeichert…";
+        updateControls();
+        try {
+          if (state.editingRewardGoalId == null) {
+            await api.createRewardGoal({ title, cost_chips: cost });
+            rewardsNotice.textContent = `Neues Ziel: ${title}.`;
+          } else {
+            await api.updateRewardGoal(state.editingRewardGoalId, { title, cost_chips: cost });
+            rewardsNotice.textContent = `„${title}“ wurde aktualisiert.`;
+          }
+          resetRewardGoalForm();
+          await refreshRewardsData({ quiet: true });
+        } catch (error) {
+          rewardsNotice.textContent = error instanceof Error ? error.message : String(error);
+        } finally {
+          state.rewardsBusy = false;
+          updateControls();
+        }
+      });
+
+      routineCancel.addEventListener("click", resetRoutineForm);
+      manageRoutines.addEventListener("click", () => openRoutineManager());
+      routineForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (state.routinesBusy) return;
+        const title = routineTitle.value.trim();
+        const priority = Number(routinePriority.value);
+        if (!title) {
+          routineTitle.setCustomValidity("Bitte einen Namen eingeben.");
+          routineTitle.reportValidity();
+          return;
+        }
+        routineTitle.setCustomValidity("");
+        state.routinesBusy = true;
+        routineNotice.textContent = state.editingRoutineId == null ? "Daily wird angelegt…" : "Daily wird gespeichert…";
+        updateControls();
+        try {
+          if (state.editingRoutineId == null) {
+            await api.createRoutine({ title, priority });
+            routineNotice.textContent = `„${title}“ erscheint ab heute täglich.`;
+          } else {
+            await api.updateRoutine(state.editingRoutineId, { title, priority });
+            routineNotice.textContent = `„${title}“ wurde aktualisiert.`;
+          }
+          resetRoutineForm();
+          await loadRoutines();
+          await load({ wheelChange: true });
+        } catch (error) {
+          routineNotice.textContent = error instanceof Error ? error.message : String(error);
+        } finally {
+          state.routinesBusy = false;
+          updateControls();
+        }
+      });
+      routineTitle.addEventListener("input", () => routineTitle.setCustomValidity(""));
 
       winnerClose.addEventListener("click", () => closeWinnerDialog(true));
       winnerAction.addEventListener("click", completeWinner);
@@ -3685,18 +5036,23 @@
         screenConfetti.replaceChildren();
         winnerOverlayTitle.replaceChildren();
         winnerA11yTitle.textContent = "";
+        winnerQuote.textContent = "";
         winnerReturnFocus = null;
         state.pendingWinner = null;
         state.completionRevealId = null;
         restoreWinnerFocus = true;
         renderDayPressure(new Date());
-        if (completedId != null) revealDoneRow(completedId);
+        if (completedId != null) {
+          activateTab("heute");
+          requestAnimationFrame(() => revealDoneRow(completedId));
+        }
         if (shouldRestore) {
           requestAnimationFrame(() => {
-            const canRestore = focusTarget instanceof HTMLElement
+            const canRestore = completedId == null
+              && focusTarget instanceof HTMLElement
               && focusTarget.isConnected
               && focusTarget.matches("button:not(:disabled), input:not(:disabled), select:not(:disabled), a[href], [tabindex]:not([tabindex='-1'])");
-            const fallback = playBtn.disabled ? titleInput : playBtn;
+            const fallback = completedId != null || playBtn.disabled ? titleInput : playBtn;
             (canRestore ? focusTarget : fallback).focus();
           });
         }
@@ -3767,6 +5123,8 @@
         scheduleDayPressure();
       });
       window.addEventListener("focus", scheduleDayPressure);
+
+      activateTab(tabFromLocation());
 
       (async () => {
         try {

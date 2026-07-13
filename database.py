@@ -4,9 +4,11 @@ from collections.abc import Iterator
 import os
 from pathlib import Path
 
-from sqlmodel import Session, SQLModel, create_engine
+from sqlalchemy import event
+from sqlmodel import Session, create_engine
 
-import models  # noqa: F401 - imported so SQLModel registers the Todo table
+import models  # noqa: F401 - register all table models before migration
+from migrations import migrate_database
 
 database_path_setting = os.environ.get("TYCHE_DB_PATH")
 if database_path_setting:
@@ -22,9 +24,18 @@ else:
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 
 
-def init_db() -> None:
-    """Create tables if they do not yet exist."""
-    SQLModel.metadata.create_all(engine)
+@event.listens_for(engine, "connect")
+def _configure_sqlite(dbapi_connection, _connection_record) -> None:
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys = ON")
+    cursor.execute("PRAGMA busy_timeout = 5000")
+    cursor.close()
+
+
+def init_db(target_engine=None, *, create_backup: bool = True):
+    """Create or transactionally migrate a database to the latest schema."""
+    selected_engine = target_engine or engine
+    return migrate_database(selected_engine, create_backup=create_backup)
 
 
 def get_session() -> Iterator[Session]:
