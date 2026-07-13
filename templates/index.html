@@ -1,0 +1,2690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>TYCHE · Let chance choose</title>
+  <script>
+    // The app needs FastAPI. If the template is opened directly, move to the
+    // local server instead of leaving the UI in a permanent "Failed to fetch" state.
+    if (window.location.protocol === "file:") {
+      window.location.replace("http://127.0.0.1:8000/");
+    }
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      --page: #f5f5f7;
+      --page-glow: rgba(0, 122, 255, 0.08);
+      --surface: rgba(255, 255, 255, 0.82);
+      --surface-solid: #ffffff;
+      --surface-raised: #ffffff;
+      --surface-subtle: #f7f7f9;
+      --text: #1d1d1f;
+      --text-secondary: #65656d;
+      --text-tertiary: #85858d;
+      --line: rgba(29, 29, 31, 0.10);
+      --line-strong: rgba(29, 29, 31, 0.16);
+      --accent: #087af5;
+      --accent-hover: #006ee6;
+      --accent-soft: rgba(8, 122, 245, 0.11);
+      --accent-glow: rgba(8, 122, 245, 0.30);
+      --danger: #c9342f;
+      --danger-soft: rgba(201, 52, 47, 0.09);
+      --focus: rgba(8, 122, 245, 0.30);
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 16px 44px rgba(0, 0, 0, 0.07);
+      --shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.04), 0 20px 52px rgba(0, 0, 0, 0.10);
+      --wheel-empty: #e9e9ed;
+      --wheel-empty-line: #d9d9df;
+      --wheel-label-light: #ffffff;
+      --wheel-label-dark: #171717;
+      --wheel-1: #e60012;
+      --wheel-2: #0057d9;
+      --wheel-3: #ffd400;
+      --wheel-4: #00843d;
+      --wheel-5: #f05a00;
+      --wheel-6: #7b2cbf;
+      --wheel-7: #00b8d9;
+      --wheel-8: #d5007f;
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --fast: 160ms;
+      --normal: 260ms;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --page: #09090b;
+        --page-glow: rgba(10, 132, 255, 0.12);
+        --surface: rgba(28, 28, 30, 0.82);
+        --surface-solid: #1c1c1e;
+        --surface-raised: #242426;
+        --surface-subtle: #232326;
+        --text: #f5f5f7;
+        --text-secondary: #aaaab2;
+        --text-tertiary: #85858d;
+        --line: rgba(255, 255, 255, 0.11);
+        --line-strong: rgba(255, 255, 255, 0.18);
+        --accent: #0a84ff;
+        --accent-hover: #2997ff;
+        --accent-soft: rgba(10, 132, 255, 0.17);
+        --accent-glow: rgba(10, 132, 255, 0.38);
+        --danger: #ff6961;
+        --danger-soft: rgba(255, 105, 97, 0.13);
+        --focus: rgba(10, 132, 255, 0.38);
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.22), 0 18px 48px rgba(0, 0, 0, 0.30);
+        --shadow-hover: 0 2px 5px rgba(0, 0, 0, 0.28), 0 22px 56px rgba(0, 0, 0, 0.38);
+        --wheel-empty: #2c2c2f;
+        --wheel-empty-line: #3b3b40;
+        --wheel-1: #e60012;
+        --wheel-2: #0057d9;
+        --wheel-3: #ffd400;
+        --wheel-4: #00843d;
+        --wheel-5: #f05a00;
+        --wheel-6: #7b2cbf;
+        --wheel-7: #00b8d9;
+        --wheel-8: #d5007f;
+      }
+    }
+
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --page: #f5f5f7;
+      --page-glow: rgba(0, 122, 255, 0.08);
+      --surface: rgba(255, 255, 255, 0.82);
+      --surface-solid: #ffffff;
+      --surface-raised: #ffffff;
+      --surface-subtle: #f7f7f9;
+      --text: #1d1d1f;
+      --text-secondary: #65656d;
+      --text-tertiary: #85858d;
+      --line: rgba(29, 29, 31, 0.10);
+      --line-strong: rgba(29, 29, 31, 0.16);
+      --accent: #087af5;
+      --accent-hover: #006ee6;
+      --accent-soft: rgba(8, 122, 245, 0.11);
+      --accent-glow: rgba(8, 122, 245, 0.30);
+      --danger: #c9342f;
+      --danger-soft: rgba(201, 52, 47, 0.09);
+      --focus: rgba(8, 122, 245, 0.30);
+      --wheel-empty: #e9e9ed;
+      --wheel-empty-line: #d9d9df;
+      --wheel-1: #e60012;
+      --wheel-2: #0057d9;
+      --wheel-3: #ffd400;
+      --wheel-4: #00843d;
+      --wheel-5: #f05a00;
+      --wheel-6: #7b2cbf;
+      --wheel-7: #00b8d9;
+      --wheel-8: #d5007f;
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --page: #09090b;
+      --page-glow: rgba(10, 132, 255, 0.12);
+      --surface: rgba(28, 28, 30, 0.82);
+      --surface-solid: #1c1c1e;
+      --surface-raised: #242426;
+      --surface-subtle: #232326;
+      --text: #f5f5f7;
+      --text-secondary: #aaaab2;
+      --text-tertiary: #85858d;
+      --line: rgba(255, 255, 255, 0.11);
+      --line-strong: rgba(255, 255, 255, 0.18);
+      --accent: #0a84ff;
+      --accent-hover: #2997ff;
+      --accent-soft: rgba(10, 132, 255, 0.17);
+      --accent-glow: rgba(10, 132, 255, 0.38);
+      --danger: #ff6961;
+      --danger-soft: rgba(255, 105, 97, 0.13);
+      --focus: rgba(10, 132, 255, 0.38);
+      --wheel-empty: #2c2c2f;
+      --wheel-empty-line: #3b3b40;
+      --wheel-1: #e60012;
+      --wheel-2: #0057d9;
+      --wheel-3: #ffd400;
+      --wheel-4: #00843d;
+      --wheel-5: #f05a00;
+      --wheel-6: #7b2cbf;
+      --wheel-7: #00b8d9;
+      --wheel-8: #d5007f;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { min-width: 320px; background: var(--page); }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% -10%, var(--page-glow), transparent 34rem),
+        var(--page);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      transition: color 300ms ease, background-color 300ms ease;
+    }
+
+    button, input, select { font: inherit; }
+
+    button, select { cursor: pointer; }
+
+    button:disabled, input:disabled, select:disabled {
+      cursor: default;
+      opacity: 0.52;
+    }
+
+    button, input, select {
+      min-height: 44px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      background: var(--surface-solid);
+      outline: 0;
+      transition:
+        border-color var(--fast) ease,
+        box-shadow var(--normal) var(--ease),
+        background-color var(--fast) ease,
+        color var(--fast) ease,
+        opacity var(--fast) ease,
+        transform var(--fast) var(--ease);
+    }
+
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--focus);
+    }
+
+    button:not(:disabled):active { transform: scale(0.975); }
+
+    input {
+      width: 100%;
+      padding: 0 14px;
+      caret-color: var(--accent);
+    }
+
+    input::placeholder { color: var(--text-tertiary); }
+
+    select {
+      appearance: none;
+      padding: 0 38px 0 13px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--text-secondary) 50%),
+        linear-gradient(135deg, var(--text-secondary) 50%, transparent 50%);
+      background-position:
+        calc(100% - 17px) 52%,
+        calc(100% - 12px) 52%;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+    }
+
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0 0 0 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    .app-shell {
+      width: min(calc(100% - 28px), 1100px);
+      margin: 0 auto;
+      padding: 22px 0 28px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-areas:
+        "brand subtitle"
+        "title subtitle";
+      column-gap: 30px;
+      align-items: center;
+      max-width: none;
+      margin: 0 4px 14px;
+      text-align: left;
+    }
+
+    .brand-mark {
+      grid-area: brand;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px var(--accent-soft);
+    }
+
+    h1 {
+      grid-area: title;
+      margin: 0;
+      font-size: clamp(2.65rem, 5.2vw, 3.75rem);
+      line-height: 0.92;
+      font-weight: 760;
+      letter-spacing: -0.065em;
+    }
+
+    .subtitle {
+      grid-area: subtitle;
+      max-width: 34rem;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.48;
+    }
+
+    .stack {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(390px, 0.92fr);
+      align-items: stretch;
+      gap: 14px;
+    }
+
+    .card {
+      position: relative;
+      padding: 20px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px) saturate(1.2);
+      -webkit-backdrop-filter: blur(24px) saturate(1.2);
+      transition:
+        box-shadow var(--normal) var(--ease),
+        border-color var(--normal) ease,
+        background-color 300ms ease;
+    }
+
+    .card:hover { box-shadow: var(--shadow-hover); }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.25;
+      font-weight: 680;
+      letter-spacing: -0.025em;
+    }
+
+    .section-meta {
+      flex: none;
+      color: var(--text-tertiary);
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .add-card {
+      grid-column: 1 / -1;
+      padding: 14px 16px;
+    }
+
+    #add {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #add input { font-size: 15px; }
+
+    #new-prio {
+      min-width: 142px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+      border-color: transparent;
+      font-size: 14px;
+      font-weight: 660;
+      white-space: nowrap;
+    }
+
+    .button-primary {
+      color: #fff;
+      background: var(--accent);
+      box-shadow: 0 5px 14px var(--accent-glow);
+    }
+
+    .button-primary:not(:disabled):hover {
+      background: var(--accent-hover);
+      box-shadow: 0 7px 18px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+
+    .button-primary:not(:disabled):active { transform: translateY(0) scale(0.975); }
+
+    .button-quiet {
+      color: var(--text-secondary);
+      background: var(--surface-subtle);
+      border-color: var(--line);
+      box-shadow: none;
+    }
+
+    .button-quiet:not(:disabled):hover {
+      color: var(--text);
+      background: var(--surface-raised);
+      border-color: var(--line-strong);
+    }
+
+    .button-danger {
+      color: var(--danger);
+      background: transparent;
+      border-color: transparent;
+    }
+
+    .button-danger:not(:disabled):hover { background: var(--danger-soft); }
+
+    #add.is-confirmed input { animation: input-confirm 360ms var(--ease); }
+
+    #notice {
+      margin: 10px 2px 0;
+      padding: 10px 12px;
+      border: 1px solid color-mix(in srgb, var(--danger) 24%, transparent);
+      border-radius: var(--radius-sm);
+      color: var(--danger);
+      background: var(--danger-soft);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .wheel-card {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .wheel-stage {
+      position: relative;
+      isolation: isolate;
+      width: min(100%, 420px);
+      aspect-ratio: 1;
+      margin: 12px auto 0;
+      filter: drop-shadow(0 22px 30px rgba(19, 31, 52, 0.2));
+    }
+
+    .wheel-stage::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: -13px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #e60012, #ffd400, #0057d9, #00b8d9, #00843d, #ffd400, #e60012);
+      opacity: 0.56;
+      filter: blur(14px);
+      animation: wheel-aura-breathe 3.4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .wheel-stage::after {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      inset: -8px;
+      border: 3px dashed rgba(255, 212, 0, 0.92);
+      border-radius: 50%;
+      box-shadow: 0 0 18px rgba(255, 212, 0, 0.32);
+      animation: wheel-ring-chase 11s linear infinite;
+      pointer-events: none;
+    }
+
+    .wheel-stage.is-spinning::before {
+      opacity: 0.9;
+      animation-duration: 1.15s;
+    }
+
+    .wheel-stage.is-spinning::after {
+      border-style: dotted;
+      animation-duration: 1.35s;
+    }
+
+    .wheel-rim {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      padding: 13px;
+      overflow: hidden;
+      border: 3px solid #ffd400;
+      border-radius: 50%;
+      background: #171717;
+      box-shadow:
+        0 0 0 5px rgba(255, 255, 255, 0.86),
+        0 0 0 8px #9b6600,
+        inset 0 0 0 2px rgba(255, 255, 255, 0.62),
+        inset 0 0 18px rgba(255, 212, 0, 0.42),
+        0 14px 32px rgba(0, 0, 0, 0.28);
+    }
+
+    .wheel-rim::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: -42%;
+      background: repeating-conic-gradient(
+        #e60012 0 10deg,
+        #ffd400 10deg 20deg,
+        #0057d9 20deg 30deg,
+        #00b8d9 30deg 40deg
+      );
+      animation: wheel-rim-lights 8s linear infinite;
+      pointer-events: none;
+    }
+
+    .wheel-rim::after {
+      content: "";
+      position: absolute;
+      z-index: 3;
+      inset: 13px;
+      border: 2px solid rgba(255, 255, 255, 0.74);
+      border-radius: 50%;
+      box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.24);
+      pointer-events: none;
+    }
+
+    .wheel-stage.is-spinning .wheel-rim::before { animation-duration: 0.8s; }
+
+    #wheel {
+      position: relative;
+      z-index: 2;
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+
+    #pointer {
+      position: absolute;
+      z-index: 9;
+      top: -14px;
+      left: 50%;
+      width: 43px;
+      height: 48px;
+      transform: translateX(-50%);
+      animation: pointer-float 2.1s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    #pointer span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform-origin: 50% 9px;
+      filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.2));
+    }
+
+    #pointer span::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 31px;
+      height: 35px;
+      border: 4px solid #ffd400;
+      border-radius: 15px 15px 15px 4px;
+      background: #e60012;
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    #pointer.is-ticking span { animation: pointer-tick 140ms ease-out; }
+
+    .wheel-button-anchor {
+      position: absolute;
+      z-index: 8;
+      top: 50%;
+      left: 50%;
+      display: grid;
+      place-items: center;
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #celebration {
+      position: absolute;
+      z-index: 6;
+      inset: 8%;
+      pointer-events: none;
+    }
+
+    .confetti {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--particle);
+      opacity: 0;
+      animation: confetti-pop 760ms var(--ease) forwards;
+      animation-delay: var(--delay);
+    }
+
+    .spin-controls {
+      display: grid;
+      justify-items: center;
+      margin-top: 18px;
+    }
+
+    #play {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 102px;
+      min-width: 102px;
+      height: 102px;
+      min-height: 102px;
+      gap: 5px;
+      padding: 0;
+      border: 5px solid #ffd400;
+      border-radius: 50%;
+      color: #fff;
+      background: radial-gradient(circle at 34% 25%, #ff4a55 0, #e60012 48%, #85000b 100%);
+      box-shadow:
+        0 0 0 7px rgba(255, 255, 255, 0.94),
+        0 0 0 10px #9b6600,
+        0 11px 24px rgba(0, 0, 0, 0.38),
+        inset 0 3px 7px rgba(255, 255, 255, 0.38),
+        inset 0 -8px 12px rgba(78, 0, 8, 0.38);
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      pointer-events: auto;
+    }
+
+    #play::before {
+      content: "";
+      position: absolute;
+      inset: -18px;
+      border: 3px solid rgba(255, 212, 0, 0.7);
+      border-radius: 50%;
+      opacity: 0.68;
+      animation: center-button-pulse 2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    #play:not(:disabled):hover {
+      background: radial-gradient(circle at 34% 25%, #ff6c74 0, #f00018 48%, #91000c 100%);
+      box-shadow:
+        0 0 0 7px #fff,
+        0 0 0 10px #c98900,
+        0 15px 32px rgba(0, 0, 0, 0.42),
+        0 0 32px rgba(255, 212, 0, 0.54),
+        inset 0 3px 7px rgba(255, 255, 255, 0.42);
+      transform: scale(1.065);
+    }
+
+    #play:not(:disabled):active { transform: scale(0.96); }
+
+    #play:disabled { opacity: 0.82; }
+
+    #play:focus-visible {
+      border-color: #fff;
+      box-shadow: 0 0 0 7px #ffd400, 0 0 0 12px var(--focus), 0 10px 28px rgba(0, 0, 0, 0.44);
+    }
+
+    #play .play-icon {
+      font-size: 24px;
+      line-height: 1;
+      transform: translateX(1px);
+    }
+
+    #play .play-label { line-height: 1; }
+
+    #play.is-loading .play-icon { animation: play-pulse 800ms ease-in-out infinite alternate; }
+
+    #play.is-loading::before {
+      opacity: 1;
+      animation-duration: 620ms;
+    }
+
+    #result {
+      display: grid;
+      gap: 3px;
+      min-height: 42px;
+      align-content: start;
+      color: var(--text-secondary);
+    }
+
+    #result .result-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #result .result-title {
+      color: var(--text);
+      font-size: clamp(18px, 4vw, 23px);
+      line-height: 1.25;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    #result.is-winner { animation: winner-reveal 460ms var(--ease); }
+
+    .tasks-card {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .task-scroll {
+      flex: 1;
+      min-height: 0;
+      max-height: 478px;
+      padding-right: 4px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: var(--line-strong) transparent;
+    }
+
+    .task-scroll::-webkit-scrollbar { width: 6px; }
+    .task-scroll::-webkit-scrollbar-thumb { border-radius: 999px; background: var(--line-strong); }
+
+    body.winner-open { overflow: hidden; }
+
+    #winner-dialog {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      width: 100vw;
+      max-width: none;
+      height: 100vh;
+      height: 100dvh;
+      max-height: none;
+      margin: 0;
+      padding: max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
+      overflow: hidden;
+      border: 0;
+      color: #fff;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(230, 0, 18, 0.34), transparent 34%),
+        radial-gradient(circle at 50% 50%, #101b42 0, #070b18 55%, #02040a 100%);
+      opacity: 0;
+      transition: opacity 220ms ease;
+    }
+
+    #winner-dialog[open] {
+      display: grid;
+      place-items: center;
+    }
+
+    #winner-dialog.is-visible { opacity: 1; }
+
+    #winner-dialog::backdrop { background: #02040a; }
+
+    .winner-rays {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 145vmax;
+      height: 145vmax;
+      border-radius: 50%;
+      background: repeating-conic-gradient(
+        from 0deg,
+        rgba(230, 0, 18, 0.23) 0 8deg,
+        rgba(230, 0, 18, 0.04) 8deg 16deg,
+        rgba(0, 87, 217, 0.22) 16deg 24deg,
+        rgba(0, 87, 217, 0.04) 24deg 32deg,
+        rgba(255, 212, 0, 0.18) 32deg 40deg,
+        transparent 40deg 48deg
+      );
+      transform: translate(-50%, -50%);
+      animation: winner-rays-spin 18s linear infinite;
+      pointer-events: none;
+    }
+
+    .winner-panel {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      width: min(92vw, 1040px);
+      min-height: min(76vh, 720px);
+      min-height: min(76dvh, 720px);
+      padding: clamp(54px, 7vw, 88px) clamp(24px, 6vw, 74px) clamp(34px, 5vw, 58px);
+      overflow: hidden;
+      border: 5px solid transparent;
+      border-radius: clamp(24px, 4vw, 44px);
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 0, rgba(255, 212, 0, 0.22), transparent 34%) padding-box,
+        linear-gradient(145deg, rgba(96, 0, 21, 0.97), rgba(8, 16, 43, 0.98) 54%, rgba(0, 42, 102, 0.98)) padding-box,
+        conic-gradient(from 20deg, #ffd400, #e60012, #0057d9, #00b8d9, #ffd400) border-box;
+      box-shadow:
+        0 0 0 8px rgba(255, 255, 255, 0.08),
+        0 0 45px rgba(255, 212, 0, 0.28),
+        0 28px 90px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transform-origin: 50% 50%;
+    }
+
+    #winner-dialog.is-visible .winner-panel { animation: jackpot-panel-in 760ms var(--ease) both; }
+
+    .winner-panel::after {
+      content: "";
+      position: absolute;
+      inset: 13px;
+      border: 3px dashed rgba(255, 212, 0, 0.86);
+      border-radius: calc(clamp(24px, 4vw, 44px) - 9px);
+      box-shadow: inset 0 0 18px rgba(255, 212, 0, 0.16), 0 0 12px rgba(255, 212, 0, 0.22);
+      animation: marquee-lights 900ms steps(2, end) infinite;
+      pointer-events: none;
+    }
+
+    .winner-close {
+      position: absolute;
+      z-index: 5;
+      top: 24px;
+      right: 24px;
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      min-height: 46px;
+      padding: 0;
+      border-color: rgba(255, 255, 255, 0.22);
+      border-radius: 50%;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: 23px;
+      line-height: 1;
+    }
+
+    .winner-close:hover { background: rgba(0, 0, 0, 0.46); }
+
+    .jackpot-word {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      color: #ffd400;
+      font-size: clamp(3rem, 11vw, 9rem);
+      line-height: 0.82;
+      font-weight: 900;
+      letter-spacing: -0.075em;
+      text-transform: uppercase;
+      text-shadow:
+        0 5px 0 #a32900,
+        0 10px 0 #5a1200,
+        0 15px 28px rgba(0, 0, 0, 0.65),
+        0 0 34px rgba(255, 212, 0, 0.38);
+    }
+
+    .jackpot-word span {
+      display: inline-block;
+    }
+
+    #winner-dialog.is-visible .jackpot-word span {
+      animation: jackpot-letter-in 760ms var(--ease) both;
+      animation-delay: calc(120ms + var(--i) * 55ms);
+    }
+
+    .winner-overline {
+      position: relative;
+      z-index: 2;
+      margin: clamp(28px, 5vh, 48px) 0 12px;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: clamp(11px, 1.8vw, 15px);
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .slot-window {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: min(100%, 820px);
+      min-height: clamp(112px, 20vh, 190px);
+      padding: clamp(18px, 4vw, 34px);
+      overflow: hidden;
+      border: 3px solid #ffd400;
+      border-radius: clamp(18px, 3vw, 28px);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 20%, transparent 80%, rgba(255, 255, 255, 0.07)),
+        rgba(0, 0, 0, 0.46);
+      box-shadow:
+        inset 0 14px 28px rgba(0, 0, 0, 0.42),
+        inset 0 -14px 28px rgba(0, 0, 0, 0.42),
+        0 0 24px rgba(255, 212, 0, 0.2);
+      perspective: 800px;
+    }
+
+    .slot-window::before,
+    .slot-window::after {
+      content: "";
+      position: absolute;
+      z-index: 3;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.18);
+      pointer-events: none;
+    }
+
+    .slot-window::before { top: 22%; }
+    .slot-window::after { bottom: 22%; }
+
+    #winner-overlay-title {
+      max-width: 100%;
+      color: #fff;
+      font-size: clamp(2.1rem, 6.7vw, 5.7rem);
+      line-height: 0.98;
+      font-weight: 880;
+      letter-spacing: -0.055em;
+      text-wrap: balance;
+      text-shadow: 0 5px 18px rgba(0, 0, 0, 0.55), 0 0 22px rgba(255, 255, 255, 0.15);
+    }
+
+    .slot-word {
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .slot-letter {
+      display: inline-block;
+      animation: slot-letter-land 980ms var(--ease) both;
+      animation-delay: var(--delay);
+      transform-origin: 50% 50%;
+    }
+
+    .winner-action {
+      position: relative;
+      z-index: 4;
+      min-width: min(100%, 220px);
+      min-height: 54px;
+      margin-top: clamp(24px, 4vh, 38px);
+      padding: 0 28px;
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      border-radius: 999px;
+      color: #171717;
+      background: #ffd400;
+      box-shadow: 0 7px 0 #a86b00, 0 14px 28px rgba(0, 0, 0, 0.35), 0 0 25px rgba(255, 212, 0, 0.32);
+      font-size: 16px;
+      font-weight: 820;
+    }
+
+    .winner-action:hover {
+      background: #ffe14d;
+      transform: translateY(-2px);
+    }
+
+    .winner-action:active { transform: translateY(2px) scale(0.98); }
+
+    #screen-confetti {
+      position: absolute;
+      z-index: 4;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .screen-particle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: var(--w);
+      height: var(--h);
+      border-radius: var(--round);
+      background: var(--particle);
+      opacity: 0;
+      animation: screen-confetti-pop 1900ms var(--ease) forwards;
+      animation-delay: var(--delay);
+    }
+
+    #list,
+    #done-list {
+      display: grid;
+      list-style: none;
+      padding: 0;
+      margin: -6px 0 0;
+    }
+
+    .task-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto auto;
+      gap: 9px;
+      align-items: center;
+      min-width: 0;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+      transform-origin: center top;
+    }
+
+    .task-row:last-child { border-bottom: 0; }
+
+    .task-title {
+      min-width: 0;
+      padding-right: 6px;
+      overflow-wrap: anywhere;
+      font-size: 15px;
+      line-height: 1.4;
+      font-weight: 590;
+    }
+
+    .task-title input {
+      min-height: 40px;
+      padding: 0 11px;
+      font-size: 14px;
+    }
+
+    .task-priority {
+      min-width: 116px;
+      min-height: 40px;
+      padding-right: 31px;
+      font-size: 12px;
+      font-weight: 680;
+      color: var(--text-secondary);
+      background-color: var(--surface-subtle);
+      border-color: transparent;
+    }
+
+    .task-priority[data-priority="1"] {
+      color: var(--danger);
+      background-color: var(--danger-soft);
+    }
+
+    .task-row .button {
+      min-height: 40px;
+      padding: 0 11px;
+      font-size: 12px;
+    }
+
+    .task-row.is-entering { animation: row-enter 340ms var(--ease); }
+
+    .done-section {
+      margin-top: 8px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line-strong);
+    }
+
+    .done-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .done-head h3 {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0;
+      font-size: 14px;
+      font-weight: 720;
+      letter-spacing: -0.01em;
+    }
+
+    .done-head h3::before {
+      content: "✓";
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      color: #fff;
+      background: #18a957;
+      box-shadow: 0 4px 12px rgba(24, 169, 87, 0.28);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .done-row {
+      position: relative;
+      min-width: 0;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--line);
+      transform-origin: 28px center;
+    }
+
+    .done-row:last-child { border-bottom: 0; }
+
+    .done-toggle {
+      display: grid;
+      grid-template-columns: 31px minmax(0, 1fr);
+      align-items: center;
+      gap: 9px;
+      min-height: 42px;
+      cursor: pointer;
+    }
+
+    .done-checkbox {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .done-box {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border: 2px solid #18a957;
+      border-radius: 9px;
+      color: #fff;
+      background: #18a957;
+      box-shadow: 0 5px 15px rgba(24, 169, 87, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      transition: transform var(--fast) var(--ease), box-shadow var(--fast) ease, background-color var(--fast) ease;
+    }
+
+    .done-box::after {
+      content: "";
+      width: 11px;
+      height: 6px;
+      margin-top: -2px;
+      border-left: 3px solid currentColor;
+      border-bottom: 3px solid currentColor;
+      transform: rotate(-45deg);
+    }
+
+    .done-toggle:hover .done-box { transform: scale(1.07); box-shadow: 0 7px 19px rgba(24, 169, 87, 0.34); }
+    .done-checkbox:focus-visible + .done-box { outline: 0; box-shadow: 0 0 0 4px var(--focus), 0 7px 19px rgba(24, 169, 87, 0.34); }
+
+    .done-title {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 580;
+      line-height: 1.35;
+      text-decoration: line-through;
+      text-decoration-color: rgba(24, 169, 87, 0.68);
+      text-decoration-thickness: 2px;
+    }
+
+    .done-empty {
+      margin: 0;
+      padding: 8px 2px 4px;
+      color: var(--text-tertiary);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .done-empty[hidden] { display: none; }
+    .done-row.is-awaiting-reveal { opacity: 0; transform: translateY(-12px) scale(0.94); }
+    .done-row.is-completed-entry { animation: completion-row-in 720ms var(--ease); }
+    .done-row.is-completed-entry .done-box { animation: completion-check-pop 680ms var(--ease); }
+
+    .done-spark {
+      position: absolute;
+      z-index: 2;
+      top: 20px;
+      left: 14px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--spark);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .done-row.is-completed-entry .done-spark {
+      animation: completion-spark 760ms var(--ease) forwards;
+      animation-delay: var(--delay);
+    }
+
+    .winner-completion-beat {
+      position: absolute;
+      z-index: 7;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      border-radius: inherit;
+      background: radial-gradient(circle, rgba(24, 169, 87, 0.88), rgba(4, 50, 28, 0.7) 38%, transparent 72%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .winner-completion-beat span {
+      display: grid;
+      place-items: center;
+      width: clamp(120px, 21vw, 220px);
+      height: clamp(120px, 21vw, 220px);
+      border: 8px solid #fff;
+      border-radius: 50%;
+      color: #fff;
+      background: #18a957;
+      box-shadow: 0 0 0 12px rgba(255, 212, 0, 0.84), 0 0 70px rgba(24, 255, 125, 0.72);
+      font-size: clamp(4.8rem, 12vw, 8.5rem);
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .winner-panel.is-completing .winner-completion-beat { animation: completion-modal-beat 650ms var(--ease) forwards; }
+
+    .empty-state {
+      display: grid;
+      justify-items: center;
+      gap: 6px;
+      padding: 28px 12px 14px;
+      text-align: center;
+    }
+
+    .empty-state[hidden] { display: none; }
+
+    .empty-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 4px;
+      border-radius: 50%;
+      color: var(--accent);
+      background: var(--accent-soft);
+      font-size: 23px;
+      font-weight: 380;
+    }
+
+    .empty-title {
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .empty-copy {
+      max-width: 17rem;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    @keyframes input-confirm {
+      0%, 100% { box-shadow: none; }
+      45% { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+    }
+
+    @keyframes row-enter {
+      from { opacity: 0; transform: translateY(-10px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes completion-row-in {
+      0% { opacity: 0; transform: translateY(-18px) scale(0.9); filter: saturate(1.8); }
+      45% { opacity: 1; transform: translateY(3px) scale(1.035); background: rgba(24, 169, 87, 0.15); }
+      72% { transform: translateY(-1px) scale(0.99); }
+      100% { opacity: 1; transform: translateY(0) scale(1); background: transparent; filter: saturate(1); }
+    }
+
+    @keyframes completion-check-pop {
+      0% { transform: scale(0.2) rotate(-24deg); background: #ffd400; box-shadow: 0 0 0 0 rgba(24, 169, 87, 0.55); }
+      52% { transform: scale(1.32) rotate(5deg); box-shadow: 0 0 0 15px rgba(24, 169, 87, 0); }
+      76% { transform: scale(0.9) rotate(-2deg); }
+      100% { transform: scale(1) rotate(0); background: #18a957; }
+    }
+
+    @keyframes completion-spark {
+      0% { opacity: 0; transform: translate(0, 0) scale(0.2); }
+      22% { opacity: 1; }
+      100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(1.1); }
+    }
+
+    @keyframes completion-modal-beat {
+      0% { opacity: 0; transform: scale(0.55); }
+      42% { opacity: 1; transform: scale(1.08); }
+      72% { opacity: 1; transform: scale(0.98); }
+      100% { opacity: 0; transform: scale(1.16); }
+    }
+
+    @keyframes winner-reveal {
+      from { opacity: 0; transform: translateY(7px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes pointer-tick {
+      0%, 100% { transform: rotate(0); }
+      45% { transform: rotate(11deg); }
+    }
+
+    @keyframes pointer-float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(3px); }
+    }
+
+    @keyframes wheel-ring-chase {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes wheel-rim-lights {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes wheel-aura-breathe {
+      0%, 100% { transform: scale(0.97); opacity: 0.42; }
+      50% { transform: scale(1.025); opacity: 0.72; }
+    }
+
+    @keyframes center-button-pulse {
+      0%, 100% { transform: scale(0.88); opacity: 0.32; }
+      50% { transform: scale(1); opacity: 0.82; }
+    }
+
+    @keyframes play-pulse {
+      from { opacity: 0.55; transform: scale(0.85); }
+      to { opacity: 1; transform: scale(1.08); }
+    }
+
+    @keyframes confetti-pop {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+      20% { opacity: 1; }
+      100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1); }
+    }
+
+    @keyframes winner-rays-spin {
+      from { transform: translate(-50%, -50%) rotate(0); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes jackpot-panel-in {
+      0% { opacity: 0; transform: scale(0.68) rotate(-1.6deg); }
+      58% { opacity: 1; transform: scale(1.055) rotate(0.6deg); }
+      78% { transform: scale(0.975) rotate(-0.2deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0); }
+    }
+
+    @keyframes jackpot-letter-in {
+      0% { opacity: 0; transform: translateY(-1.2em) rotate(-10deg) scale(0.55); filter: blur(8px); }
+      62% { opacity: 1; transform: translateY(0.08em) rotate(2deg) scale(1.14); filter: blur(0); }
+      82% { transform: translateY(-0.025em) rotate(-1deg) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); filter: blur(0); }
+    }
+
+    @keyframes slot-letter-land {
+      0% { opacity: 0; transform: translateY(-3.8em) rotateX(-78deg) scaleY(1.3); filter: blur(9px); }
+      48% { opacity: 1; transform: translateY(0.24em) rotateX(12deg) scaleY(0.9); filter: blur(0); }
+      68% { transform: translateY(-0.09em) rotateX(-5deg) scaleY(1.04); }
+      84% { transform: translateY(0.035em) rotateX(2deg) scaleY(0.985); }
+      100% { opacity: 1; transform: translateY(0) rotateX(0) scaleY(1); filter: blur(0); }
+    }
+
+    @keyframes marquee-lights {
+      0%, 100% { opacity: 0.68; filter: brightness(0.92); }
+      50% { opacity: 1; filter: brightness(1.32); }
+    }
+
+    @keyframes screen-confetti-pop {
+      0% { opacity: 0; transform: translate(-50%, -50%) rotate(0) scale(0.25); }
+      12% { opacity: 1; }
+      72% { opacity: 1; }
+      100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) rotate(var(--spin)) scale(1); }
+    }
+
+    @media (min-width: 821px) {
+      html, body {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .app-shell {
+        display: flex;
+        flex-direction: column;
+        height: 100dvh;
+      }
+
+      .hero { flex: none; }
+
+      .stack {
+        flex: 1;
+        min-height: 0;
+        grid-template-rows: auto minmax(0, 1fr);
+      }
+
+      .wheel-card {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .wheel-stage {
+        flex: none;
+        width: min(100%, 420px, calc(100dvh - 360px));
+      }
+
+      .spin-controls { flex: none; }
+
+      .task-scroll {
+        max-height: none;
+        scrollbar-gutter: stable;
+      }
+
+      .tasks-card .task-row {
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 7px;
+        padding: 7px 0;
+      }
+
+      .tasks-card .task-title {
+        grid-column: 1 / -1;
+        padding: 0 0 2px;
+      }
+
+      .tasks-card .task-priority { justify-self: start; }
+      .empty-state:not([hidden]) { flex: 1; align-content: center; }
+    }
+
+    @media (min-width: 821px) and (max-width: 1120px) {
+      .task-row {
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 7px;
+        padding: 10px 0;
+      }
+
+      .task-title {
+        grid-column: 1 / -1;
+        padding: 0 0 2px;
+      }
+
+      .task-priority { justify-self: start; }
+    }
+
+    @media (min-width: 821px) and (max-height: 680px) {
+      .app-shell { padding-top: 12px; padding-bottom: 12px; }
+      .hero { margin-bottom: 8px; }
+      .brand-mark { margin-bottom: 1px; font-size: 10px; }
+      h1 { font-size: 2.55rem; }
+      .subtitle { font-size: 12px; line-height: 1.35; }
+      .stack { gap: 10px; }
+      .card { padding: 15px; }
+      .add-card { padding: 9px 12px; }
+      .section-head { margin-bottom: 7px; }
+      .wheel-stage { width: min(100%, 350px, calc(100dvh - 315px)); margin-top: 7px; }
+      .wheel-button-anchor { width: 94px; height: 94px; }
+      #play { width: 86px; min-width: 86px; height: 86px; min-height: 86px; font-size: 10px; }
+      #play .play-icon { font-size: 18px; }
+      .spin-controls { margin-top: 9px; }
+      #result { min-height: 36px; }
+      #result .result-label { font-size: 10px; }
+      #result .result-title { font-size: 17px; }
+      .tasks-card .task-row { padding: 5px 0; }
+      .done-section { margin-top: 5px; padding-top: 10px; }
+      .done-row { padding: 3px 0; }
+      .done-toggle { min-height: 36px; }
+
+      .winner-panel {
+        min-height: calc(100dvh - 20px);
+        padding: 42px 22px 22px;
+        overflow-y: auto;
+      }
+      .jackpot-word { font-size: clamp(2.6rem, 9vw, 5.4rem); }
+      .winner-overline { margin-top: 18px; }
+      .slot-window { min-height: 88px; padding: 14px 18px; }
+      .winner-action { min-height: 48px; margin-top: 16px; }
+    }
+
+    @media (max-width: 820px) {
+      .app-shell {
+        width: min(calc(100% - 28px), 720px);
+        padding: 34px 0 48px;
+      }
+
+      .hero {
+        display: block;
+        max-width: 610px;
+        margin: 0 auto 28px;
+        text-align: center;
+      }
+
+      .brand-mark { margin-bottom: 14px; }
+      h1 { font-size: clamp(2.9rem, 11vw, 4.6rem); }
+      .subtitle { margin: 16px auto 0; font-size: 15px; line-height: 1.55; }
+
+      .stack { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+      .add-card { grid-column: auto; }
+      .wheel-stage { width: min(100%, 500px); }
+
+      .tasks-card { display: block; }
+      .task-scroll {
+        max-height: none;
+        padding-right: 0;
+        overflow: visible;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .app-shell {
+        width: min(calc(100% - 24px), 720px);
+        padding: 38px 0 48px;
+      }
+
+      .hero { margin-bottom: 26px; }
+      .card { padding: 20px; border-radius: 19px; }
+      .add-card { padding: 16px; }
+
+      #add { grid-template-columns: minmax(0, 1fr) auto; }
+      #add .title-field { grid-column: 1 / -1; }
+      #new-prio { width: 100%; }
+
+      .wheel-stage { width: min(100%, 430px); margin-top: 18px; }
+      .wheel-button-anchor { width: 104px; height: 104px; }
+      #play { width: 94px; min-width: 94px; height: 94px; min-height: 94px; border-width: 4px; font-size: 11px; }
+      #play::before { inset: -13px; border-width: 2px; }
+      #play .play-icon { font-size: 19px; }
+      .wheel-rim { padding: 10px; }
+      .wheel-rim::after { inset: 10px; }
+      #pointer { top: -11px; width: 37px; height: 42px; }
+      #pointer span::before { width: 27px; height: 31px; }
+
+      #winner-dialog {
+        padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+      }
+
+      .winner-panel {
+        width: 100%;
+        min-height: min(82vh, 680px);
+        min-height: min(82dvh, 680px);
+        padding: 60px 17px 30px;
+        border-width: 4px;
+      }
+
+      .winner-panel::after { inset: 9px; border-width: 2px; }
+      .winner-close { top: 18px; right: 18px; }
+      .winner-overline { margin-top: 34px; }
+      .slot-window { min-height: 120px; padding: 18px 12px; }
+      .winner-action { width: min(100%, 260px); }
+
+      .task-row {
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 8px;
+      }
+
+      .task-title { grid-column: 1 / -1; padding: 1px 0 3px; }
+      .task-priority { justify-self: start; }
+    }
+
+    @media (max-width: 380px) {
+      #add { grid-template-columns: 1fr; }
+      #add .title-field { grid-column: auto; }
+      #add .button { width: 100%; }
+
+      .task-row { grid-template-columns: 1fr 1fr; }
+      .task-title { grid-column: 1 / -1; }
+      .task-priority { grid-column: 1 / -1; width: 100%; }
+      .task-row .button { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .confetti { display: none; }
+      .screen-particle, .winner-rays { display: none; }
+      .wheel-stage::before,
+      .wheel-stage::after,
+      .wheel-rim::before,
+      #pointer,
+      #play::before {
+        animation: none !important;
+      }
+      #winner-dialog, .winner-panel, .jackpot-word span, .slot-letter, .winner-panel::after, .winner-completion-beat {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <div class="brand-mark">Decision wheel</div>
+      <h1>TYCHE</h1>
+      <p class="subtitle">Add what needs doing, then let time tip the odds. The longer a task has waited, the more likely it is to be chosen.</p>
+    </header>
+
+    <div class="stack">
+      <section class="card add-card" aria-label="Add a task">
+        <form id="add" novalidate>
+          <div class="title-field">
+            <label class="visually-hidden" for="title">Task name</label>
+            <input id="title" name="title" type="text" placeholder="What needs doing?" autocomplete="off" required autofocus>
+          </div>
+          <label class="visually-hidden" for="new-prio">Priority</label>
+          <select id="new-prio" name="priority" aria-label="Priority for new task">
+            <option value="1">P1 · high</option>
+            <option value="2" selected>P2 · medium</option>
+            <option value="3">P3 · low</option>
+          </select>
+          <button class="button button-primary" type="submit"><span aria-hidden="true">＋</span> Add task</button>
+        </form>
+        <div id="notice" role="alert" hidden></div>
+      </section>
+
+      <section class="card wheel-card" aria-labelledby="wheel-heading">
+        <div class="section-head">
+          <h2 id="wheel-heading">Wheel</h2>
+          <span class="section-meta" id="wheel-count">0 tasks</span>
+        </div>
+
+        <div class="wheel-stage" id="wheel-stage">
+          <div class="wheel-rim">
+            <canvas id="wheel" role="img" aria-label="The task wheel is empty"></canvas>
+          </div>
+          <div id="pointer" aria-hidden="true"><span></span></div>
+          <div class="wheel-button-anchor">
+            <button class="button button-primary" id="play" type="button" aria-label="Spin the wheel" disabled>
+              <span class="play-icon" aria-hidden="true">▶</span>
+              <span class="play-label">Spin</span>
+            </button>
+          </div>
+          <div id="celebration" aria-hidden="true"></div>
+        </div>
+
+        <div class="spin-controls">
+          <div id="result" role="status" aria-live="polite" aria-atomic="true">
+            <span class="result-label">Ready when you are</span>
+            <strong class="result-title">Your next move will appear here.</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="card tasks-card" aria-labelledby="tasks-heading">
+        <div class="section-head">
+          <h2 id="tasks-heading">Tasks</h2>
+          <span class="section-meta" id="task-count">0 tasks</span>
+        </div>
+        <div class="task-scroll" id="task-scroll">
+          <ul id="list"></ul>
+          <div class="empty-state" id="empty" hidden>
+            <div class="empty-icon" aria-hidden="true">＋</div>
+            <div class="empty-title">A clear slate</div>
+            <div class="empty-copy">Add your first task above and it will appear here and on the wheel.</div>
+          </div>
+          <section class="done-section" aria-labelledby="done-heading">
+            <div class="done-head">
+              <h3 id="done-heading">Done</h3>
+              <span class="section-meta" id="done-count">0 wins</span>
+            </div>
+            <ul id="done-list"></ul>
+            <p class="done-empty" id="done-empty">Completed wins will land here.</p>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="winner-dialog" aria-label="Winner celebration">
+    <div class="winner-rays" aria-hidden="true"></div>
+    <div id="screen-confetti" aria-hidden="true"></div>
+    <section class="winner-panel">
+      <div class="winner-completion-beat" id="winner-completion-beat" aria-hidden="true"><span>✓</span></div>
+      <button class="winner-close" id="winner-close" type="button" aria-label="Close winner celebration">×</button>
+      <div aria-hidden="true">
+        <p class="jackpot-word">
+          <span style="--i:0">J</span><span style="--i:1">A</span><span style="--i:2">C</span><span style="--i:3">K</span><span style="--i:4">P</span><span style="--i:5">O</span><span style="--i:6">T</span><span style="--i:7">!</span>
+        </p>
+        <p class="winner-overline">The wheel has spoken</p>
+        <div class="slot-window">
+          <strong id="winner-overlay-title"></strong>
+        </div>
+      </div>
+      <p class="visually-hidden" id="winner-a11y-title"></p>
+      <button class="winner-action" id="winner-action" type="button">Mark it done ✓</button>
+    </section>
+  </dialog>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const canvas = document.getElementById("wheel");
+      const ctx = canvas.getContext("2d");
+      const wheelStage = document.getElementById("wheel-stage");
+      const pointer = document.getElementById("pointer");
+      const celebration = document.getElementById("celebration");
+      const playBtn = document.getElementById("play");
+      const playLabel = playBtn.querySelector(".play-label");
+      const resultEl = document.getElementById("result");
+      const resultLabel = resultEl.querySelector(".result-label");
+      const resultTitle = resultEl.querySelector(".result-title");
+      const taskScroll = document.getElementById("task-scroll");
+      const listEl = document.getElementById("list");
+      const emptyEl = document.getElementById("empty");
+      const doneListEl = document.getElementById("done-list");
+      const doneCount = document.getElementById("done-count");
+      const doneEmpty = document.getElementById("done-empty");
+      const noticeEl = document.getElementById("notice");
+      const addForm = document.getElementById("add");
+      const titleInput = document.getElementById("title");
+      const newPrio = document.getElementById("new-prio");
+      const wheelCount = document.getElementById("wheel-count");
+      const taskCount = document.getElementById("task-count");
+      const winnerDialog = document.getElementById("winner-dialog");
+      const winnerOverlayTitle = document.getElementById("winner-overlay-title");
+      const winnerA11yTitle = document.getElementById("winner-a11y-title");
+      const winnerClose = document.getElementById("winner-close");
+      const winnerAction = document.getElementById("winner-action");
+      const winnerPanel = winnerDialog.querySelector(".winner-panel");
+      const screenConfetti = document.getElementById("screen-confetti");
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const darkMode = window.matchMedia("(prefers-color-scheme: dark)");
+      const TAU = Math.PI * 2;
+
+      const state = {
+        todos: [],
+        doneTodos: [],
+        rotation: 0,
+        spinning: false,
+        mutationBusy: false,
+        loading: true,
+        spinSnapshot: null,
+        winnerId: null,
+        pendingWinner: null,
+        completionRevealId: null,
+        segmentIntro: null,
+        canvasSize: 340,
+        dpr: 1,
+        loadVersion: 0,
+      };
+
+      let winnerReturnFocus = null;
+      let restoreWinnerFocus = true;
+      let pointerTickAnimation = null;
+
+      const mod = (value, base) => ((value % base) + base) % base;
+      const cssValue = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      const palette = () => Array.from({ length: 8 }, (_, i) => cssValue(`--wheel-${i + 1}`));
+
+      function taskWord(count) {
+        return `${count} ${count === 1 ? "task" : "tasks"}`;
+      }
+
+      async function request(path, options = {}) {
+        const response = await fetch(path, {
+          cache: "no-store",
+          ...options,
+          headers: options.body
+            ? { "Content-Type": "application/json", ...(options.headers || {}) }
+            : options.headers,
+        });
+        if (!response.ok) {
+          let message = `Request failed (${response.status})`;
+          try {
+            const body = await response.json();
+            if (typeof body.detail === "string") message = body.detail;
+          } catch (_) {
+            // Keep the status-based fallback when the response is not JSON.
+          }
+          throw new Error(message);
+        }
+        return response.status === 204 ? null : response.json();
+      }
+
+      const api = {
+        list: () => request("/todos"),
+        listDone: () => request("/todos?status=done"),
+        create: (title, priority) => request("/todos", {
+          method: "POST",
+          body: JSON.stringify({ title, priority }),
+        }),
+        update: (id, patch) => request(`/todos/${id}`, {
+          method: "PATCH",
+          body: JSON.stringify(patch),
+        }),
+        remove: (id) => request(`/todos/${id}`, { method: "DELETE" }),
+        spin: () => request("/wheel/spin"),
+      };
+
+      function showError(error) {
+        noticeEl.textContent = error instanceof Error ? error.message : String(error);
+        noticeEl.hidden = false;
+      }
+
+      function clearError() {
+        noticeEl.hidden = true;
+        noticeEl.textContent = "";
+      }
+
+      function updateControls() {
+        const busy = state.loading || state.spinning || state.mutationBusy;
+        addForm.querySelectorAll("input, select, button").forEach((control) => {
+          control.disabled = busy;
+        });
+        listEl.querySelectorAll("input, select, button").forEach((control) => {
+          control.disabled = busy;
+        });
+        doneListEl.querySelectorAll("input, select, button").forEach((control) => {
+          control.disabled = busy;
+        });
+        playBtn.disabled = busy || state.todos.length === 0;
+        playBtn.classList.toggle("is-loading", state.spinning);
+        wheelStage.classList.toggle("is-spinning", state.spinning);
+        playLabel.textContent = state.spinning ? "Spinning" : "Spin";
+        playBtn.setAttribute("aria-label", state.spinning ? "Wheel is spinning" : "Spin the wheel");
+        wheelStage.setAttribute("aria-busy", state.spinning ? "true" : "false");
+      }
+
+      function splitGraphemes(text) {
+        if (typeof Intl.Segmenter === "function") {
+          const segmenter = new Intl.Segmenter(undefined, { granularity: "grapheme" });
+          return Array.from(segmenter.segment(text), (part) => part.segment);
+        }
+        return Array.from(text);
+      }
+
+      function buildWinnerTitle(title) {
+        const fragment = document.createDocumentFragment();
+        let letterIndex = 0;
+        title.trim().split(/\s+/).forEach((word, wordIndex) => {
+          if (wordIndex > 0) fragment.appendChild(document.createTextNode(" "));
+          const wordEl = document.createElement("span");
+          wordEl.className = "slot-word";
+          splitGraphemes(word).forEach((character) => {
+            const letter = document.createElement("span");
+            letter.className = "slot-letter";
+            letter.textContent = character;
+            letter.style.setProperty("--delay", `${390 + Math.min(letterIndex, 24) * 42}ms`);
+            wordEl.appendChild(letter);
+            letterIndex += 1;
+          });
+          fragment.appendChild(wordEl);
+        });
+        winnerOverlayTitle.replaceChildren(fragment);
+      }
+
+      function celebrateScreen() {
+        screenConfetti.replaceChildren();
+        if (reduceMotion.matches) return;
+        const colors = palette();
+        const fragment = document.createDocumentFragment();
+        const distanceBase = Math.hypot(window.innerWidth, window.innerHeight);
+        const count = Math.min(64, Math.max(44, Math.round(window.innerWidth / 22)));
+        for (let i = 0; i < count; i += 1) {
+          const particle = document.createElement("i");
+          const angle = ((i * 137.508) % 360) * (Math.PI / 180);
+          const distance = distanceBase * (0.42 + (i % 8) * 0.026);
+          const width = 7 + (i % 4) * 3;
+          const height = i % 3 === 0 ? width : width * 1.8;
+          particle.className = "screen-particle";
+          particle.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
+          particle.style.setProperty("--y", `${Math.sin(angle) * distance + 90}px`);
+          particle.style.setProperty("--spin", `${480 + (i % 7) * 115}deg`);
+          particle.style.setProperty("--w", `${width}px`);
+          particle.style.setProperty("--h", `${height}px`);
+          particle.style.setProperty("--round", i % 4 === 0 ? "50%" : "2px");
+          particle.style.setProperty("--particle", colors[i % colors.length]);
+          particle.style.setProperty("--delay", `${(i % 9) * 22}ms`);
+          fragment.appendChild(particle);
+        }
+        screenConfetti.appendChild(fragment);
+      }
+
+      function openWinnerDialog(winner) {
+        winnerReturnFocus = document.activeElement;
+        restoreWinnerFocus = true;
+        winnerA11yTitle.textContent = `The wheel selected ${winner.title}.`;
+        winnerAction.textContent = "Mark it done ✓";
+        winnerAction.disabled = false;
+        winnerAction.setAttribute("aria-label", `Mark ${winner.title} as done`);
+        winnerPanel.classList.remove("is-completing");
+        buildWinnerTitle(winner.title);
+        celebrateScreen();
+        document.body.classList.add("winner-open");
+        winnerDialog.classList.remove("is-visible");
+        if (!winnerDialog.open) winnerDialog.showModal();
+        void winnerDialog.offsetWidth;
+        winnerDialog.classList.add("is-visible");
+        requestAnimationFrame(() => winnerAction.focus({ preventScroll: true }));
+      }
+
+      function closeWinnerDialog(restoreFocus = true) {
+        if (!winnerDialog.open) return;
+        restoreWinnerFocus = restoreFocus;
+        winnerDialog.classList.remove("is-visible");
+        winnerDialog.close();
+      }
+
+      function resetWinner() {
+        closeWinnerDialog(false);
+        state.winnerId = null;
+        state.pendingWinner = null;
+        resultEl.classList.remove("is-winner");
+        resultLabel.textContent = "Ready when you are";
+        resultTitle.textContent = "Your next move will appear here.";
+        celebration.replaceChildren();
+      }
+
+      function setChoosingResult() {
+        state.winnerId = null;
+        resultEl.classList.remove("is-winner");
+        resultLabel.textContent = "The wheel is turning";
+        resultTitle.textContent = "Choosing your next move…";
+      }
+
+      function showWinner(winner) {
+        state.winnerId = winner.id;
+        state.pendingWinner = winner;
+        resultLabel.textContent = "Up next";
+        resultTitle.textContent = winner.title;
+        resultEl.classList.remove("is-winner");
+        void resultEl.offsetWidth;
+        resultEl.classList.add("is-winner");
+        celebrate();
+        openWinnerDialog(winner);
+      }
+
+      function celebrate() {
+        celebration.replaceChildren();
+        if (reduceMotion.matches) return;
+        const colors = palette();
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < 12; i += 1) {
+          const particle = document.createElement("i");
+          const angle = (i / 12) * TAU - Math.PI / 2;
+          const distance = 105 + (i % 3) * 18;
+          particle.className = "confetti";
+          particle.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
+          particle.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
+          particle.style.setProperty("--particle", colors[i % colors.length]);
+          particle.style.setProperty("--delay", `${(i % 4) * 24}ms`);
+          fragment.appendChild(particle);
+        }
+        celebration.appendChild(fragment);
+        window.setTimeout(() => celebration.replaceChildren(), 1100);
+      }
+
+      function syncCanvasSize() {
+        const rect = canvas.getBoundingClientRect();
+        const size = Math.max(240, Math.round(rect.width || 340));
+        const dpr = Math.min(window.devicePixelRatio || 1, 2, 1200 / size);
+        const width = Math.round(size * dpr);
+        if (canvas.width !== width || canvas.height !== width) {
+          canvas.width = width;
+          canvas.height = width;
+        }
+        state.canvasSize = size;
+        state.dpr = dpr;
+        draw();
+      }
+
+      function fitText(text, maxWidth) {
+        if (ctx.measureText(text).width <= maxWidth) return text;
+        let low = 0;
+        let high = text.length;
+        while (low < high) {
+          const mid = Math.ceil((low + high) / 2);
+          if (ctx.measureText(`${text.slice(0, mid)}…`).width <= maxWidth) low = mid;
+          else high = mid - 1;
+        }
+        return low > 0 ? `${text.slice(0, low)}…` : "";
+      }
+
+      function draw() {
+        const size = state.canvasSize;
+        const radius = size / 2;
+        const items = state.spinSnapshot || state.todos;
+        const colors = palette();
+        ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+        ctx.clearRect(0, 0, size, size);
+        ctx.save();
+        ctx.translate(radius, radius);
+        ctx.rotate(state.rotation);
+
+        if (items.length === 0) {
+          const emptyGradient = ctx.createRadialGradient(0, -radius * 0.3, 0, 0, 0, radius);
+          emptyGradient.addColorStop(0, cssValue("--surface-raised"));
+          emptyGradient.addColorStop(1, cssValue("--wheel-empty"));
+          ctx.beginPath();
+          ctx.arc(0, 0, radius - 7, 0, TAU);
+          ctx.fillStyle = emptyGradient;
+          ctx.fill();
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = cssValue("--wheel-empty-line");
+          ctx.stroke();
+          ctx.restore();
+          return;
+        }
+
+        const segment = TAU / items.length;
+        const outerRadius = radius - 7;
+        const labelScale = Math.min(1.35, Math.max(1, size / 340));
+        const intro = state.segmentIntro;
+        items.forEach((todo, index) => {
+          const start = -Math.PI / 2 + index * segment;
+          const end = start + segment;
+          let reveal = 1;
+          if (intro && String(intro.id) === String(todo.id)) reveal = intro.progress;
+          const segmentRadius = outerRadius * (0.88 + 0.12 * reveal);
+          const colorIndex = index % colors.length;
+          const color = colors[colorIndex];
+
+          ctx.save();
+          ctx.globalAlpha = 0.2 + 0.8 * reveal;
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.arc(0, 0, segmentRadius, start, end);
+          ctx.closePath();
+          ctx.fillStyle = color;
+          if (!state.spinning && String(state.winnerId) === String(todo.id)) {
+            ctx.shadowColor = cssValue("--accent-glow");
+            ctx.shadowBlur = 22;
+          }
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.lineWidth = items.length > 24 ? 0.8 : 1.6;
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.68)";
+          ctx.stroke();
+
+          if (items.length <= 16 && reveal > 0.35) {
+            const center = start + segment / 2;
+            const screenAngle = mod(center + state.rotation, TAU);
+            const maxWidth = Math.max(32, Math.min(outerRadius * 0.58, segment * outerRadius * 0.92));
+            const fontSize = (items.length > 10 ? 10 : items.length > 6 ? 11 : 12.5) * labelScale;
+            ctx.save();
+            ctx.rotate(center);
+            ctx.font = `650 ${fontSize}px ${cssValue("--font") || "system-ui"}`;
+            ctx.textBaseline = "middle";
+            const useDarkLabel = colorIndex === 2 || colorIndex === 4 || colorIndex === 6;
+            ctx.fillStyle = cssValue(useDarkLabel ? "--wheel-label-dark" : "--wheel-label-light");
+            ctx.shadowColor = useDarkLabel ? "rgba(255, 255, 255, 0.30)" : "rgba(0, 0, 0, 0.42)";
+            ctx.shadowBlur = 3;
+            const onLeft = Math.cos(screenAngle) < 0;
+            const x = outerRadius - 20;
+            if (onLeft) {
+              ctx.rotate(Math.PI);
+              ctx.textAlign = "left";
+              ctx.fillText(fitText(todo.title, maxWidth), -x, 0);
+            } else {
+              ctx.textAlign = "right";
+              ctx.fillText(fitText(todo.title, maxWidth), x, 0);
+            }
+            ctx.restore();
+          }
+          ctx.restore();
+        });
+        ctx.restore();
+
+        ctx.save();
+        ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+        ctx.beginPath();
+        ctx.arc(radius, radius, outerRadius, 0, TAU);
+        ctx.clip();
+        const gloss = ctx.createRadialGradient(size * 0.32, size * 0.2, 0, radius, radius, outerRadius * 1.15);
+        gloss.addColorStop(0, "rgba(255, 255, 255, 0.20)");
+        gloss.addColorStop(0.36, "rgba(255, 255, 255, 0.06)");
+        gloss.addColorStop(0.72, "rgba(0, 0, 0, 0.03)");
+        gloss.addColorStop(1, "rgba(0, 0, 0, 0.18)");
+        ctx.fillStyle = gloss;
+        ctx.fillRect(0, 0, size, size);
+        ctx.restore();
+
+        ctx.save();
+        ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+        ctx.beginPath();
+        ctx.arc(radius, radius, outerRadius, 0, TAU);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function startSegmentIntro(id) {
+        if (reduceMotion.matches) {
+          state.segmentIntro = null;
+          draw();
+          return;
+        }
+        const started = performance.now();
+        state.segmentIntro = { id, progress: 0 };
+        function frame(now) {
+          if (!state.segmentIntro || String(state.segmentIntro.id) !== String(id)) return;
+          const t = Math.min((now - started) / 420, 1);
+          state.segmentIntro.progress = 1 - Math.pow(1 - t, 3);
+          draw();
+          if (t < 1) requestAnimationFrame(frame);
+          else {
+            state.segmentIntro = null;
+            draw();
+          }
+        }
+        requestAnimationFrame(frame);
+      }
+
+      function animateWheelRefresh() {
+        if (reduceMotion.matches || !canvas.animate) return;
+        canvas.animate(
+          [
+            { opacity: 0.62, transform: "scale(0.975)" },
+            { opacity: 1, transform: "scale(1)" },
+          ],
+          { duration: 300, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+        );
+      }
+
+      function triggerPointerTick() {
+        if (reduceMotion.matches) return;
+        const ticker = pointer.querySelector("span");
+        if (ticker.animate) {
+          pointerTickAnimation?.cancel();
+          pointerTickAnimation = ticker.animate(
+            [{ transform: "rotate(0)" }, { transform: "rotate(11deg)" }, { transform: "rotate(0)" }],
+            { duration: 140, easing: "ease-out" }
+          );
+        }
+      }
+
+      function spinTarget(index, items) {
+        const segment = TAU / items.length;
+        const landing = mod(-(index + 0.5) * segment, TAU);
+        const delta = mod(landing - mod(state.rotation, TAU), TAU);
+        return state.rotation + TAU * 7 + delta;
+      }
+
+      // Zero velocity at both ends, with a short acceleration and long deceleration.
+      const spinEase = (t) => 1 - Math.pow(1 - t, 4) * (1 + 4 * t);
+      const settleEase = (t) => t * t * (3 - 2 * t);
+
+      function animateSpin(index, items) {
+        const from = state.rotation;
+        const target = spinTarget(index, items);
+        if (reduceMotion.matches) {
+          state.rotation = mod(target, TAU);
+          draw();
+          return Promise.resolve();
+        }
+
+        const segment = TAU / items.length;
+        const overshoot = Math.min(segment * 0.06, 0.035);
+        const mainTarget = target + overshoot;
+        const duration = 4050;
+        const mainDuration = duration * 0.92;
+        const started = performance.now();
+        let previousBoundary = Math.floor((from + Math.PI / 2) / segment);
+
+        return new Promise((resolve) => {
+          function frame(now) {
+            const elapsed = now - started;
+            if (elapsed <= mainDuration) {
+              const t = Math.min(elapsed / mainDuration, 1);
+              state.rotation = from + (mainTarget - from) * spinEase(t);
+            } else {
+              const t = Math.min((elapsed - mainDuration) / (duration - mainDuration), 1);
+              state.rotation = mainTarget + (target - mainTarget) * settleEase(t);
+            }
+
+            const boundary = Math.floor((state.rotation + Math.PI / 2) / segment);
+            if (boundary !== previousBoundary) {
+              previousBoundary = boundary;
+              triggerPointerTick();
+            }
+            draw();
+
+            if (elapsed < duration) requestAnimationFrame(frame);
+            else {
+              state.rotation = mod(target, TAU);
+              draw();
+              wheelStage.animate?.(
+                [
+                  { transform: "scale(1)" },
+                  { transform: "scale(1.018)" },
+                  { transform: "scale(0.994)" },
+                  { transform: "scale(1)" },
+                ],
+                { duration: 360, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+              );
+              resolve();
+            }
+          }
+          requestAnimationFrame(frame);
+        });
+      }
+
+      function prioritySelect(todo) {
+        const select = document.createElement("select");
+        select.className = "task-priority";
+        select.dataset.priority = String(todo.priority);
+        select.setAttribute("aria-label", `Priority for ${todo.title}`);
+        [[1, "P1 · high"], [2, "P2 · medium"], [3, "P3 · low"]].forEach(([value, label]) => {
+          const option = document.createElement("option");
+          option.value = String(value);
+          option.textContent = label;
+          option.selected = value === todo.priority;
+          select.appendChild(option);
+        });
+        select.addEventListener("change", async () => {
+          clearError();
+          state.mutationBusy = true;
+          updateControls();
+          try {
+            await api.update(todo.id, { priority: Number(select.value) });
+            resetWinner();
+            await load({ animateReorder: true, wheelChange: true });
+          } catch (error) {
+            showError(error);
+            select.value = String(todo.priority);
+            select.dataset.priority = String(todo.priority);
+          } finally {
+            state.mutationBusy = false;
+            updateControls();
+          }
+        });
+        return select;
+      }
+
+      function renderRow(todo) {
+        const row = document.createElement("li");
+        row.className = "task-row";
+        row.dataset.id = String(todo.id);
+
+        const title = document.createElement("div");
+        title.className = "task-title";
+        title.textContent = todo.title;
+
+        const select = prioritySelect(todo);
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.className = "button button-quiet edit-button";
+        editButton.textContent = "Edit";
+        editButton.setAttribute("aria-label", `Edit ${todo.title}`);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "button button-danger delete-button";
+        deleteButton.textContent = "Delete";
+        deleteButton.setAttribute("aria-label", `Delete ${todo.title}`);
+
+        let editing = false;
+        let finishing = false;
+        let editInput = null;
+
+        function focusEditButton() {
+          requestAnimationFrame(() => {
+            listEl.querySelector(`[data-id="${todo.id}"] .edit-button`)?.focus();
+          });
+        }
+
+        function cancelEdit() {
+          if (finishing) return;
+          finishing = true;
+          editing = false;
+          renderList();
+          focusEditButton();
+        }
+
+        async function saveEdit() {
+          if (finishing || !editInput) return;
+          const nextTitle = editInput.value.trim();
+          if (!nextTitle) {
+            editInput.setCustomValidity("Enter a task name.");
+            editInput.reportValidity();
+            editInput.focus();
+            return;
+          }
+          if (nextTitle === todo.title) {
+            cancelEdit();
+            return;
+          }
+
+          finishing = true;
+          clearError();
+          state.mutationBusy = true;
+          row.setAttribute("aria-busy", "true");
+          updateControls();
+          try {
+            await api.update(todo.id, { title: nextTitle });
+            resetWinner();
+            await load({ wheelChange: true });
+            focusEditButton();
+          } catch (error) {
+            finishing = false;
+            showError(error);
+            editInput?.focus();
+          } finally {
+            state.mutationBusy = false;
+            row.removeAttribute("aria-busy");
+            updateControls();
+          }
+        }
+
+        function beginEdit() {
+          if (editing) return;
+          editing = true;
+          row.classList.add("is-editing");
+          editInput = document.createElement("input");
+          editInput.type = "text";
+          editInput.value = todo.title;
+          editInput.setAttribute("aria-label", `New title for ${todo.title}`);
+          title.replaceChildren(editInput);
+          editButton.textContent = "Save";
+          editButton.setAttribute("aria-label", `Save ${todo.title}`);
+          deleteButton.textContent = "Cancel";
+          deleteButton.className = "button button-quiet delete-button";
+          deleteButton.setAttribute("aria-label", `Cancel editing ${todo.title}`);
+          select.disabled = true;
+
+          editInput.addEventListener("input", () => editInput.setCustomValidity(""));
+          editInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              saveEdit();
+            } else if (event.key === "Escape") {
+              event.preventDefault();
+              cancelEdit();
+            }
+          });
+          editInput.addEventListener("blur", (event) => {
+            if (event.relatedTarget === editButton || event.relatedTarget === deleteButton) return;
+            saveEdit();
+          });
+          editInput.focus();
+          editInput.select();
+        }
+
+        editButton.addEventListener("click", () => editing ? saveEdit() : beginEdit());
+        deleteButton.addEventListener("click", () => editing ? cancelEdit() : deleteTodo(todo, row));
+        row.append(title, select, editButton, deleteButton);
+        return row;
+      }
+
+      function renderDoneRow(todo, { awaitingReveal = false } = {}) {
+        const row = document.createElement("li");
+        row.className = "done-row";
+        row.dataset.id = String(todo.id);
+        if (awaitingReveal) row.classList.add("is-awaiting-reveal");
+
+        const label = document.createElement("label");
+        label.className = "done-toggle";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "done-checkbox";
+        checkbox.checked = true;
+        checkbox.setAttribute("aria-label", `Mark ${todo.title} as not done`);
+
+        const box = document.createElement("span");
+        box.className = "done-box";
+        box.setAttribute("aria-hidden", "true");
+
+        const title = document.createElement("span");
+        title.className = "done-title";
+        title.textContent = todo.title;
+        label.append(checkbox, box, title);
+
+        const sparkColors = ["#18a957", "#ffd400", "#e60012", "#00b8d9", "#7b2cbf"];
+        for (let i = 0; i < 10; i += 1) {
+          const spark = document.createElement("i");
+          const angle = (i / 10) * TAU;
+          const distance = 34 + (i % 3) * 8;
+          spark.className = "done-spark";
+          spark.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
+          spark.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
+          spark.style.setProperty("--spark", sparkColors[i % sparkColors.length]);
+          spark.style.setProperty("--delay", `${(i % 4) * 26}ms`);
+          row.appendChild(spark);
+        }
+
+        checkbox.addEventListener("change", async () => {
+          if (checkbox.checked || state.mutationBusy || state.spinning) return;
+          clearError();
+          state.mutationBusy = true;
+          updateControls();
+          try {
+            await api.update(todo.id, { status: "open" });
+            await animateRowOut(row);
+            resetWinner();
+            await load({ enterId: todo.id, animateReorder: true, wheelChange: true });
+            requestAnimationFrame(() => {
+              const restored = listEl.querySelector(`[data-id="${todo.id}"]`);
+              restored?.scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth", block: "nearest" });
+              restored?.querySelector(".edit-button")?.focus({ preventScroll: true });
+            });
+          } catch (error) {
+            checkbox.checked = true;
+            showError(error);
+          } finally {
+            state.mutationBusy = false;
+            updateControls();
+          }
+        });
+
+        row.prepend(label);
+        return row;
+      }
+
+      function renderDoneList({ enterId = null } = {}) {
+        const fragment = document.createDocumentFragment();
+        state.doneTodos.forEach((todo) => {
+          fragment.appendChild(renderDoneRow(todo, {
+            awaitingReveal: String(todo.id) === String(enterId),
+          }));
+        });
+        doneListEl.replaceChildren(fragment);
+        doneEmpty.hidden = state.doneTodos.length > 0;
+        doneCount.textContent = `${state.doneTodos.length} ${state.doneTodos.length === 1 ? "win" : "wins"}`;
+      }
+
+      function revealDoneRow(todoId) {
+        const row = doneListEl.querySelector(`[data-id="${todoId}"]`);
+        if (!row) return;
+        row.classList.remove("is-awaiting-reveal");
+        if (!reduceMotion.matches) {
+          row.classList.add("is-completed-entry");
+          window.setTimeout(() => row.classList.remove("is-completed-entry"), 900);
+        }
+        requestAnimationFrame(() => {
+          taskScroll.scrollTo({
+            top: taskScroll.scrollHeight,
+            behavior: reduceMotion.matches ? "auto" : "smooth",
+          });
+        });
+      }
+
+      function renderList({ enterId = null, animateReorder = false } = {}) {
+        const oldPositions = new Map();
+        if (animateReorder && !reduceMotion.matches) {
+          listEl.querySelectorAll(".task-row").forEach((row) => {
+            oldPositions.set(row.dataset.id, row.getBoundingClientRect().top);
+          });
+        }
+
+        const fragment = document.createDocumentFragment();
+        state.todos.forEach((todo) => {
+          const row = renderRow(todo);
+          if (String(todo.id) === String(enterId) && !reduceMotion.matches) row.classList.add("is-entering");
+          fragment.appendChild(row);
+        });
+        listEl.replaceChildren(fragment);
+        emptyEl.hidden = state.todos.length > 0;
+
+        if (oldPositions.size) {
+          listEl.querySelectorAll(".task-row").forEach((row) => {
+            const oldTop = oldPositions.get(row.dataset.id);
+            if (oldTop == null) return;
+            const delta = oldTop - row.getBoundingClientRect().top;
+            if (Math.abs(delta) < 1 || !row.animate) return;
+            row.animate(
+              [{ transform: `translateY(${delta}px)` }, { transform: "translateY(0)" }],
+              { duration: 330, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+            );
+          });
+        }
+
+        const countText = taskWord(state.todos.length);
+        taskCount.textContent = countText;
+        wheelCount.textContent = countText;
+        canvas.setAttribute(
+          "aria-label",
+          state.todos.length
+            ? `Task wheel with ${countText}. The task list below contains the segment labels.`
+            : "The task wheel is empty"
+        );
+      }
+
+      function animateRowOut(row) {
+        if (!row || reduceMotion.matches || !row.animate) return Promise.resolve();
+        const height = row.getBoundingClientRect().height;
+        return row.animate(
+          [
+            { height: `${height}px`, opacity: 1, transform: "translateX(0) scale(1)" },
+            { height: "0px", opacity: 0, transform: "translateX(12px) scale(0.985)", paddingTop: 0, paddingBottom: 0 },
+          ],
+          { duration: 260, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "forwards" }
+        ).finished.catch(() => undefined);
+      }
+
+      async function completeWinner() {
+        const winner = state.pendingWinner;
+        if (!winner || state.mutationBusy || state.spinning) return;
+        const activeRow = listEl.querySelector(`[data-id="${winner.id}"]`);
+        clearError();
+        state.mutationBusy = true;
+        winnerAction.disabled = true;
+        winnerAction.textContent = "Completing…";
+        updateControls();
+
+        try {
+          await api.update(winner.id, { status: "done" });
+          winnerAction.textContent = "DONE! ✓";
+          winnerPanel.classList.add("is-completing");
+          await Promise.all([
+            animateRowOut(activeRow),
+            new Promise((resolve) => window.setTimeout(resolve, reduceMotion.matches ? 0 : 650)),
+          ]);
+          state.completionRevealId = winner.id;
+          await load({ doneEnterId: winner.id, wheelChange: true });
+          state.winnerId = null;
+          resultLabel.textContent = "Completed";
+          resultTitle.textContent = winner.title;
+          closeWinnerDialog(true);
+        } catch (error) {
+          winnerPanel.classList.remove("is-completing");
+          winnerAction.textContent = "Try again";
+          winnerAction.disabled = false;
+          showError(error);
+        } finally {
+          state.mutationBusy = false;
+          updateControls();
+        }
+      }
+
+      async function deleteTodo(todo, row) {
+        if (state.mutationBusy || state.spinning) return;
+        const oldIndex = state.todos.findIndex((item) => item.id === todo.id);
+        const focusId = state.todos[oldIndex + 1]?.id ?? state.todos[oldIndex - 1]?.id;
+        clearError();
+        state.mutationBusy = true;
+        updateControls();
+        try {
+          await api.remove(todo.id);
+          await animateRowOut(row);
+          resetWinner();
+          await load({ wheelChange: true });
+          requestAnimationFrame(() => {
+            if (focusId != null) listEl.querySelector(`[data-id="${focusId}"] .delete-button`)?.focus();
+            else titleInput.focus();
+          });
+        } catch (error) {
+          showError(error);
+        } finally {
+          state.mutationBusy = false;
+          updateControls();
+        }
+      }
+
+      async function load({ enterId = null, doneEnterId = null, animateReorder = false, wheelChange = false } = {}) {
+        const version = ++state.loadVersion;
+        const [todos, doneTodos] = await Promise.all([api.list(), api.listDone()]);
+        if (version !== state.loadVersion) return;
+        state.todos = todos;
+        state.doneTodos = doneTodos;
+        renderList({ enterId, animateReorder });
+        renderDoneList({ enterId: doneEnterId });
+        draw();
+        if (enterId != null) startSegmentIntro(enterId);
+        else if (wheelChange) animateWheelRefresh();
+      }
+
+      addForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (state.mutationBusy || state.spinning) return;
+        const title = titleInput.value.trim();
+        if (!title) {
+          titleInput.setCustomValidity("Enter a task name.");
+          titleInput.reportValidity();
+          return;
+        }
+        titleInput.setCustomValidity("");
+        clearError();
+        state.mutationBusy = true;
+        let refocusTitle = false;
+        updateControls();
+        try {
+          const created = await api.create(title, Number(newPrio.value));
+          titleInput.value = "";
+          newPrio.value = "2";
+          resetWinner();
+          await load({ enterId: created.id, animateReorder: true });
+          addForm.classList.remove("is-confirmed");
+          void addForm.offsetWidth;
+          addForm.classList.add("is-confirmed");
+          refocusTitle = true;
+        } catch (error) {
+          showError(error);
+          refocusTitle = true;
+        } finally {
+          state.mutationBusy = false;
+          updateControls();
+          if (refocusTitle) titleInput.focus();
+        }
+      });
+
+      titleInput.addEventListener("input", () => titleInput.setCustomValidity(""));
+
+      winnerClose.addEventListener("click", () => closeWinnerDialog(true));
+      winnerAction.addEventListener("click", completeWinner);
+      winnerDialog.addEventListener("cancel", (event) => {
+        event.preventDefault();
+        closeWinnerDialog(true);
+      });
+      winnerDialog.addEventListener("click", (event) => {
+        if (event.target === winnerDialog) closeWinnerDialog(true);
+      });
+      winnerDialog.addEventListener("close", () => {
+        const focusTarget = winnerReturnFocus;
+        const shouldRestore = restoreWinnerFocus;
+        const completedId = state.completionRevealId;
+        document.body.classList.remove("winner-open");
+        winnerPanel.classList.remove("is-completing");
+        screenConfetti.replaceChildren();
+        winnerOverlayTitle.replaceChildren();
+        winnerA11yTitle.textContent = "";
+        winnerReturnFocus = null;
+        state.pendingWinner = null;
+        state.completionRevealId = null;
+        restoreWinnerFocus = true;
+        if (completedId != null) revealDoneRow(completedId);
+        if (shouldRestore) {
+          requestAnimationFrame(() => {
+            const canRestore = focusTarget instanceof HTMLElement
+              && focusTarget.isConnected
+              && focusTarget.matches("button:not(:disabled), input:not(:disabled), select:not(:disabled), a[href], [tabindex]:not([tabindex='-1'])");
+            const fallback = playBtn.disabled ? titleInput : playBtn;
+            (canRestore ? focusTarget : fallback).focus();
+          });
+        }
+      });
+
+      playBtn.addEventListener("click", async () => {
+        if (state.spinning || state.mutationBusy || state.todos.length === 0) return;
+        clearError();
+        resetWinner();
+        setChoosingResult();
+        state.spinning = true;
+        state.spinSnapshot = state.todos.slice();
+        updateControls();
+
+        try {
+          const winner = await api.spin();
+          if (!winner) {
+            await load();
+            resetWinner();
+            return;
+          }
+
+          let index = state.spinSnapshot.findIndex((todo) => todo.id === winner.id);
+          if (index === -1) {
+            const refreshed = await api.list();
+            index = refreshed.findIndex((todo) => todo.id === winner.id);
+            if (index === -1) throw new Error("The chosen task changed before the wheel could display it. Please spin again.");
+            state.todos = refreshed;
+            state.spinSnapshot = refreshed.slice();
+            renderList();
+          }
+
+          await animateSpin(index, state.spinSnapshot);
+          state.spinning = false;
+          state.spinSnapshot = null;
+          showWinner(winner);
+          draw();
+        } catch (error) {
+          showError(error);
+          resetWinner();
+        } finally {
+          state.spinning = false;
+          state.spinSnapshot = null;
+          updateControls();
+        }
+      });
+
+      const redrawForTheme = () => requestAnimationFrame(draw);
+      darkMode.addEventListener?.("change", redrawForTheme);
+      reduceMotion.addEventListener?.("change", (event) => {
+        redrawForTheme();
+        if (event.matches && winnerDialog.open) screenConfetti.replaceChildren();
+      });
+      new MutationObserver(redrawForTheme).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+      });
+      new ResizeObserver(syncCanvasSize).observe(canvas);
+
+      (async () => {
+        try {
+          await load();
+        } catch (error) {
+          showError(error);
+        } finally {
+          state.loading = false;
+          updateControls();
+          syncCanvasSize();
+        }
+      })();
+    })();
+  </script>
+</body>
+</html>
