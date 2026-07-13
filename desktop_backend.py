@@ -5,7 +5,7 @@ import os
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="TYCHE local desktop service")
+    parser = argparse.ArgumentParser(description="To-Do Gambling local desktop service")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, required=True)
     parser.add_argument("--db", required=True)

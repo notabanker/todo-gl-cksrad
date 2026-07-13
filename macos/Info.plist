@@ -5,7 +5,7 @@
   <key>CFBundleDevelopmentRegion</key>
   <string>en</string>
   <key>CFBundleDisplayName</key>
-  <string>TYCHE</string>
+  <string>To-Do Gambling</string>
   <key>CFBundleExecutable</key>
   <string>TYCHE</string>
   <key>CFBundleIconFile</key>
@@ -15,13 +15,13 @@
   <key>CFBundleInfoDictionaryVersion</key>
   <string>6.0</string>
   <key>CFBundleName</key>
-  <string>TYCHE</string>
+  <string>To-Do Gambling</string>
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>
-  <string>1.0</string>
+  <string>2.0</string>
   <key>CFBundleVersion</key>
-  <string>1</string>
+  <string>2</string>
   <key>LSApplicationCategoryType</key>
   <string>public.app-category.productivity</string>
   <key>LSMinimumSystemVersion</key>

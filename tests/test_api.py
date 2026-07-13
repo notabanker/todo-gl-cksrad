@@ -8,12 +8,12 @@ from datetime import timedelta
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import Session, create_engine
 from sqlmodel.pool import StaticPool
 
 import main
-from database import get_session
-from models import Todo, utcnow
+from database import get_session, init_db
+from models import ArcadeState, Todo, utcnow
 
 
 @pytest.fixture(name="client")
@@ -23,7 +23,7 @@ def client_fixture():
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
-    SQLModel.metadata.create_all(engine)
+    init_db(engine, create_backup=False)
 
     def session_override():
         with Session(engine) as session:
@@ -167,3 +167,166 @@ def test_spin_excludes_completed_todos(client):
 
     chosen = client.get("/wheel/spin").json()
     assert chosen["title"] == "still open"
+
+
+def test_arcade_mints_one_ticket_for_each_new_100_xp_threshold(client):
+    for index in range(4):
+        _add_todo(
+            client.engine,
+            f"completed P1 #{index}",
+            status="done",
+            priority=1,
+            age_days=0,
+        )
+
+    response = client.get("/arcade")
+    assert response.status_code == 200
+    assert {
+        key: response.json()[key]
+        for key in ("tickets", "task_xp", "xp_to_next_ticket", "last_spin")
+    } == {
+        "tickets": 2,
+        "task_xp": 200,
+        "xp_to_next_ticket": 100,
+        "last_spin": None,
+    }
+
+    with Session(client.engine) as session:
+        state = session.get(ArcadeState, 1)
+        assert state.highest_xp_threshold == 200
+        assert state.tickets == 2
+
+
+def test_arcade_task_xp_matches_priority_and_waiting_bonus_formula(client):
+    # P2 base 30 + capped 30 waiting bonus; P3 base 20 + 4 waiting XP.
+    completed = utcnow()
+    with Session(client.engine) as session:
+        session.add(
+            Todo(
+                title="old P2",
+                status="done",
+                priority=2,
+                created_at=completed - timedelta(days=20),
+                updated_at=completed,
+                completed_at=completed,
+            )
+        )
+        session.add(
+            Todo(
+                title="two-day P3",
+                status="done",
+                priority=3,
+                created_at=completed - timedelta(days=2),
+                updated_at=completed,
+                completed_at=completed,
+            )
+        )
+        session.commit()
+
+    status = client.get("/arcade").json()
+    assert {
+        key: status[key]
+        for key in ("tickets", "task_xp", "xp_to_next_ticket", "last_spin")
+    } == {
+        "tickets": 0,
+        "task_xp": 84,
+        "xp_to_next_ticket": 16,
+        "last_spin": None,
+    }
+
+
+def test_arcade_does_not_remint_after_reopen_delete_or_recomplete(client):
+    first = client.post("/todos", json={"title": "first", "priority": 1}).json()
+    second = client.post("/todos", json={"title": "second", "priority": 1}).json()
+    assert client.patch(f"/todos/{first['id']}", json={"status": "done"}).status_code == 200
+    assert client.patch(f"/todos/{second['id']}", json={"status": "done"}).status_code == 200
+    assert client.get("/arcade").json()["tickets"] == 1
+
+    # Dropping below the boundary and returning to it must not mint it again.
+    client.patch(f"/todos/{first['id']}", json={"status": "open"})
+    assert client.get("/arcade").json()["task_xp"] == 50
+    client.patch(f"/todos/{first['id']}", json={"status": "done"})
+    assert client.get("/arcade").json()["tickets"] == 1
+
+    # Deletion is another XP drop; replacement XP at the old threshold is not
+    # a new lifetime high-water boundary either.
+    client.delete(f"/todos/{first['id']}")
+    third = client.post("/todos", json={"title": "third", "priority": 1}).json()
+    client.patch(f"/todos/{third['id']}", json={"status": "done"})
+    status = client.get("/arcade").json()
+    assert status["task_xp"] == 100
+    assert status["tickets"] == 1
+
+    with Session(client.engine) as session:
+        assert session.get(ArcadeState, 1).highest_xp_threshold == 100
+
+
+def test_arcade_spin_is_server_result_and_consumes_one_ticket(client, monkeypatch):
+    _add_todo(
+        client.engine, "completed one", status="done", priority=1, age_days=0
+    )
+    _add_todo(
+        client.engine, "completed two", status="done", priority=1, age_days=0
+    )
+
+    class JackpotRng:
+        def choices(self, population, *, weights, k):
+            assert weights == [50, 30, 15, 4, 1]
+            assert k == 1
+            return [next(item for item in population if item["outcome"] == "jackpot")]
+
+    monkeypatch.setattr(main, "arcade_rng", JackpotRng())
+    response = client.post("/arcade/spin")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["symbols"] == ["7️⃣", "7️⃣", "7️⃣"]
+    assert body["outcome"] == "jackpot"
+    assert body["label"] == "Focus Jackpot"
+    assert body["tier"] == "jackpot"
+    assert body["message"]
+    assert body["spin_count"] == 1
+    assert body["remaining_tickets"] == 0
+    assert body["spun_at"]
+
+    # A spin never changes productivity XP and its exact server result persists.
+    status = client.get("/arcade").json()
+    assert status["tickets"] == 0
+    assert status["task_xp"] == 100
+    assert {
+        key: status["last_spin"][key]
+        for key in (
+            "symbols",
+            "outcome",
+            "label",
+            "message",
+            "tier",
+            "spin_count",
+            "spun_at",
+        )
+    } == {
+        key: body[key]
+        for key in (
+            "symbols",
+            "outcome",
+            "label",
+            "message",
+            "tier",
+            "spin_count",
+            "spun_at",
+        )
+    }
+
+    out_of_tickets = client.post("/arcade/spin")
+    assert out_of_tickets.status_code == 409
+    assert out_of_tickets.json() == {"detail": "no Lucky Tickets available"}
+
+    with Session(client.engine) as session:
+        state = session.get(ArcadeState, 1)
+        assert state.tickets == 0
+        assert state.spin_count == 1
+
+
+def test_arcade_spin_requires_a_ticket(client):
+    response = client.post("/arcade/spin")
+    assert response.status_code == 409
+    assert response.json() == {"detail": "no Lucky Tickets available"}

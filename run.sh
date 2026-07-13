@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-command launcher for TYCHE.
+# One-command launcher for To-Do Gambling.
 # Creates the virtualenv on first run, installs deps, then starts the app.
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -14,5 +14,5 @@ fi
 echo "Installing dependencies..."
 ./.venv/bin/pip install -q -r requirements.txt
 
-echo "Starting TYCHE..."
+echo "Starting To-Do Gambling..."
 exec ./.venv/bin/python main.py
